@@ -4,17 +4,17 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:33431",
-      "sslPort": 44349
+      "applicationUrl": "http://localhost:22376",
+      "sslPort": 44332
     }
   },
   "profiles": {
-    "food_vault_api": {
+    "FoodVault.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7150;http://localhost:5150",
+      "applicationUrl": "https://localhost:7099;http://localhost:5099",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

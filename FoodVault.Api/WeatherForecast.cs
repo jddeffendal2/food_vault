@@ -1,4 +1,4 @@
-namespace food_vault_api
+namespace FoodVault.Api
 {
     public class WeatherForecast
     {
