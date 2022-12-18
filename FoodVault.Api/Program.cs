@@ -1,3 +1,7 @@
+using FoodVault.Api.Data;
+using Microsoft.EntityFrameworkCore;
+using MySql.EntityFrameworkCore.Extensions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +10,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddEntityFrameworkMySQL().AddDbContext<FoodVaultDbContext>(options =>
+{
+    options.UseMySQL(builder.Configuration.GetConnectionString("FoodVaultMySQLConnection"));
+});
 
 var app = builder.Build();
 
