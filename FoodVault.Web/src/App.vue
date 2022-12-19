@@ -1,5 +1,5 @@
 <script>
-import LoginView from "./views/LoginView.vue"
+// import LoginView from "./views/LoginView.vue"
 import { useAccountStore } from "@/stores/accountStore.js";
 
 export default {
@@ -9,7 +9,7 @@ export default {
     return { userStore }
   },
   components: {
-    LoginView,
+    // LoginView,
   }
 }
 </script>
@@ -17,7 +17,10 @@ export default {
 <template>
   <h1>Recipe Vault (logo here?)</h1>
   <div>
-    <LoginView />
+    <!-- <LoginView /> -->
+
+    <router-link to="/AddRecipeOptions">Work Link: Add Recipe Page</router-link>
+    <router-view></router-view>
   </div>
 </template>
 
