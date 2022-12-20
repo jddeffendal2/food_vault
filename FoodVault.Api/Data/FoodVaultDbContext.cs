@@ -8,11 +8,7 @@ namespace FoodVault.Api.Data
         {
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        public FoodVaultDbContext(DbContextOptions<FoodVaultDbContext> options) : base(options)
         {
         }
 
