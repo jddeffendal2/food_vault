@@ -1,5 +1,4 @@
 <script>
-// import LoginView from "./views/LoginView.vue"
 import { useAccountStore } from "@/stores/accountStore.js";
 
 export default {
@@ -15,7 +14,9 @@ export default {
 </script>
 
 <template>
-  <h1>Recipe Vault (logo here?)</h1>
+  <header>
+    <h1>Recipe Vault (logo here?)</h1>
+  </header>
   <div>
     <!-- <LoginView /> -->
 
@@ -28,6 +29,7 @@ export default {
 header {
   line-height: 1.5;
   max-height: 100vh;
+  background-color: antiquewhite;
 }
 
 .logo {
