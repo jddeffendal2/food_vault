@@ -1,4 +1,4 @@
-using FoodVault.Api.Data;
+using FoodVault_Api.Data;
 using Microsoft.EntityFrameworkCore;
 using MySql.EntityFrameworkCore.Extensions;
 
@@ -23,6 +23,15 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<FoodVaultDbContext>();
+
+    if (context.Database.GetPendingMigrations().Any())
+        context.Database.Migrate();
 }
 
 app.UseHttpsRedirection();

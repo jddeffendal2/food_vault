@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FoodVault.Api.Controllers
+namespace FoodVault_Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]

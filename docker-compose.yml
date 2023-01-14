@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  foodvault_db:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'FoodVault'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    ports:
+      - '3307:3306'
+    volumes:
+      - foodvault_db_vol:/var/lib/mysql
+
+  foodvault_api:
+    image: foodvault_api
+    build:
+      dockerfile: FoodVault_Api/Dockerfile
+    ports:
+      - "5000:80"
+
+volumes:
+  foodvault_db_vol:
