@@ -1,4 +1,4 @@
-﻿namespace FoodVault_Api.Data.Models
+﻿namespace FoodVault_Api.Models
 {
     public class UserGroup
     {

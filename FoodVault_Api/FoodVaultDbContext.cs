@@ -1,17 +1,30 @@
-﻿using FoodVault_Api.Data.Models;
+﻿using FoodVault_Api.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodVault_Api.Data
+namespace FoodVault_Api
 {
     public class FoodVaultDbContext : DbContext
     {
-        public FoodVaultDbContext()
-        {
-        }
+        //protected readonly IConfiguration Configuration;
+        
+        //public FoodVaultDbContext()
+        //{
+        //}
+
+        //public FoodVaultDbContext(IConfiguration configuration)
+        //{
+        //    Configuration = configuration;
+        //}
 
         public FoodVaultDbContext(DbContextOptions<FoodVaultDbContext> options) : base(options)
         {
         }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder options)
+        //{
+        //    var connectionString = Configuration.GetConnectionString("FoodVaultMySQLConnection");
+        //    options.UseMySQL(connectionString);
+        //}
 
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }

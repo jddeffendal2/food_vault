@@ -1,27 +1,26 @@
 <script>
 import { useAccountStore } from "@/stores/accountStore.js";
 
+// Potential colors: #FFFEF2 background white
+// #5DD39E main green
+// #087E8B secondary blue
+
 export default {
   setup() {
     const userStore = useAccountStore();
 
     return { userStore }
-  },
-  components: {
-    // LoginView,
   }
 }
 </script>
 
 <template>
   <header>
-    <h1>Recipe Vault (logo here?)</h1>
+    <h1>Recipe Vault</h1>
   </header>
   <div>
-    <!-- <LoginView /> -->
-
-    <router-link to="/AddRecipeOptions">Work Link: Add Recipe Page</router-link>
     <router-view></router-view>
+    <!-- Todo: show either home page or login page after checking if should be logged in -->
   </div>
 </template>
 

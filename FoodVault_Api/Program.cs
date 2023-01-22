@@ -1,6 +1,10 @@
-using FoodVault_Api.Data;
+using FoodVault_Api;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MySql.EntityFrameworkCore.Extensions;
+using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,9 +15,35 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddEntityFrameworkMySQL().AddDbContext<FoodVaultDbContext>(options =>
+builder.Services.AddDbContext<FoodVaultDbContext>(options =>
 {
-    options.UseMySQL(builder.Configuration.GetConnectionString("FoodVaultMySQLConnection"));
+    options.UseNpgsql(builder.Configuration["ConnectionString"]);
+});
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "AllowAppOrigins",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:5173",
+                "https://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters()
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
 });
 
 var app = builder.Build();
@@ -34,7 +64,10 @@ using (var scope = app.Services.CreateScope())
         context.Database.Migrate();
 }
 
-app.UseHttpsRedirection();
+//app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
+app.UseCors("AllowAppOrigins");
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
