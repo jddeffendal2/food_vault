@@ -1,8 +1,9 @@
 <script setup>
 import { onMounted } from "vue";
 import LoginPage from "@/components/LoginPage.vue";
-// TODO: Find way to check if user should still be logged in
-// Either show login page or home page
+// Get token from local storage on mounted to check if logged in.
+// If not logged in, show login page
+// else show home page (TBD)
 </script>
 
 <template>

@@ -1,4 +1,4 @@
-﻿namespace FoodVault_Api.Models
+﻿namespace FoodVaultApi.Models
 {
     public class Recipe
     {

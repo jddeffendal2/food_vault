@@ -1,9 +1,9 @@
-using FoodVault_Api;
+using FoodVaultApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using System.Net;
+using MySql.EntityFrameworkCore.Extensions;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,18 +15,24 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<FoodVaultDbContext>(options =>
-{
-    options.UseNpgsql(builder.Configuration["ConnectionString"]);
-});
+//builder.Services.AddDbContext<FoodVaultDbContext>(options =>
+//{
+//    var connectionstring = builder.Configuration["ConnectionString"];
+//    options.UseMySql(connectionstring, ServerVersion.AutoDetect(connectionstring));
+//});
+
+builder.Services.AddEntityFrameworkMySQL()
+                .AddDbContext<FoodVaultDbContext>(options =>
+                {
+                    options.UseMySQL(builder.Configuration["ConnectionString"]);
+                });
 
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "AllowAppOrigins",
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173",
-                "https://localhost:5173")
+            policy.AllowAnyOrigin()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -74,3 +80,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

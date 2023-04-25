@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import { signupRequest } from "@/utils/request.js";
+import { useRouter } from 'vue-router'
 
 var firstName = ref("");
 var lastName = ref("");
@@ -9,6 +10,8 @@ var username = ref("");
 var password = ref("");
 var birthdate = ref("");
 var showPassword = ref(false);
+
+const router = useRouter();
 
 var signup = function() {
   var data = {
@@ -21,9 +24,8 @@ var signup = function() {
   }
 
   var callback = function(response) {
-    console.log(response);
     if (response.success) {
-      this.$router.push("/login");
+      router.push("/login");
     }
   }
 

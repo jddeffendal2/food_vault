@@ -1,4 +1,4 @@
-﻿namespace FoodVault_Api.DTO
+﻿namespace FoodVaultApi.DTO
 {
     public class UserSignup
     {
