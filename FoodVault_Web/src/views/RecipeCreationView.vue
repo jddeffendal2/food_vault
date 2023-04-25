@@ -1,6 +1,6 @@
 <script >
 export default {
-    name: 'RecipeCreationView'
+    name: "RecipeCreationView"
 }
 </script>
 
