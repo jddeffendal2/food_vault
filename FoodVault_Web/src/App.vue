@@ -36,36 +36,32 @@ export default {
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
   background-color: antiquewhite;
-  text-align: center;
+  max-height: 100px;
   border: 1px solid #E8E8E4;
-  border-radius: 10px;
-  box-shadow: 0 5px 10px #ECE4DB;
+  border-radius: 8px;
+  box-shadow: 0 3px 3px #ECE4DB;
 }
 
 .brandName {
   color: #087E8B
 }
 
-ul {
-  list-style-type: none;
-}
-
 a {
   text-decoration: none;
   color: #087E8B;
 }
+ul {
+  list-style-type: none;
+}
 
-li {
-  padding: 20px;
+ul li {
+  padding: 30px;
 }
 
 .nav-bar {
-  font-family: Poppins;
-  color: aqua;
   display: flex;
+  font-family: Poppins;
 }
 
 @media (min-width: 1024px) {
@@ -74,12 +70,6 @@ li {
     flex-direction: row;
     align-items: center;
     /* justify-content: space-between; */
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
   }
 }
 </style>
