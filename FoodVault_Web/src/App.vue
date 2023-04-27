@@ -16,7 +16,17 @@ export default {
 
 <template>
   <header>
-    <h1>Recipe Vault</h1>
+    <router-link to="/">
+      <h1 class="brandName">Recipe Vault</h1>
+    </router-link>
+    <ul class="nav-bar">
+      <li><router-link to="/">WORK</router-link></li>
+      <li><router-link to="/">ABOUT</router-link></li>
+      <li><router-link to="/">CONTACT</router-link></li>
+    </ul>
+    <router-link to="/">
+      <button class="loginButton" type="button">Log In</button>
+    </router-link>
   </header>
   <div>
     <router-view></router-view>
@@ -26,65 +36,41 @@ export default {
 
 <style scoped>
 header {
-  line-height: 1.5;
-  max-height: 100vh;
   background-color: antiquewhite;
+  max-height: 100px;
+  border: 1px solid #E8E8E4;
+  border-radius: 8px;
+  box-shadow: 0 3px 3px #ECE4DB;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.brandName {
+  color: #087E8B;
+  padding-left: 100px;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+a {
+  text-decoration: none;
+  color: #087E8B;
+}
+ul {
+  list-style-type: none;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+ul li {
+  padding: 30px;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
+.nav-bar {
+  display: flex;
+  font-family: Poppins;
 }
 
 @media (min-width: 1024px) {
   header {
     display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
+    flex-direction: row;
+    align-items: center;
+    /* justify-content: space-between; */
   }
 }
 </style>
