@@ -1,5 +1,6 @@
-﻿using FoodVault_Api.DTO;
-using FoodVault_Api.Models;
+﻿using FoodVaultApi.DTO;
+using FoodVaultApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -7,7 +8,7 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace FoodVault_Api.Controllers
+namespace FoodVaultApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -27,6 +28,7 @@ namespace FoodVault_Api.Controllers
         /// </summary>
         /// <param name="userSignupInfo">Signup information passed from the user</param>
         /// <returns>JSON regarding success status</returns>
+        [AllowAnonymous]
         [HttpPost("Signup")]
         public IActionResult SignUp(UserSignup userSignupInfo)
         {
@@ -65,6 +67,7 @@ namespace FoodVault_Api.Controllers
         /// </summary>
         /// <param name="userLoginInfo">The login information supplied by the user</param>
         /// <returns>JSON regarding success status</returns>
+        [AllowAnonymous]
         [HttpPost("Authenticate")]
         public IActionResult Authenticate(UserLogin userLoginInfo)
         {

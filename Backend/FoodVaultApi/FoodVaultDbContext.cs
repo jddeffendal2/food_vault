@@ -1,12 +1,14 @@
-﻿using FoodVault_Api.Models;
+﻿using FoodVaultApi.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Reflection.Emit;
 
-namespace FoodVault_Api
+namespace FoodVaultApi
 {
     public class FoodVaultDbContext : DbContext
     {
         //protected readonly IConfiguration Configuration;
-        
+
         //public FoodVaultDbContext()
         //{
         //}
@@ -25,6 +27,14 @@ namespace FoodVault_Api
         //    var connectionString = Configuration.GetConnectionString("FoodVaultMySQLConnection");
         //    options.UseMySQL(connectionString);
         //}
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseMySQL("USE YOUR CONNECTION STRING FROM appsettings.json here");
+            }
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Group> Groups { get; set; }

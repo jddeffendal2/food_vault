@@ -11,35 +11,39 @@ namespace FoodVaultApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AlterDatabase()
+                .Annotation("MySQL:Charset", "utf8mb4");
+
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    Username = table.Column<string>(type: "text", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: false),
-                    PasswordSalt = table.Column<string>(type: "text", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    FirstName = table.Column<string>(type: "longtext", nullable: false),
+                    LastName = table.Column<string>(type: "longtext", nullable: false),
+                    Username = table.Column<string>(type: "longtext", nullable: false),
+                    Email = table.Column<string>(type: "longtext", nullable: false),
+                    PasswordHash = table.Column<string>(type: "longtext", nullable: false),
+                    PasswordSalt = table.Column<string>(type: "longtext", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Groups",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,18 +54,19 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Recipes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -72,19 +77,20 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "Invitations",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    SentFrom = table.Column<string>(type: "text", nullable: false),
-                    SentTo = table.Column<string>(type: "text", nullable: false),
-                    SentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    AcceptedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Accepted = table.Column<bool>(type: "boolean", nullable: false),
-                    GroupId = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    SentFrom = table.Column<string>(type: "varchar(255)", nullable: false),
+                    SentTo = table.Column<string>(type: "varchar(255)", nullable: false),
+                    SentDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    AcceptedDate = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    Accepted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -105,15 +111,16 @@ namespace FoodVaultApi.Migrations
                         column: x => x.SentTo,
                         principalTable: "Users",
                         principalColumn: "Id");
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "UserGroups",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    UserId = table.Column<string>(type: "text", nullable: false),
-                    GroupId = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    UserId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -130,15 +137,16 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "GroupRecipes",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    GroupId = table.Column<string>(type: "text", nullable: false),
-                    RecipeId = table.Column<string>(type: "text", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    GroupId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    RecipeId = table.Column<string>(type: "varchar(255)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -155,18 +163,19 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "RecipeIngredients",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    RecipeId = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Quantity = table.Column<double>(type: "double precision", nullable: false),
-                    UnitOfMeasurement = table.Column<string>(type: "text", nullable: false),
-                    SortOrder = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    RecipeId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Name = table.Column<string>(type: "longtext", nullable: false),
+                    Quantity = table.Column<double>(type: "double", nullable: false),
+                    UnitOfMeasurement = table.Column<string>(type: "longtext", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -177,16 +186,17 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateTable(
                 name: "RecipeInstructions",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
-                    RecipeId = table.Column<string>(type: "text", nullable: false),
-                    Text = table.Column<string>(type: "text", nullable: false),
-                    SortOrder = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<string>(type: "varchar(255)", nullable: false),
+                    RecipeId = table.Column<string>(type: "varchar(255)", nullable: false),
+                    Text = table.Column<string>(type: "longtext", nullable: false),
+                    SortOrder = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -197,7 +207,8 @@ namespace FoodVaultApi.Migrations
                         principalTable: "Recipes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
+                })
+                .Annotation("MySQL:Charset", "utf8mb4");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GroupRecipes_GroupId",

@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 import { loginRequest } from "@/utils/request.js";
+import { useRouter } from 'vue-router'
+import router from "../router";
 
 var emailUsername = ref("");
 var password = ref("");
@@ -13,8 +15,11 @@ var login = function() {
   }
 
   var callback = (res) => {
-    console.log(res);
-    localStorage.setItem("token", res);
+    if (res) {
+      localStorage.setItem("token", res);
+      router.push('/')
+    }
+
   }
 
   loginRequest(loginInfo, callback);

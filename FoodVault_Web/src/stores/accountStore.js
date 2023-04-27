@@ -7,7 +7,7 @@ export const useAccountStore = defineStore('account', {
     user: undefined,
   }),
   getters: {
-    user: (state) => state.user,
+    currentUser: (state) => state.user,
   },
   actions: {},
 })
