@@ -53,10 +53,10 @@ var login = function() {
   border: 3px solid #087E8B;
   border-radius: 6px;
   margin: 100px auto;
-  min-height: 600px;
-  max-height: 600px;
-  min-width: 500px;
-  max-width: 500px;
+  min-height: 550px;
+  max-height: 550px;
+  min-width: 450px;
+  max-width: 450px;
 }
 
 .row {
@@ -69,10 +69,10 @@ var login = function() {
 }
 
 .row input {
-  min-width: 350px;
-  max-width: 350px;
-  min-height: 40px;
-  min-height: 40px;
+  min-width: 315px;
+  max-width: 315px;
+  min-height: 35px;
+  min-height: 35px;
   background: #e9e9e9;
   border: 1px solid #0e333c;
   border-radius: 6px;
@@ -86,14 +86,14 @@ var login = function() {
 }
 
 .row p {
-  margin: auto auto 15px 130px;
+  margin: auto auto 15px 118px;
   font-size: 15px;
   font-weight: bold;
 }
 
 .row input:focus {
   background-color: #ffffff;
-  border: 2px solid #0e333c;
+  border: 2px solid #087E8B;
 }
 
 .row label {

@@ -44,7 +44,8 @@ header {
 }
 
 .brandName {
-  color: #087E8B
+  color: #087E8B;
+  padding-left: 100px;
 }
 
 a {
