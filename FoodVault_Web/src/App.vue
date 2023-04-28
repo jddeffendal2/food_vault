@@ -1,38 +1,44 @@
-<script>
+<template>
+  <header>
+    <RouterLink to="/">
+      <h1 class="brandName">Recipe Vault</h1>
+    </RouterLink>
+    <ul class="nav-bar">
+      <li><RouterLink to="/">WORK</RouterLink></li>
+      <li><RouterLink to="/">ABOUT</RouterLink></li>
+      <li><RouterLink to="/">CONTACT</RouterLink></li>
+    </ul>
+    <!-- <RouterLink to="/">
+      <button class="loginButton" type="button">Log In</button>
+    </RouterLink> -->
+  </header>
+  <div>
+    <RouterView />
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
+import router from "./router";
+
+const accountStore = useAccountStore();
+var loggedIn = ref(false);
+
+onMounted(async () => {
+  await accountStore.initialize();
+
+  if (!accountStore.isLoggedIn) {
+    router.push("/login");
+  } else {
+    router.push("/")
+  }
+});
 
 // Potential colors: #FFFEF2 background white
 // #5DD39E main green
 // #087E8B secondary blue
-
-export default {
-  setup() {
-    const userStore = useAccountStore();
-
-    return { userStore }
-  }
-}
 </script>
-
-<template>
-  <header>
-    <router-link to="/">
-      <h1 class="brandName">Recipe Vault</h1>
-    </router-link>
-    <ul class="nav-bar">
-      <li><router-link to="/">WORK</router-link></li>
-      <li><router-link to="/">ABOUT</router-link></li>
-      <li><router-link to="/">CONTACT</router-link></li>
-    </ul>
-    <router-link to="/">
-      <button class="loginButton" type="button">Log In</button>
-    </router-link>
-  </header>
-  <div>
-    <router-view></router-view>
-    <!-- Todo: show either home page or login page after checking if should be logged in -->
-  </div>
-</template>
 
 <style scoped>
 header {
