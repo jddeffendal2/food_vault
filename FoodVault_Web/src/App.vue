@@ -8,9 +8,9 @@
       <li><RouterLink to="/">ABOUT</RouterLink></li>
       <li><RouterLink to="/">CONTACT</RouterLink></li>
     </ul>
-    <!-- <RouterLink to="/">
-      <button class="loginButton" type="button">Log In</button>
-    </RouterLink> -->
+    <RouterLink v-if="accountStore.isLoggedIn" to="/login">
+      <button class="logoutButton" type="button" @click="logOut">Log Out</button>
+    </RouterLink>
   </header>
   <div>
     <RouterView />
@@ -18,12 +18,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { onMounted } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import router from "./router";
 
 const accountStore = useAccountStore();
-var loggedIn = ref(false);
 
 onMounted(async () => {
   await accountStore.initialize();
@@ -34,6 +33,10 @@ onMounted(async () => {
     router.push("/")
   }
 });
+
+function logOut() {
+  accountStore.logOut()
+}
 
 // Potential colors: #FFFEF2 background white
 // #5DD39E main green
@@ -69,6 +72,22 @@ ul li {
 .nav-bar {
   display: flex;
   font-family: Poppins;
+}
+
+.logoutButton {
+  margin: auto auto auto 400px;
+  min-width: 100px;
+  max-width: 100px;
+  min-height: 40px;
+  max-height: 40px;
+  border-radius: 8px;
+  border: 1px solid #087E8B;
+  color: #087E8B;
+}
+
+.logoutButton:hover {
+  box-shadow: 1px 1px 1px gray;
+  cursor: pointer;
 }
 
 @media (min-width: 1024px) {
