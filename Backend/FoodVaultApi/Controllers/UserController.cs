@@ -10,6 +10,7 @@ using System.Text;
 
 namespace FoodVaultApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -108,6 +109,11 @@ namespace FoodVaultApi.Controllers
             });
         }
 
+        /// <summary>
+        /// Get a specific user by their ID
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet("{userId}")]
         public IActionResult GetUser(string userId)
         {

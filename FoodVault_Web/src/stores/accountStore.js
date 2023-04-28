@@ -18,7 +18,7 @@ export const useAccountStore = defineStore("account", () => {
     if (localToken) token.value = localToken;
     if (localUserId) userId.value = localUserId;
 
-    if (userId.value) {
+    if (userId.value && token.value) {
       await loadUserData(userId.value);
     }
   }
