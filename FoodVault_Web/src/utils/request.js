@@ -20,7 +20,15 @@ var signupRequest = function(data, callback) {
     .then((data) => callback(data));
 }
 
+var getUser = function(userId, callback) {
+  return axios
+    .get(import.meta.env.VITE_FOODVAULT_API_URL + `/User/${userId}`)
+    .then((response) => response.data)
+    .then((data) => callback(data));
+}
+
 export {
   loginRequest,
-  signupRequest
+  signupRequest,
+  getUser
 }

@@ -1,35 +1,7 @@
-<script setup>
-import { ref } from "vue";
-import { loginRequest } from "@/utils/request.js";
-import { useRouter } from 'vue-router'
-import router from "../router";
-
-var emailUsername = ref("");
-var password = ref("");
-var showPassword = ref(false);
-
-var login = function() {
-  var loginInfo = {
-    emailUsername: emailUsername.value,
-    password: password.value,
-  }
-
-  var callback = (res) => {
-    if (res) {
-      localStorage.setItem("token", res);
-      router.push('/')
-    }
-
-  }
-
-  loginRequest(loginInfo, callback);
-}
-</script>
-
 <template>
   <div class="container">
     <h1 class="loginHeader">Sign In to Food Vault</h1>
-    <br/>
+    <br />
     <div class="row">
       <label class="row" for="emailUsername">Email or Username: </label>
       <input v-model="emailUsername" type="text" placeholder="Email or username" />
@@ -52,8 +24,41 @@ var login = function() {
   </div>
 </template>
 
-<style scoped>
+<script setup>
+import { ref } from "vue";
+import { loginRequest } from "@/utils/request.js";
+import { useRouter } from 'vue-router'
+import { useAccountStore } from "../stores/accountStore";
 
+var accountStore = useAccountStore();
+var router = useRouter();
+
+var emailUsername = ref("");
+var password = ref("");
+var showPassword = ref(false);
+
+var login = function () {
+  var loginInfo = {
+    emailUsername: emailUsername.value,
+    password: password.value,
+  }
+
+  var callback = async (res) => {
+    if (res) {
+      await accountStore.logIn(res);
+
+      if (accountStore.isLoggedIn) {
+        router.push("/")
+      }
+    }
+  }
+
+  loginRequest(loginInfo, callback);
+}
+</script>
+
+
+<style scoped>
 .container {
   border: 3px solid #087E8B;
   border-radius: 6px;
@@ -69,7 +74,8 @@ var login = function() {
   width: 100%;
 }
 
-.row h2, p {
+.row h2,
+p {
   font-weight: bold;
 }
 
@@ -132,5 +138,4 @@ var login = function() {
   width: 10%;
   height: 40px;
 }
-
 </style>

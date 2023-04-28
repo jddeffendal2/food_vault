@@ -98,10 +98,24 @@ namespace FoodVaultApi.Controllers
                 _configuration["Jwt:Issuer"],
                 _configuration["Jwt:Audience"],
                 claims,
-                expires: DateTime.UtcNow.AddMinutes(15),
+                expires: DateTime.UtcNow.AddDays(1),
                 signingCredentials: signIn);
 
-            return Ok(new JwtSecurityTokenHandler().WriteToken(token));
+            return Ok(new
+            { 
+                token = new JwtSecurityTokenHandler().WriteToken(token),
+                userId = user.Id,
+            });
+        }
+
+        [HttpGet("{userId}")]
+        public IActionResult GetUser(string userId)
+        {
+            var user = _context.Users.FirstOrDefault(x => x.Id == userId);
+            
+            if (user == null) return NotFound();
+
+            return Ok(UserDTO.ToDTO(user));
         }
 
         private void HashPassword(string password, out byte[] passwordHash, out byte[] salt)

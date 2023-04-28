@@ -1,7 +1,10 @@
 # Recipe Vault
 
-- Use cases:
-  - A user can create a family (group) and invite their friends/family to it, and any recipes they share in the group will be viewable by the whole group
-  - Right now it is a web app with Vue
-  - In the future we want a mobile app
-  - .NET 6 API interacts with database (MySQL most likely)
+To run the app:
+  - In Backend/FoodVaultApi, run `dotnet watch run`
+  - In FoodVault_Web, run `npm run dev`
+
+Database Migrations
+- If you change a model, create a migration
+  - `dotnet ef migrations add <MigrationName>`
+  - You don't need the <> symbols
