@@ -1,24 +1,36 @@
-<script setup>
-import { onMounted } from "vue";
-</script>
-
 <template>
-  <div class="homePageTitle"><h2>Welcome Home!</h2></div>
+  <div class="homePageTitle">
+    <h2>Welcome Home!</h2>
+  </div>
   <div class="homePage">
     <div class="leftDiv">
-      <h3>Start your recipe journey now!</h3>
+      <h3>Create a group to share your recipes with!</h3>
+      <div>
+        <button @click="openGroupCreation">Create Group</button>
+      </div>
     </div>
     <div class="centerDiv">
       <h3>Share your Recipes with family/friends</h3>
     </div>
     <div class="rightDiv">
-       <h3>Create your first Recipe: <RouterLink to="/AddRecipeOptions"> <button class="createRecipe">Create Recipe</button></RouterLink></h3>
+      <h3>Create your first Recipe: <RouterLink to="/AddRecipeOptions"> <button class="createRecipe">Create
+            Recipe</button></RouterLink>
+      </h3>
     </div>
   </div>
 </template>
 
-<style>
+<script setup>
+import { useRouter } from "vue-router";
 
+const router = useRouter();
+const openGroupCreation = function() {
+  router.push("/CreateGroup");
+}
+
+</script>
+
+<style>
 .homePageTitle {
   justify-content: center;
   text-align: center;
@@ -30,7 +42,8 @@ import { onMounted } from "vue";
   flex-direction: row;
   flex-wrap: wrap;
 }
-.homePage div {
+
+.homePage > div {
   flex: 30%;
   min-width: 250px;
   padding: 5px;
@@ -42,7 +55,7 @@ import { onMounted } from "vue";
   text-align: center;
 }
 
-.homePage div:hover {
+.homePage > div:hover {
   border: 3px solid #C7D6D5;
 }
 
@@ -65,5 +78,4 @@ import { onMounted } from "vue";
 .createRecipe:hover {
   box-shadow: 0 4px 4px #C7D6D5;
   cursor: pointer;
-}
-</style>
+}</style>
