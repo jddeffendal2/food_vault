@@ -2,23 +2,23 @@
   <div class="container">
     <h1 class="loginHeader">Sign In to Food Vault</h1>
     <br />
-    <div class="row">
-      <label class="row" for="emailUsername">Email or Username: </label>
+    <div class="loginRow">
+      <label class="loginRow" for="emailUsername">Email or Username: </label>
       <input v-model="emailUsername" type="text" placeholder="Email or username" />
     </div>
-    <div class="row">
-      <label class="row" for="password">Password: </label>
+    <div class="loginRow">
+      <label class="loginRow" for="password">Password: </label>
       <input v-if="showPassword" type="text" v-model="password" placeholder="Password" />
       <input v-else type="password" v-model="password" placeholder="Password" />
       <button id="showPassword" @click="showPassword = !showPassword">Show</button>
     </div>
-    <div class="row">
+    <div class="loginRow">
       <p id="passwordForgetten"><router-link to="/">Forgot your password?</router-link></p>
     </div>
-    <div class="row">
+    <div class="loginRow">
       <button type="submit" id="loginButton" @click="login">Login</button>
     </div>
-    <div class="row">
+    <div class="loginRow">
       <p>Don't have an account? <router-link to="/signup">Sign up!</router-link></p>
     </div>
   </div>
@@ -60,54 +60,56 @@ var login = function () {
 
 <style scoped>
 .container {
-  border: 3px solid #087E8B;
+  border: 3px solid #6D7275;
   border-radius: 6px;
   margin: 100px auto;
   min-height: 550px;
   max-height: 550px;
   min-width: 450px;
   max-width: 450px;
+  background-color: #C7D6D5;
 }
 
-.row {
+.loginRow {
   display: block;
   width: 100%;
 }
 
-.row h2,
-p {
+.loginRow h2, p, label {
   font-weight: bold;
+  color: #043565;
 }
 
-.row input {
+.loginRow input {
   min-width: 315px;
   max-width: 315px;
   min-height: 35px;
   min-height: 35px;
   background: #e9e9e9;
-  border: 1px solid #0e333c;
+  border: 1px solid #043565;
   border-radius: 6px;
   font-size: 22px;
   margin: 0px auto 15px 65px;
+  font-family: 'Quicksand', sans-serif;
 }
 
-.row #passwordForgetten {
+.loginRow #passwordForgetten {
   margin: auto auto 15px 65px;
   font-size: 15px;
 }
 
-.row p {
+.loginRow p {
   margin: auto auto 15px 118px;
   font-size: 15px;
   font-weight: bold;
 }
 
-.row input:focus {
+.loginRow input:focus {
   background-color: #ffffff;
-  border: 2px solid #087E8B;
+  border: 2px solid #043565;
 }
 
-.row label {
+.loginRow label {
   width: 100%;
   font-size: 20px;
   margin: auto auto 5px 65px;
@@ -119,10 +121,11 @@ p {
   height: 50px;
   border: none;
   border-radius: 4px;
-  background: #087E8B;
+  background: #043565;
   color: white;
   font-size: 23px;
   font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
 }
 
 #loginButton:hover {
@@ -132,10 +135,12 @@ p {
 
 .loginHeader {
   text-align: center;
+  color: #043565;
 }
 
 #showPassword {
   width: 10%;
   height: 40px;
+  font-family: 'Quicksand', sans-serif;
 }
 </style>

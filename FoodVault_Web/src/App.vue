@@ -43,9 +43,20 @@ function logOut() {
 // #087E8B secondary blue
 </script>
 
-<style scoped>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+
+
+html, body {
+  font-family: 'Quicksand', sans-serif;
+}
+
+#app {
+  font-family: 'Quicksand', sans-serif;
+}
+
 header {
-  background-color: antiquewhite;
+  background-color: #C7D6D5;
   max-height: 100px;
   border: 1px solid #E8E8E4;
   border-radius: 8px;
@@ -53,13 +64,13 @@ header {
 }
 
 .brandName {
-  color: #087E8B;
+  color: #043565;
   padding-left: 100px;
 }
 
 a {
   text-decoration: none;
-  color: #087E8B;
+  color: #043565;
 }
 ul {
   list-style-type: none;
@@ -71,7 +82,6 @@ ul li {
 
 .nav-bar {
   display: flex;
-  font-family: Poppins;
 }
 
 .logoutButton {
@@ -81,8 +91,8 @@ ul li {
   min-height: 40px;
   max-height: 40px;
   border-radius: 8px;
-  border: 1px solid #087E8B;
-  color: #087E8B;
+  border: 1px solid #043565;
+  color: #043565;
 }
 
 .logoutButton:hover {
