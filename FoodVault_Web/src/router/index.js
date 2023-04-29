@@ -4,6 +4,7 @@ import HomeView from "@/views/HomeView.vue"
 import RecipeCreationView from "@/views/RecipeCreationView.vue"
 import LoginPage from "@/components/LoginPage.vue";
 import SignUpPage from "@/components/SignUpPage.vue";
+import CreateGroup from "@/components/CreateGroup.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -22,6 +23,11 @@ const router = createRouter({
       path: "/Signup",
       name: "Signup",
       component: SignUpPage
+    },
+    {
+      path: "/CreateGroup",
+      name: "CreateGroup",
+      component: CreateGroup
     },
     {
       path: "/AddRecipeOptions",
