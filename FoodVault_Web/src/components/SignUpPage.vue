@@ -52,7 +52,7 @@ var signup = function() {
     <div class="row">
       <input v-if="showPassword" type="text" placeholder="Password" v-model="password" />
       <input v-else type="password" placeholder="Password" v-model="password" />
-      <button @click="showPassword = !showPassword">Show</button>
+      <button id="showPasswordButton" @click="showPassword = !showPassword">Show</button>
     </div>
     <div class="row">
       <input type="date" v-model="birthdate" />
@@ -65,13 +65,14 @@ var signup = function() {
 
 <style>
 .container {
-  border: 3px solid #087E8B;
+  border: 3px solid #6D7275;
   border-radius: 6px;
   margin: 100px auto;
   min-height: 550px;
   max-height: 550px;
   min-width: 450px;
   max-width: 450px;
+  background-color: #C7D6D5;
 }
 
 .row {
@@ -85,15 +86,16 @@ var signup = function() {
   min-height: 35px;
   min-height: 35px;
   background: #e9e9e9;
-  border: 1px solid #0e333c;
+  border: 1px solid #043565;
   border-radius: 6px;
   font-size: 22px;
   margin: 0px auto 15px 65px;
+  font-family: 'Quicksand', sans-serif;
 }
 
 .row input:focus {
   background-color: #ffffff;
-  border: 2px solid #087E8B;
+  border: 2px solid #043565;
 }
 
 #registerButton {
@@ -102,10 +104,11 @@ var signup = function() {
   height: 40px;
   border: none;
   border-radius: 4px;
-  background: #087E8B;
+  background: #043565;
   color: white;
   font-size: 23px;
   font-weight: bold;
+  font-family: 'Quicksand', sans-serif;
 }
 
 #registerButton:hover {
@@ -115,10 +118,12 @@ var signup = function() {
 
 .registerHeader {
   text-align: center;
+  color: #043565;
 }
 
-#showPassword {
-  width: 10%;
-  height: 40px;
+#showPasswordButton {
+  width: 12%;
+  height: 30px;
+  font-family: 'Quicksand', sans-serif;
 }
 </style>
