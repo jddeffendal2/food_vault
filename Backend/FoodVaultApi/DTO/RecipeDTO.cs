@@ -1,4 +1,6 @@
-﻿namespace FoodVaultApi.DTO
+﻿using FoodVaultApi.Models;
+
+namespace FoodVaultApi.DTO
 {
     public class RecipeDTO
     {
