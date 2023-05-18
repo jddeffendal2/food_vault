@@ -1,5 +1,7 @@
 # Recipe Vault
 
+This is an application for creating and sharing your personal recipes with your family and friends.
+
 To run the app:
   - In Backend/FoodVaultApi, run `dotnet watch run`
   - In FoodVault_Web, run `npm run dev`
