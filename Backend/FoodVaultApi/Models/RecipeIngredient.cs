@@ -9,6 +9,6 @@
         public string UnitOfMeasurement { get; set; }
         public int SortOrder { get; set; }
 
-        //public Recipe Recipe { get; set; } // The recipe this ingredient belongs to
+        public Recipe Recipe { get; set; } // The recipe this ingredient belongs to
     }
 }

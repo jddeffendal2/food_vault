@@ -50,11 +50,36 @@ var saveRecipe = function(recipeInfo, callback) {
     .then((data) => callback(data));
 }
 
+var saveRecipeIngredient = function(recipeIngredientInfo, callback) {
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("fv-token")}`
+    }
+  }
+  return axios
+    .post(import.meta.env.VITE_FOODVAULT_API_URL + `/RecipeIngredient/Create`, recipeIngredientInfo, config)
+    .then((response) => response.data)
+    .then((data) => callback(data));
+}
+
+var saveRecipeInstruction = function(recipeInstructionInfo, callback) {
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("fv-token")}`
+    }
+  }
+  return axios
+    .post(import.meta.env.VITE_FOODVAULT_API_URL + `/RecipeInstruction/Create`, recipeInstructionInfo, config)
+    .then((response) => response.data)
+    .then((data) => callback(data));
+}
 
 export {
   loginRequest,
   signupRequest,
   getUser,
   saveGroup,
-  saveRecipe
+  saveRecipe,
+  saveRecipeIngredient,
+  saveRecipeInstruction
 }

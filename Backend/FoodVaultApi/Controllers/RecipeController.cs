@@ -37,7 +37,7 @@ namespace FoodVaultApi.Controllers
             _context.Recipes.Add(recipe);
             _context.SaveChanges();
 
-            return Ok();
+            return Ok(recipe.Id);
         }
 
 

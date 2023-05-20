@@ -9,7 +9,7 @@ namespace FoodVaultApi.Controllers
     [ApiController]
     [Route("api/[controller]")]
 
-    public class RecipeIngredientController
+    public class RecipeIngredientController : ControllerBase
     {
         private readonly FoodVaultDbContext _context;
         private IConfiguration _configuration;
@@ -27,6 +27,7 @@ namespace FoodVaultApi.Controllers
             var recipeIngredient = new RecipeIngredient
             {
                 Id = Guid.NewGuid().ToString().ToUpper(),
+                RecipeId = recipeIngredientDto.recipeId,
                 Name = recipeIngredientDto.name,
                 Quantity = recipeIngredientDto.quantity,
                 UnitOfMeasurement = recipeIngredientDto.unitOfMeasurement,
