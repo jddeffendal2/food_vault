@@ -7,37 +7,64 @@
     <br /><br />
     <label>Description of Recipe: </label>
     <input type="text" name="description" v-model="description" />
-    <br/><br/>
+    <br /><br />
     <div class="recipeInformation">
       <div class="ingredientBox">
-        <label id="ingredientLabel"><b>Ingredients:</b></label> <br/><br/>
+        <label id="ingredientLabel"><b>Ingredients:</b></label> <br /><br />
         <div class="ingredients" v-if="ingredients.length > 0">
-          <br/>
+          <br />
           <div class="ingredientInputs" v-for="ingredient in ingredients" :key="ingredient">
-            <span>{{ ingredient.id + 1}}: </span>
-            <input type="text" :id="'ingredientName' + ingredient.id" placeholder="Name of Ingredient"/> 
-            <input class="amount" type="number" :id="'amount' + ingredient.id" placeholder="Amount"/>
-            <input class="termOfMeasurements" type="text" :id="'termOfMeasurement' + ingredient.id" placeholder="mg"/>
-            <br/> <br/>
+            <span>{{ ingredient.id + 1 }}: </span>
+            <input
+              type="text"
+              :id="'ingredientName' + ingredient.id"
+              placeholder="Name of Ingredient"
+            />
+            <input
+              class="amount"
+              type="number"
+              :id="'amount' + ingredient.id"
+              placeholder="Amount"
+            />
+            <input
+              class="termOfMeasurements"
+              type="text"
+              :id="'termOfMeasurement' + ingredient.id"
+              placeholder="mg"
+            />
+            <br />
+            <br />
           </div>
         </div>
-        <br/>
-        <button id="addIngredient" @click="addIngredient">Add Another Ingredient</button>
-        <br /> <br/>
+        <br />
+        <button id="addIngredient" @click="addIngredient">
+          Add Another Ingredient
+        </button>
+        <br />
+        <br />
       </div>
       <div class="instructionsBox">
-        <label id="instructionsLabel"><b>Instructions: </b></label> <br/><br/>
+        <label id="instructionsLabel"><b>Instructions: </b></label> <br /><br />
         <div class="instructions" v-if="instructions.length > 0">
-          <br/>
-          <div v-for="instruction in instructions" :key="instruction">
-            <span>{{ instruction.id + 1}}: </span>
-            <input type="text" :id="'instructionText' + instruction.id" :placeholder="'Instruction #' + (instruction.id + 1)">
-            <br/> <br/>
-          </div>
+          <br />
+          <draggable v-model="instructions">
+            <template #item="{ element: instruction }">
+              <div class="instructionHover">
+                <span>{{ instruction.id + 1 }}: </span>
+                <input
+                  type="text"
+                  :id="'instructionText' + instruction.id"
+                  :placeholder="'Instruction #' + (instruction.id + 1)"
+                />
+              </div>
+            </template>
+          </draggable>
         </div>
         <div id="extraInstructions"></div>
         <br /><br />
-        <button id="addInstruction" @click="addInstruction">Add Another Instruction</button>
+        <button id="addInstruction" @click="addInstruction">
+          Add Another Instruction
+        </button>
         <br /><br />
       </div>
     </div>
@@ -51,12 +78,12 @@ import { useAccountStore } from "../stores/accountStore";
 import { saveRecipe } from "../utils/request.js";
 import { saveRecipeIngredient } from "../utils/request.js";
 import { saveRecipeInstruction } from "../utils/request.js";
+import draggable from "vuedraggable";
 
 const accountStore = useAccountStore();
 
 const ingredients = ref([]);
 const instructions = ref([]);
-
 
 var recipeName = ref("");
 var description = ref("");
@@ -68,49 +95,52 @@ const createRecipe = async function() {
     description: description.value
   };
   let savedRecipe = await saveRecipe(recipe, (res) => res);
-  
-  for (let i=0; i<ingredients.value.length; i++) {
-    const ingredientName = document.getElementById('ingredientName' + i).value;
-    const amount = document.getElementById('amount' + i).value;
-    const termOfMeasurement = document.getElementById('termOfMeasurement' + i).value;
+
+  for (let i = 0; i < ingredients.value.length; i++) {
+    const ingredientName = document.getElementById("ingredientName" + i).value;
+    const amount = document.getElementById("amount" + i).value;
+    const termOfMeasurement = document.getElementById(
+      "termOfMeasurement" + i
+    ).value;
     var newIngredient = {
       recipeId: savedRecipe,
       name: ingredientName,
-      quantity: amount, 
+      quantity: amount,
       unitOfMeasurement: termOfMeasurement,
-      sortOrder: i + 1
+      sortOrder: i + 1,
     };
-    saveRecipeIngredient(newIngredient, (res) => console.log(res))
+    saveRecipeIngredient(newIngredient, (res) => console.log(res));
   }
 
-  for (let i=0; i<instructions.value.length; i++) {
-    const instructionText = document.getElementById('instructionText' + i).value;
+  for (let i = 0; i < instructions.value.length; i++) {
+    const instructionText = document.getElementById(
+      "instructionText" + i
+    ).value;
     var newInstruction = {
       recipeId: savedRecipe,
       text: instructionText,
       sortOrder: i + 1
     };
-    saveRecipeInstruction(newInstruction, (res) => console.log(res))
+    saveRecipeInstruction(newInstruction, (res) => console.log(res));
   }
-}
+};
 
-const addIngredient = function() {
+const addIngredient = function () {
   var newIngredient = {
     id: ingredients.value.length,
     text: "",
-    amount: "", 
-    measurementTerm: ""
+    amount: "",
+    measurementTerm: "",
   };
   ingredients.value.push(newIngredient);
-}
-const addInstruction = function() {
+};
+const addInstruction = function () {
   var newInstruction = {
     id: instructions.value.length,
-    text: ""
+    text: "",
   };
   instructions.value.push(newInstruction);
-}
-
+};
 </script>
 
 <style scoped>
@@ -132,12 +162,13 @@ const addInstruction = function() {
 
 .ingredients,
 .instructions {
-  border: 3px solid #C7D6D5;
+  border: 3px solid #c7d6d5;
   border-radius: 5px;
-  background-color: #C7D6D5;
+  background-color: #c7d6d5;
+  justify-content: center;
 }
 
-.ingredientInputs input{
+.ingredientInputs input {
   margin: 1px;
 }
 
@@ -159,5 +190,18 @@ const addInstruction = function() {
 #instructionsLabel {
   font-size: 20px;
   color: #043565;
+}
+
+.instructionHover {
+  border: 2px solid #043565;
+  border-radius: 4px;
+  max-width: 300px;
+  min-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+}
+.instructionHover:hover {
+  cursor: pointer;
 }
 </style>
