@@ -11,6 +11,9 @@
     </div>
     <div class="centerDiv">
       <h3>Share your Recipes with family/friends</h3>
+      <div>
+        <button @click="openRecipeEditing">View/Edit Your Recipes</button>
+      </div>
     </div>
     <div class="rightDiv">
       <h3>Create your first Recipe: <RouterLink to="/AddRecipeOptions"> <button class="createRecipe">Create
@@ -26,6 +29,10 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const openGroupCreation = function() {
   router.push("/CreateGroup");
+}
+
+const openRecipeEditing = function() {
+  router.push("/EditRecipes");
 }
 
 </script>
