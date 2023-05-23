@@ -55,7 +55,8 @@
                   type="text"
                   :id="'instructionText' + instruction.id"
                   :placeholder="'Instruction #' + (instruction.id + 1)"
-                />
+                />&nbsp;
+                <img src="../assets/drag.png" />
               </div>
             </template>
           </draggable>
@@ -69,7 +70,8 @@
       </div>
     </div>
     <button id="saveRecipe" @click="createRecipe">Save Recipe</button>
-  </div>
+    <br/><br/><br/>
+    <a href="https://www.flaticon.com/free-icons/handle" title="handle icons">Handle icons created by exomoon design studio - Flaticon</a>  </div>
 </template>
 
 <script setup>
@@ -193,8 +195,7 @@ const addInstruction = function () {
 }
 
 .instructionHover {
-  border: 2px solid #043565;
-  border-radius: 4px;
+
   max-width: 300px;
   min-width: 300px;
   margin-left: auto;
