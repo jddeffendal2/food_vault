@@ -5,11 +5,12 @@
       <div
         class="singleRecipe"
         v-for="recipe in currentUserRecipes"
-        :key="recipe.id"
+        :key="recipe.id" 
+        @click="editRecipe(recipe)"
       >
         <span class="recipeName"> {{ recipe.name }}: &nbsp;&nbsp;</span>
-        <span>{{ recipe.description }}</span>
-        <br />
+        <span class="recipeDescription">{{ recipe.description }}</span>
+        <p class="lastUpdated"> Last Updated: {{ recipe.updatedDate }}</p>
       </div>
     </div>
     <br/>
@@ -20,6 +21,9 @@
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "../stores/accountStore";
 import { getRecipesByUserId } from "../utils/request.js";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const accountStore = useAccountStore();
 
@@ -31,6 +35,15 @@ onMounted(async () => {
     (res) => res
   );
 });
+
+const editRecipe = function (recipe) {
+  router.push({
+    name: "EditSingleRecipe",
+    params: {
+      recipeId: recipe.id
+    }
+  });
+};
 </script>
 
 <style scoped>
@@ -54,5 +67,13 @@ onMounted(async () => {
 .singleRecipe:hover {
   cursor: pointer;
   background-color: lightgray;
+}
+
+.lastUpdated {
+  font-size: 60%;
+  font-weight: bold;
+}
+.recipeDescription {
+  font-size: smaller;
 }
 </style>
