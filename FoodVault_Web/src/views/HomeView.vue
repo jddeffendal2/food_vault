@@ -6,19 +6,18 @@
     <div class="leftDiv">
       <h3>Create a group to share your recipes with!</h3>
       <div>
-        <button @click="openGroupCreation">Create Group</button>
+        <button class="greenButtons" @click="openGroupCreation">Create Group</button>
       </div>
     </div>
     <div class="centerDiv">
       <h3>Share your Recipes with family/friends</h3>
       <div>
-        <button @click="openRecipeEditing">View/Edit Your Recipes</button>
+        <button class="editButton" @click="openRecipeEditing">View/Edit Your Recipes</button>
       </div>
     </div>
     <div class="rightDiv">
-      <h3>Create your first Recipe: <RouterLink to="/AddRecipeOptions"> <button class="createRecipe">Create
-            Recipe</button></RouterLink>
-      </h3>
+      <h3>Create your first Recipe</h3>
+      <RouterLink to="/AddRecipeOptions"> <button class="greenButtons">Create Recipe</button></RouterLink>
     </div>
   </div>
 </template>
@@ -74,7 +73,7 @@ const openRecipeEditing = function() {
   color: #043565;
 }
 
-.createRecipe {
+.greenButtons {
   min-height: 30px;
   min-width: 100px;
   background-color: #C7D6D5;
@@ -82,7 +81,20 @@ const openRecipeEditing = function() {
   border: 1px solid #043565;
 }
 
-.createRecipe:hover {
+.greenButtons:hover {
   box-shadow: 0 4px 4px #C7D6D5;
   cursor: pointer;
-}</style>
+}
+
+.editButton {
+  min-height: 30px;
+  min-width: 100px;
+  border-radius: 10px;
+  border: 1px solid #043565;
+}
+
+.editButton:hover {
+  box-shadow: 0 2px 2px lightslategrey;
+  cursor: pointer;
+}
+</style>
