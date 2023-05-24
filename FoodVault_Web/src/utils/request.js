@@ -86,6 +86,18 @@ var getRecipesByUserId = function(userId, callback) {
     .then((data) => callback(data));
 }
 
+var getGroupsByUserId = function(userId, callback) {
+  const config = {
+    headers: {
+      "Authorization": `Bearer ${localStorage.getItem("fv-token")}`
+    }
+  }
+  return axios
+    .get(import.meta.env.VITE_FOODVAULT_API_URL + `/Group/${userId}`, config)
+    .then((response) => response.data)
+    .then((data) => callback(data));
+}
+
 export {
   loginRequest,
   signupRequest,
@@ -94,5 +106,6 @@ export {
   saveRecipe,
   saveRecipeIngredient,
   saveRecipeInstruction,
-  getRecipesByUserId
+  getRecipesByUserId,
+  getGroupsByUserId
 }

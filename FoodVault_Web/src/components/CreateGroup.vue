@@ -21,19 +21,22 @@
 import { ref } from "vue";
 import { useAccountStore } from "../stores/accountStore";
 import { saveGroup } from "../utils/request.js";
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 const accountStore = useAccountStore();
 
 var name = ref("");
 var description = ref("");
 
-const createGroup = function () {
+const createGroup = async function () {
   const group = {
     name: name.value,
     description: description.value,
     creator: accountStore.currentUserId
   };
-  saveGroup(group, (res) => console.log(res));
+  await saveGroup(group, (res) => console.log(res));
+  router.push("/");
 }
 </script>
 

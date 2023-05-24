@@ -37,5 +37,13 @@ namespace FoodVaultApi.Controllers
 
             return Ok();
         }
+
+        [HttpGet("{userId}")]
+
+        public IActionResult GetGroupsById(String userId) {
+            var groups = _context.Groups.Where(x => x.UserId == userId);
+                        
+            return Ok(groups);
+        }
     }
 }

@@ -13,7 +13,11 @@
         <label id="ingredientLabel"><b>Ingredients:</b></label> <br /><br />
         <div class="ingredients" v-if="ingredients.length > 0">
           <br />
-          <div class="ingredientInputs" v-for="ingredient in ingredients" :key="ingredient">
+          <div
+            class="ingredientInputs"
+            v-for="ingredient in ingredients"
+            :key="ingredient"
+          >
             <span>{{ ingredient.id + 1 }}: </span>
             <input
               type="text"
@@ -55,8 +59,7 @@
                   type="text"
                   :id="'instructionText' + instruction.id"
                   :placeholder="'Instruction #' + (instruction.id + 1)"
-                />&nbsp;
-                <img src="../assets/drag.png" />
+                />&nbsp;&nbsp; &#8597;
               </div>
             </template>
           </draggable>
@@ -70,8 +73,8 @@
       </div>
     </div>
     <button id="saveRecipe" @click="createRecipe">Save Recipe</button>
-    <br/><br/><br/>
-    <a href="https://www.flaticon.com/free-icons/handle" title="handle icons">Handle icons created by exomoon design studio - Flaticon</a>  </div>
+    <br /><br /><br />
+  </div>
 </template>
 
 <script setup>
@@ -81,6 +84,9 @@ import { saveRecipe } from "../utils/request.js";
 import { saveRecipeIngredient } from "../utils/request.js";
 import { saveRecipeInstruction } from "../utils/request.js";
 import draggable from "vuedraggable";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const accountStore = useAccountStore();
 
@@ -90,11 +96,11 @@ const instructions = ref([]);
 var recipeName = ref("");
 var description = ref("");
 
-const createRecipe = async function() {
+const createRecipe = async function () {
   const recipe = {
     creator: accountStore.currentUserId,
-    name: recipeName.value, 
-    description: description.value
+    name: recipeName.value,
+    description: description.value,
   };
   let savedRecipe = await saveRecipe(recipe, (res) => res);
 
@@ -111,7 +117,7 @@ const createRecipe = async function() {
       unitOfMeasurement: termOfMeasurement,
       sortOrder: i + 1,
     };
-    saveRecipeIngredient(newIngredient, (res) => console.log(res));
+    await saveRecipeIngredient(newIngredient, (res) => console.log(res));
   }
 
   for (let i = 0; i < instructions.value.length; i++) {
@@ -121,9 +127,10 @@ const createRecipe = async function() {
     var newInstruction = {
       recipeId: savedRecipe,
       text: instructionText,
-      sortOrder: i + 1
+      sortOrder: i + 1,
     };
-    saveRecipeInstruction(newInstruction, (res) => console.log(res));
+    await saveRecipeInstruction(newInstruction, (res) => console.log(res));
+    router.push("/");
   }
 };
 
@@ -195,7 +202,6 @@ const addInstruction = function () {
 }
 
 .instructionHover {
-
   max-width: 300px;
   min-width: 300px;
   margin-left: auto;
