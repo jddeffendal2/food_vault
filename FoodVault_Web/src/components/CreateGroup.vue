@@ -20,8 +20,8 @@
 <script setup>
 import { ref } from "vue";
 import { useAccountStore } from "../stores/accountStore";
-import { saveGroup } from "../utils/request.js";
 import { useRouter } from "vue-router";
+import GroupRequest from "@/requests/group-request";
 
 const router = useRouter();
 const accountStore = useAccountStore();
@@ -35,7 +35,7 @@ const createGroup = async function () {
     description: description.value,
     creator: accountStore.currentUserId
   };
-  await saveGroup(group, (res) => console.log(res));
+  await new GroupRequest().createGroup(group);
   router.push("/");
 }
 </script>

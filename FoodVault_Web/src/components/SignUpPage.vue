@@ -1,42 +1,7 @@
-<script setup>
-import { ref } from "vue";
-import { signupRequest } from "@/utils/request.js";
-import { useRouter } from 'vue-router'
-
-var firstName = ref("");
-var lastName = ref("");
-var email = ref("");
-var username = ref("");
-var password = ref("");
-var birthdate = ref("");
-var showPassword = ref(false);
-
-const router = useRouter();
-
-var signup = function() {
-  var data = {
-    firstName: firstName.value,
-    lastName: lastName.value,
-    email: email.value,
-    username: username.value,
-    password: password.value,
-    birthdate: birthdate.value
-  }
-
-  var callback = function(response) {
-    if (response.success) {
-      router.push("/login");
-    }
-  }
-
-  signupRequest(data, callback);
-}
-</script>
-
 <template>
   <div class="container">
     <h1 class="registerHeader">Create an Account</h1>
-    <br/>
+    <br />
     <div class="row">
       <input type="text" placeholder="First Name" v-model="firstName" />
     </div>
@@ -45,7 +10,7 @@ var signup = function() {
     </div>
     <div class="row">
       <input type="text" placeholder="Email" v-model="email" />
-    </div>  
+    </div>
     <div class="row">
       <input type="text" placeholder="Username" v-model="username" />
     </div>
@@ -62,6 +27,38 @@ var signup = function() {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import UserRequest from "@/requests/user-request";
+
+var firstName = ref("");
+var lastName = ref("");
+var email = ref("");
+var username = ref("");
+var password = ref("");
+var birthdate = ref("");
+var showPassword = ref(false);
+
+const router = useRouter();
+
+var signup = async function () {
+  var data = {
+    firstName: firstName.value,
+    lastName: lastName.value,
+    email: email.value,
+    username: username.value,
+    password: password.value,
+    birthdate: birthdate.value
+  }
+
+  const response = await new UserRequest().signUp(data);
+  if (response.success) {
+    router.push("/login");
+  }
+}
+</script>
 
 <style>
 .container {

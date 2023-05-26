@@ -1,19 +1,24 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import { getUser } from '../utils/request';
+import UserRequest from "@/requests/user-request";
+import router from "@/router";
 
 export const useAccountStore = defineStore("account", () => {
   const userId = ref(null);
   const token = ref(null);
   const user = ref({});
+  const userRequest = new UserRequest();
+
+  const tokenKey = "fv-token";
+  const userIdKey = "fv-userId";
 
   const currentUserId = computed(() => userId.value);
   const activeToken = computed(() => token.value);
   const isLoggedIn = computed(() => userId.value !== null && token.value !== null && user.value !== null);
 
   async function initialize() {
-    var localToken = localStorage.getItem("fv-token");
-    var localUserId = localStorage.getItem("fv-userId");
+    var localToken = localStorage.getItem(tokenKey);
+    var localUserId = localStorage.getItem(userIdKey);
 
     if (localToken) token.value = localToken;
     if (localUserId) userId.value = localUserId;
@@ -23,32 +28,31 @@ export const useAccountStore = defineStore("account", () => {
     }
   }
 
-  async function logIn(userData) {
-    localStorage.setItem("fv-token", userData.token);
-    localStorage.setItem("fv-userId", userData.userId);
-    token.value = userData.token;
-    userId.value = userData.userId;
+  async function logIn(userInfo) {
+    const response = await userRequest.logIn(userInfo);
+    localStorage.setItem(tokenKey, response.token);
+    localStorage.setItem(userIdKey, response.userId);
+    token.value = response.token;
+    userId.value = response.userId;
 
     await loadUserData(userId.value);
   }
 
   function logOut() {
-    localStorage.removeItem("fv-token");
-    localStorage.removeItem("fv-userId");
-    clearUserInfo();
+    localStorage.removeItem(tokenKey);
+    localStorage.removeItem(userIdKey);
+    clearAccountStore();
+    router.push("/Login");
   }
 
-  function loadUserData(userId) {
-    return getUser(userId, (res) => {
-      user.value = res;
-    });
+  async function loadUserData(userId) {
+    user.value = await userRequest.getUser(userId);
   }
 
-  function clearUserInfo() {
+  function clearAccountStore() {
     token.value = null;
-    username.value = null;
     userId.value = null;
-    userFullName.value = null;
+    user.value = null;
   }
 
   return {

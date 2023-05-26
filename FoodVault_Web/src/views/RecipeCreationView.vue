@@ -1,11 +1,214 @@
-<script >
-export default {
-    name: "RecipeCreationView"
-}
+<template>
+  <div class="div-main">
+    <h2>Create/Add Your Own Recipes To Food Vault</h2>
+    <br />
+    <label>Name of Recipe: </label>
+    <input type="text" name="recipeName" v-model="recipeName" />
+    <br /><br />
+    <label>Description of Recipe: </label>
+    <input type="text" name="description" v-model="description" />
+    <br /><br />
+    <div class="recipeInformation">
+      <div class="ingredientBox">
+        <label id="ingredientLabel"><b>Ingredients:</b></label> <br /><br />
+        <div class="ingredients" v-if="ingredients.length > 0">
+          <br />
+          <div
+            class="ingredientInputs"
+            v-for="ingredient in ingredients"
+            :key="ingredient"
+          >
+            <span>{{ ingredient.id + 1 }}: </span>
+            <input
+              type="text"
+              :id="'ingredientName' + ingredient.id"
+              placeholder="Name of Ingredient"
+            />
+            <input
+              class="amount"
+              type="number"
+              :id="'amount' + ingredient.id"
+              placeholder="Amount"
+            />
+            <input
+              class="termOfMeasurements"
+              type="text"
+              :id="'termOfMeasurement' + ingredient.id"
+              placeholder="mg"
+            />
+            <br />
+            <br />
+          </div>
+        </div>
+        <br />
+        <button id="addIngredient" @click="addIngredient">
+          Add Another Ingredient
+        </button>
+        <br />
+        <br />
+      </div>
+      <div class="instructionsBox">
+        <label id="instructionsLabel"><b>Instructions: </b></label> <br /><br />
+        <div class="instructions" v-if="instructions.length > 0">
+          <br />
+          <draggable v-model="instructions">
+            <template #item="{ element: instruction }">
+              <div class="instructionHover">
+                <span>{{ instruction.id + 1 }}: </span>
+                <input
+                  type="text"
+                  :id="'instructionText' + instruction.id"
+                  :placeholder="'Instruction #' + (instruction.id + 1)"
+                />&nbsp;&nbsp; &#8597;
+              </div>
+            </template>
+          </draggable>
+        </div>
+        <div id="extraInstructions"></div>
+        <br /><br />
+        <button id="addInstruction" @click="addInstruction">
+          Add Another Instruction
+        </button>
+        <br /><br />
+      </div>
+    </div>
+    <button id="saveRecipe" @click="createRecipe">Save Recipe</button>
+    <br /><br /><br />
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { useAccountStore } from "../stores/accountStore";
+import draggable from "vuedraggable";
+import { useRouter } from "vue-router";
+import RecipeRequest from "@/requests/recipe-request";
+import RecipeIngredientRequest from "@/requests/recipe-ingredient-request";
+import RecipeInstructionRequest from "@/requests/recipe-instruction-request";
+
+const router = useRouter();
+
+const accountStore = useAccountStore();
+
+const ingredients = ref([]);
+const instructions = ref([]);
+
+var recipeName = ref("");
+var description = ref("");
+
+const createRecipe = async function () {
+  const recipe = {
+    creator: accountStore.currentUserId,
+    name: recipeName.value,
+    description: description.value,
+  };
+  const recipeId = await new RecipeRequest().createRecipe(recipe);
+
+  for (let i = 0; i < ingredients.value.length; i++) {
+    const ingredientName = document.getElementById("ingredientName" + i).value;
+    const amount = document.getElementById("amount" + i).value;
+    const termOfMeasurement = document.getElementById(
+      "termOfMeasurement" + i
+    ).value;
+    var newIngredient = {
+      recipeId: recipeId,
+      name: ingredientName,
+      quantity: amount,
+      unitOfMeasurement: termOfMeasurement,
+      sortOrder: i + 1,
+    };
+    await new RecipeIngredientRequest().createRecipeIngredient(newIngredient);
+  }
+
+  for (let i = 0; i < instructions.value.length; i++) {
+    const instructionText = document.getElementById(
+      "instructionText" + i
+    ).value;
+    var newInstruction = {
+      recipeId: savedRecipe,
+      text: instructionText,
+      sortOrder: i + 1,
+    };
+    await new RecipeInstructionRequest().createRecipeInstruction(newInstruction);
+    router.push("/");
+  }
+};
+
+const addIngredient = function () {
+  var newIngredient = {
+    id: ingredients.value.length,
+    text: "",
+    amount: "",
+    measurementTerm: "",
+  };
+  ingredients.value.push(newIngredient);
+};
+const addInstruction = function () {
+  var newInstruction = {
+    id: instructions.value.length,
+    text: "",
+  };
+  instructions.value.push(newInstruction);
+};
 </script>
 
-<!-- <template>
-</template> -->
-
 <style scoped>
+.div-main {
+  text-align: center;
+}
+
+.recipeInformation {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.recipeInformation > div {
+  flex: 30%;
+  margin: 20px;
+}
+
+.ingredients,
+.instructions {
+  border: 3px solid #c7d6d5;
+  border-radius: 5px;
+  background-color: #c7d6d5;
+  justify-content: center;
+}
+
+.ingredientInputs input {
+  margin: 1px;
+}
+
+.amount {
+  min-width: 70px;
+  max-width: 70px;
+}
+
+.termOfMeasurements {
+  min-width: 20px;
+  max-width: 20px;
+}
+
+#ingredientLabel {
+  font-size: 20px;
+  color: #043565;
+}
+
+#instructionsLabel {
+  font-size: 20px;
+  color: #043565;
+}
+
+.instructionHover {
+  max-width: 300px;
+  min-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 5px;
+}
+.instructionHover:hover {
+  cursor: pointer;
+}
 </style>

@@ -20,8 +20,8 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "../stores/accountStore";
-import { getRecipesByUserId } from "../utils/request.js";
 import { useRouter } from "vue-router";
+import RecipeRequest from "@/requests/recipe-request";
 
 const router = useRouter();
 
@@ -30,10 +30,7 @@ const accountStore = useAccountStore();
 var currentUserRecipes = ref([]);
 
 onMounted(async () => {
-  currentUserRecipes.value = await getRecipesByUserId(
-    accountStore.currentUserId,
-    (res) => res
-  );
+  currentUserRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
 });
 
 const editRecipe = function (recipe) {
