@@ -26,9 +26,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { loginRequest } from "@/utils/request.js";
 import { useRouter } from 'vue-router'
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 
 var accountStore = useAccountStore();
 var router = useRouter();
@@ -37,26 +36,19 @@ var emailUsername = ref("");
 var password = ref("");
 var showPassword = ref(false);
 
-var login = function () {
+var login = async function () {
   var loginInfo = {
     emailUsername: emailUsername.value,
     password: password.value,
   }
 
-  var callback = async (res) => {
-    if (res) {
-      await accountStore.logIn(res);
-
-      if (accountStore.isLoggedIn) {
-        router.push("/")
-      }
-    }
+  await accountStore.logIn(loginInfo);
+  
+  if (accountStore.isLoggedIn) {
+    router.push("/");
   }
-
-  loginRequest(loginInfo, callback);
 }
 </script>
-
 
 <style scoped>
 .container {

@@ -33,7 +33,7 @@
     </div>
     <div class="rightDiv">
       <h3>Your Recipes</h3>
-      <RouterLink to="/AddRecipeOptions">
+      <RouterLink to="/CreateRecipe">
         <button class="greenButtons">Create Recipe</button></RouterLink
       ><br/><br/>
       <div class="dropDownList" @click="toggleDisplayOfRecipes">
@@ -63,9 +63,9 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getGroupsByUserId } from "../utils/request.js";
-import { getRecipesByUserId } from "../utils/request.js";
 import { useAccountStore } from "../stores/accountStore";
+import RecipeRequest from "@/requests/recipe-request";
+import GroupRequest from "@/requests/group-request";
 
 const router = useRouter();
 
@@ -109,14 +109,8 @@ const editRecipe = function (recipe) {
 }
 
 onMounted(async () => {
-  usersGroups.value = await getGroupsByUserId(
-    accountStore.currentUserId,
-    (res) => res
-  );
-  usersRecipes.value = await getRecipesByUserId(
-    accountStore.currentUserId,
-    (res) => res
-  );
+  usersGroups.value = await new GroupRequest().getGroupsOwnedByUser(accountStore.currentUserId);
+  usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
 });
 </script>
 

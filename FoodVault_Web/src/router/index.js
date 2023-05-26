@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AddRecipeOptionsView from "@/views/AddRecipeOptionsView.vue"
-import HomeView from "@/views/HomeView.vue"
 import RecipeCreationView from "@/views/RecipeCreationView.vue"
+import HomeView from "@/views/HomeView.vue"
 import LoginPage from "@/components/LoginPage.vue";
 import SignUpPage from "@/components/SignUpPage.vue";
 import CreateGroup from "@/components/CreateGroup.vue";
@@ -32,13 +31,8 @@ const router = createRouter({
       component: CreateGroup
     },
     {
-      path: "/AddRecipeOptions",
-      name: "AddRecipeOptionsView",
-      component: AddRecipeOptionsView
-    },
-    {
-      path: "/RecipeCreationView",
-      name: "RecipeCreationView",
+      path: "/CreateRecipe",
+      name: "CreateRecipe",
       component: RecipeCreationView
     },
     {
