@@ -44,7 +44,7 @@ export class Request {
       },
       method: method
     }
-    const response = await axios.request({
+    return (await axios.request({
       ...config,
       url: this.endpoint(action),
       data: body
@@ -53,6 +53,6 @@ export class Request {
       if (error.response.status === 401) {
         useAccountStore().logOut();
       }
-    });
+    })).data;
   }
 }
