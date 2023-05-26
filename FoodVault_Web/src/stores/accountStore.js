@@ -12,6 +12,7 @@ export const useAccountStore = defineStore("account", () => {
   const tokenKey = "fv-token";
   const userIdKey = "fv-userId";
 
+  const currentUser = computed(() => user.value);
   const currentUserId = computed(() => userId.value);
   const activeToken = computed(() => token.value);
   const isLoggedIn = computed(() => userId.value !== null && token.value !== null && user.value !== null);
@@ -56,9 +57,7 @@ export const useAccountStore = defineStore("account", () => {
   }
 
   return {
-    userId,
-    token,
-    user,
+    currentUser,
     currentUserId,
     activeToken,
     isLoggedIn,

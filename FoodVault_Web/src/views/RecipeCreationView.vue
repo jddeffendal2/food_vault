@@ -13,29 +13,11 @@
         <label id="ingredientLabel"><b>Ingredients:</b></label> <br /><br />
         <div class="ingredients" v-if="ingredients.length > 0">
           <br />
-          <div
-            class="ingredientInputs"
-            v-for="ingredient in ingredients"
-            :key="ingredient"
-          >
+          <div class="ingredientInputs" v-for="ingredient in ingredients" :key="ingredient">
             <span>{{ ingredient.id + 1 }}: </span>
-            <input
-              type="text"
-              :id="'ingredientName' + ingredient.id"
-              placeholder="Name of Ingredient"
-            />
-            <input
-              class="amount"
-              type="number"
-              :id="'amount' + ingredient.id"
-              placeholder="Amount"
-            />
-            <input
-              class="termOfMeasurements"
-              type="text"
-              :id="'termOfMeasurement' + ingredient.id"
-              placeholder="mg"
-            />
+            <input type="text" :id="'ingredientName' + ingredient.id" placeholder="Name of Ingredient" v-model="ingredient.text" />
+            <input class="amount" type="number" :id="'amount' + ingredient.id" placeholder="Amount" v-model="ingredient.amount" />
+            <input class="termOfMeasurements" type="text" :id="'termOfMeasurement' + ingredient.id" placeholder="mg" v-model="ingredient.measurementTerm" />
             <br />
             <br />
           </div>
@@ -51,18 +33,13 @@
         <label id="instructionsLabel"><b>Instructions: </b></label> <br /><br />
         <div class="instructions" v-if="instructions.length > 0">
           <br />
-          <draggable v-model="instructions">
-            <template #item="{ element: instruction }">
-              <div class="instructionHover">
-                <span>{{ instruction.id + 1 }}: </span>
-                <input
-                  type="text"
-                  :id="'instructionText' + instruction.id"
-                  :placeholder="'Instruction #' + (instruction.id + 1)"
-                />&nbsp;&nbsp; &#8597;
-              </div>
-            </template>
-          </draggable>
+          <div v-for="instruction in instructions" :key="instruction.id">
+            <span>{{ instruction.sortOrder }}: </span>
+            <input type="text" v-model="instruction.text" />
+            &nbsp;&nbsp;
+            <button v-if="instructions.length > 1 && instruction.order !== 1" @click="shiftUp(instruction)">&#8593;</button>
+            <button v-if="instructions.length > 1 && instruction.order !== instructions.length" @click="shiftDown(instruction)">&#8595;</button>
+          </div>
         </div>
         <div id="extraInstructions"></div>
         <br /><br />
@@ -80,7 +57,6 @@
 <script setup>
 import { ref } from "vue";
 import { useAccountStore } from "../stores/accountStore";
-import draggable from "vuedraggable";
 import { useRouter } from "vue-router";
 import RecipeRequest from "@/requests/recipe-request";
 import RecipeIngredientRequest from "@/requests/recipe-ingredient-request";
@@ -93,8 +69,8 @@ const accountStore = useAccountStore();
 const ingredients = ref([]);
 const instructions = ref([]);
 
-var recipeName = ref("");
-var description = ref("");
+const recipeName = ref("");
+const description = ref("");
 
 const createRecipe = async function () {
   const recipe = {
@@ -105,28 +81,20 @@ const createRecipe = async function () {
   const recipeId = await new RecipeRequest().createRecipe(recipe);
 
   for (let i = 0; i < ingredients.value.length; i++) {
-    const ingredientName = document.getElementById("ingredientName" + i).value;
-    const amount = document.getElementById("amount" + i).value;
-    const termOfMeasurement = document.getElementById(
-      "termOfMeasurement" + i
-    ).value;
     var newIngredient = {
       recipeId: recipeId,
-      name: ingredientName,
-      quantity: amount,
-      unitOfMeasurement: termOfMeasurement,
+      name: ingredients.value[i].text,
+      quantity: ingredients.value[i].amount,
+      unitOfMeasurement: ingredients.value[i].measurementTerm,
       sortOrder: i + 1,
     };
     await new RecipeIngredientRequest().createRecipeIngredient(newIngredient);
   }
 
   for (let i = 0; i < instructions.value.length; i++) {
-    const instructionText = document.getElementById(
-      "instructionText" + i
-    ).value;
     var newInstruction = {
-      recipeId: savedRecipe,
-      text: instructionText,
+      recipeId: recipeId,
+      text: instructions.value[i].text,
       sortOrder: i + 1,
     };
     await new RecipeInstructionRequest().createRecipeInstruction(newInstruction);
@@ -140,6 +108,7 @@ const addIngredient = function () {
     text: "",
     amount: "",
     measurementTerm: "",
+    sortOrder: ingredients.value.length + 1
   };
   ingredients.value.push(newIngredient);
 };
@@ -147,9 +116,30 @@ const addInstruction = function () {
   var newInstruction = {
     id: instructions.value.length,
     text: "",
+    sortOrder: instructions.value.length + 1
   };
   instructions.value.push(newInstruction);
 };
+
+const shiftUp = function (instruction) {
+  const oldIndex = instructions.value.indexOf(instruction);
+  instructions.value.splice(oldIndex, 1);
+  instructions.value.splice(oldIndex - 1, 0, instruction);
+  updateInstructionOrderLabels();
+}
+
+const shiftDown = function (instruction) {
+  const oldIndex = instructions.value.indexOf(instruction);
+  instructions.value.splice(oldIndex, 1);
+  instructions.value.splice(oldIndex + 1, 0, instruction);
+  updateInstructionOrderLabels();
+}
+
+const updateInstructionOrderLabels = function () {
+  for (let i = 0; i < instructions.value.length; i++) {
+    instructions.value[i].sortOrder = i + 1;
+  }
+}
 </script>
 
 <style scoped>
@@ -164,7 +154,7 @@ const addInstruction = function () {
   flex-wrap: wrap;
 }
 
-.recipeInformation > div {
+.recipeInformation>div {
   flex: 30%;
   margin: 20px;
 }
@@ -208,6 +198,7 @@ const addInstruction = function () {
   margin-right: auto;
   margin-bottom: 5px;
 }
+
 .instructionHover:hover {
   cursor: pointer;
 }
