@@ -14,11 +14,22 @@
           Your Groups &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <span v-if="dropDownIsHidden">&dtrif;</span>
           <span v-else> &utrif; </span>
-        </div> 
-        <br/>
+        </div>
+        <br />
         <div v-if="!dropDownIsHidden" id="dropDown" class="dropdown">
-          <div class="groupDiv" v-for="group in usersGroups" :key="group.id" @click="editGroup(group)">
-            &nbsp;{{ group.name }}
+          <div
+            v-for="group in usersGroups"
+            :key="group.id"
+            @click="editGroup(group)"
+          >
+            <td class="nameColumn">&nbsp;{{ group.name }}</td>
+            <td class="editColumn">
+              <span class="editSpan">
+                <button class="editEachRow">
+                  View/Edit
+                </button>
+              </span>
+            </td>
           </div>
         </div>
       </div>
@@ -35,22 +46,22 @@
       <h3>Your Recipes</h3>
       <RouterLink to="/CreateRecipe">
         <button class="greenButtons">Create Recipe</button></RouterLink
-      ><br/><br/>
+      ><br /><br />
       <div class="dropDownList" @click="toggleDisplayOfRecipes">
         Your Recipes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span v-if="recipeDropDownIsHidden">&dtrif;</span>
         <span v-else> &utrif; </span>
       </div>
-      <br/>
+      <br />
       <div v-if="!recipeDropDownIsHidden" id="dropDown" class="dropdown">
         <table>
           <div v-for="recipe in usersRecipes" :key="recipe.id">
-            <td class="recipeNameColumn"> 
-              &nbsp;{{ recipe.name }}
-            </td>
+            <td class="nameColumn">&nbsp;{{ recipe.name }}</td>
             <td class="editColumn">
               <span class="editSpan">
-                <button class="editEachRecipe" @click="editRecipe(recipe)">Edit</button>
+                <button class="editEachRow" @click="editRecipe(recipe)">
+                  Edit
+                </button>
               </span>
             </td>
           </div>
@@ -70,7 +81,7 @@ import GroupRequest from "@/requests/group-request";
 const router = useRouter();
 
 var dropDownIsHidden = ref(true);
-var recipeDropDownIsHidden = ref(true)
+var recipeDropDownIsHidden = ref(true);
 const accountStore = useAccountStore();
 var usersGroups = ref([]);
 var usersRecipes = ref([]);
@@ -87,10 +98,10 @@ const editGroup = function (group) {
   router.push({
     name: "EditGroup",
     params: {
-      groupId: group.id
-    } 
-  })
-}
+      groupId: group.id,
+    },
+  });
+};
 
 const toggleDisplayOfGroups = function () {
   if (dropDownIsHidden.value == true) {
@@ -112,14 +123,18 @@ const editRecipe = function (recipe) {
   router.push({
     name: "EditSingleRecipe",
     params: {
-      recipeId: recipe.id
-    } 
-  })
-}
+      recipeId: recipe.id,
+    },
+  });
+};
 
 onMounted(async () => {
-  usersGroups.value = await new GroupRequest().getGroupsOwnedByUser(accountStore.currentUserId);
-  usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
+  usersGroups.value = await new GroupRequest().getGroupsOwnedByUser(
+    accountStore.currentUserId
+  );
+  usersRecipes.value = await new RecipeRequest().getUserRecipes(
+    accountStore.currentUserId
+  );
 });
 </script>
 
@@ -210,14 +225,14 @@ onMounted(async () => {
   box-shadow: 1px 1px 1px gray;
 }
 
-.recipeNameColumn {
+.nameColumn {
   width: 600px;
 }
 .editColumn {
-  width: 5%
+  width: 5%;
 }
 
-.editEachRecipe {
+.editEachRow {
   min-height: 20px;
   min-width: 80px;
   background-color: #c7d6d5;
@@ -225,9 +240,8 @@ onMounted(async () => {
   border: 1px solid #043565;
 }
 
-.editEachRecipe:hover {
+.editEachRow:hover {
   box-shadow: 0 4px 4px #c7d6d5;
   cursor: pointer;
 }
-
 </style>
