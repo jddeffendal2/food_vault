@@ -48,7 +48,12 @@ namespace FoodVaultApi.Controllers
             return Ok(recipes);
         }
 
+        [HttpGet("GetRecipe/{recipeId}")]
 
-
+        public IActionResult GetRecipeByRecipeId(String recipeId) {
+            var recipe = _context.Recipes.Where(x => x.Id == recipeId).First();
+                        
+            return Ok(recipe);
+        }
     }
 }

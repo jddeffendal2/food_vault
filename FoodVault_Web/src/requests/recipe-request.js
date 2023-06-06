@@ -12,4 +12,8 @@ export default class RecipeRequest extends Request {
   getUserRecipes = async function(userId) {
     return await this.makeAuthenticatedRequest(userId, "GET");
   }
+
+  getRecipeById = async function (recipeId) {
+    return await this.makeAuthenticatedRequest("GetRecipe/" + recipeId, "GET")
+  }
 }
