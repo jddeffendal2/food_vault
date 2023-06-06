@@ -17,7 +17,7 @@
         </div> 
         <br/>
         <div v-if="!dropDownIsHidden" id="dropDown" class="dropdown">
-          <div v-for="group in usersGroups" :key="group.id">
+          <div class="groupDiv" v-for="group in usersGroups" :key="group.id" @click="editGroup(group)">
             &nbsp;{{ group.name }}
           </div>
         </div>
@@ -82,6 +82,15 @@ const openGroupCreation = function () {
 const openRecipeEditing = function () {
   router.push("/EditRecipes");
 };
+
+const editGroup = function (group) {
+  router.push({
+    name: "EditGroup",
+    params: {
+      groupId: group.id
+    } 
+  })
+}
 
 const toggleDisplayOfGroups = function () {
   if (dropDownIsHidden.value == true) {

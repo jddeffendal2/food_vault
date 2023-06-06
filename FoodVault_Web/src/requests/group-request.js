@@ -12,4 +12,8 @@ export default class GroupRequest extends Request {
   getGroupsOwnedByUser = async function(userId) {
     return await this.makeAuthenticatedRequest(userId, "GET");
   }
+
+  getGroupById = async function (groupId) {
+    return await this.makeAuthenticatedRequest("GetGroup/" + groupId, "GET")
+  }
 }
