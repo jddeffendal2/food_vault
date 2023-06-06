@@ -6,6 +6,7 @@ import SignUpPage from "@/components/SignUpPage.vue";
 import CreateGroup from "@/components/CreateGroup.vue";
 import EditRecipes from "@/components/EditRecipes.vue";
 import EditSingleRecipe from "@/components/EditSingleRecipe.vue";
+import EditGroup from "@/components/EditGroup.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,12 @@ const router = createRouter({
       path: "/EditSingleRecipe/:recipeId",
       name: "EditSingleRecipe",
       component: EditSingleRecipe,
+      props: true
+    },
+    {
+      path: "/EditGroup/:groupId",
+      name: "EditGroup",
+      component: EditGroup, 
       props: true
     }
   ]
