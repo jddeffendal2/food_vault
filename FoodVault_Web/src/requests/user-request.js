@@ -16,4 +16,8 @@ export default class UserRequest extends Request {
   getUser = async function(userId) {
     return this.makeAuthenticatedRequest(userId, "GET");
   }
+
+  searchUsers = async function(searchTerm) {
+    return this.makeAuthenticatedRequest("SearchUsers", "GET", { searchTerm });
+  }
 }

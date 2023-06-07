@@ -9,7 +9,7 @@
       </header>
 
       <section class="modal-body">
-        <div class="recipeView" v-for="recipe in usersRecipes" :key="recipe">
+        <div class="recipeView" v-for="recipe in recipesNotInGroup" :key="recipe">
           <td>Picture</td>
           <td class="recipeNameColumn">{{ recipe.name }}</td>
           <td>
@@ -36,6 +36,9 @@ import GroupRecipeRequest from "@/requests/group-recipe-request";
 
 const accountStore = useAccountStore();
 const usersRecipes = ref([]);
+const recipesAlreadyInGroup = ref([])
+var recipesNotInGroup = ref([]);
+var isRecipeAlreadyInGroup = ref(false);
 
 const props = defineProps({
   selectedGroup: {
@@ -45,9 +48,20 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  usersRecipes.value = await new RecipeRequest().getUserRecipes(
-    accountStore.currentUserId
-  );
+  usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
+  recipesAlreadyInGroup.value = await new GroupRecipeRequest().getRecipesInGroup(props.selectedGroup.id);  
+  for (let i = 0; i < usersRecipes.value.length; i++) {
+    isRecipeAlreadyInGroup.value = false;
+
+    for (let j = 0; j < recipesAlreadyInGroup.value.length; j++) {
+      if (usersRecipes.value[i].id == recipesAlreadyInGroup.value[j].recipeId) {
+        isRecipeAlreadyInGroup.value = true;
+      }
+    }
+    if (!isRecipeAlreadyInGroup.value) {
+      recipesNotInGroup.value.push(usersRecipes.value[i])
+    }
+  }
 });
 
 const emit = defineEmits(["close"]);

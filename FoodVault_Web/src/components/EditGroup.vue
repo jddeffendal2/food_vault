@@ -6,7 +6,7 @@
     <br />
     <div class="viewGroupDiv">
       <div class="sharedUsers">
-        Shared with {{ 0 }} Users <button>Share</button>
+        Shared with {{ 0 }} Users <button @click="shareGroup">Share</button>
       </div>
       <div class="addedRecipes">
         <p v-if="addedGroupRecipes.length == 0">
@@ -17,14 +17,16 @@
           <table>
             <br /><br />
             <tr>
-              <th><h2>Recipes in this Group</h2></th>
+              <th><h2> Recipes in this Group </h2>
+                <button id="addMoreRecipesButton" @click="showAddRecipeModal">Add More Recipes</button>
+              </th>
             </tr>
             <div
               class="recipeTable"
               v-for="recipe in recipesInGroup"
               :key="recipe"
             >
-              <div id="recipeRow">
+              <div id="recipeRow" @click="selectRecipe(recipe)">
                 <td>{{ recipe.name }}</td>
                 <td>{{ recipe.description }}</td>
               </div>
@@ -38,6 +40,7 @@
       :selectedGroup="selectedGroup"
       @close="closeAddRecipesModal"
     ></AddRecipesToGroup>
+    <ShareGroupFeature v-if="isReadyToShare"></ShareGroupFeature>
   </div>
 </template>
 
@@ -47,11 +50,16 @@ import GroupRequest from "@/requests/group-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
 import RecipeRequest from "@/requests/recipe-request";
 import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
+import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 var selectedGroup = ref({});
 var addedGroupRecipes = ref([]);
 var recipesInGroup = ref([]);
 var isGroupEmpty = ref(false);
+var isReadyToShare = ref(false);
 
 const props = defineProps({
   groupId: {
@@ -81,6 +89,20 @@ const showAddRecipeModal = function () {
 const closeAddRecipesModal = function () {
   isGroupEmpty.value = false;
 };
+
+const shareGroup = function () {
+  isReadyToShare.value = true;
+};
+
+const selectRecipe = function (recipe) {
+  router.push({
+    name: "EditSingleRecipe",
+    params: {
+      recipeId: recipe.id
+    }
+  });
+}
+
 </script>
 
 <style scoped>
@@ -101,6 +123,14 @@ th {
 th, #recipeRow {
   border: 2px solid #c7d6d5;
   text-align: center;
+  margin-bottom: 5px;
+}
+
+#recipeRow:hover {
+  box-shadow: 0px 0px 3px #043565;
+  cursor: pointer;
+  background-color: #c7d6d5;
+  border: 2px solid #c7d6d5;
 }
 
 th {
@@ -109,4 +139,9 @@ th {
 td {
   width: 250px;
 }
+
+#recipeTableTitle {
+  font-size: 20px;
+}
+
 </style>

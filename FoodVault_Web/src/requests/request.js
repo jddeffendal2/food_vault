@@ -9,21 +9,24 @@ export class Request {
   endpoint = (action) => `${import.meta.env.VITE_FOODVAULT_API_URL}/${this.controller}/${action}`;
 
   options = (method, data, headers) => {
-    if (!data) {
-      return {
-        method: method
-      }
-    }
+    let options = {
+      method: method,
+    };
+
+    if (headers) options.headers = headers;
+
+    if (!data) return options;
+
     if (method === "GET" || method === "DELETE") {
       return {
-        method: method,
-        params: data
-      }
+        ...options,
+        params: data,
+      };
     }
     return {
-      method: method,
-      data: data
-    }
+      ...options,
+      data: data,
+    };
   }
 
   makeRequest = async (action, method, body = null) => {
@@ -37,22 +40,22 @@ export class Request {
     })).data;
   }
 
-  makeAuthenticatedRequest = async function(action, method, body = null) {
-    let config = {
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("fv-token")}`
-      },
-      method: method
-    }
-    return (await axios.request({
-      ...config,
-      url: this.endpoint(action),
-      data: body
-    }).catch((error) => {
-      console.error(error);
-      if (error.response.status === 401) {
-        useAccountStore().logOut();
-      }
-    })).data;
-  }
+  makeAuthenticatedRequest = async function (action, method, body = null) {
+    let config = this.options(method, body, {
+      Authorization: `Bearer ${localStorage.getItem("fv-token")}`,
+    });
+    return (
+      await axios
+        .request({
+          ...config,
+          url: this.endpoint(action),
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.response.status === 401) {
+            useAccountStore().logOut();
+          }
+        })
+    ).data;
+  };
 }
