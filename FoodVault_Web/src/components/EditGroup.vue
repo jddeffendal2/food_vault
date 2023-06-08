@@ -40,7 +40,7 @@
       :selectedGroup="selectedGroup"
       @close="closeAddRecipesModal"
     ></AddRecipesToGroup>
-    <ShareGroupFeature v-if="isReadyToShare"></ShareGroupFeature>
+    <ShareGroupFeature v-if="isReadyToShare" @close="closeShareGroupModal"></ShareGroupFeature>
   </div>
 </template>
 
@@ -86,12 +86,27 @@ const showAddRecipeModal = function () {
   isGroupEmpty.value = true;
 };
 
-const closeAddRecipesModal = function () {
+const closeAddRecipesModal = async function () {
   isGroupEmpty.value = false;
+  addedGroupRecipes.value = await new GroupRecipeRequest().getRecipesInGroup(
+    props.groupId
+  );
+  recipesInGroup.value = []
+  for (let i = 0; i < addedGroupRecipes.value.length; i++) {
+    recipesInGroup.value.push(
+      await new RecipeRequest().getRecipeById(
+        addedGroupRecipes.value[i].recipeId
+      )
+    );
+  }
 };
 
 const shareGroup = function () {
   isReadyToShare.value = true;
+};
+
+const closeShareGroupModal = function () {
+  isReadyToShare.value = false;
 };
 
 const selectRecipe = function (recipe) {

@@ -3,7 +3,7 @@
     <div class="modal">
       <header class="modal-header">
         <slot id="header" name="header">
-          Add People to this Group to Share Your Recipes with Them
+          Add People to this Group to Share Your Recipes with
         </slot>
         <button type="button" class="btn-close" @click="close">x</button>
       </header>

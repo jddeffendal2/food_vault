@@ -14,8 +14,11 @@
           <td class="recipeNameColumn">{{ recipe.name }}</td>
           <td>
             <span>
-              <button class="addRecipe" @click="addRecipe(recipe)">
+              <button v-if="!computedAddedRecipes.includes(recipe.id)" class="addRecipe" @click="addRecipe(recipe)">
                 Add
+              </button>
+              <button v-else class="addRecipe" @click="removeRecipe(recipe)">
+                Remove
               </button>
             </span>
           </td>
@@ -29,7 +32,7 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useAccountStore } from "../stores/accountStore";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
@@ -39,6 +42,7 @@ const usersRecipes = ref([]);
 const recipesAlreadyInGroup = ref([])
 var recipesNotInGroup = ref([]);
 var isRecipeAlreadyInGroup = ref(false);
+const addedRecipes = ref([])
 
 const props = defineProps({
   selectedGroup: {
@@ -66,17 +70,35 @@ onMounted(async () => {
 
 const emit = defineEmits(["close"]);
 
-const close = function () {
+const close = async function () {
+  for (let i = 0; i < addedRecipes.value.length; i++) {
+    const groupRecipe = {
+      groupId: props.selectedGroup.id,
+      recipeId: addedRecipes.value[i]
+    };
+    await new GroupRecipeRequest().createGroupRecipe(groupRecipe);
+  }
   emit("close");
 };
 
-const addRecipe = async function (recipe) {
-  const groupRecipe = {
-    groupId: props.selectedGroup.id,
-    recipeId: recipe.id
-  };
-  await new GroupRecipeRequest().createGroupRecipe(groupRecipe);
+const addRecipe = function (recipe) {
+  addedRecipes.value.push(recipe.id)
 };
+
+const removeRecipe = function (recipe) {
+  var updatedAddedRecipes = []
+  for (let i = 0; i < addedRecipes.value.length; i++) {
+    if (addedRecipes.value[i] != recipe.id) {
+      updatedAddedRecipes.push(addedRecipes.value[i])
+    }
+  }
+  addedRecipes.value = updatedAddedRecipes;
+}
+
+const computedAddedRecipes = computed(() => {
+  return addedRecipes.value;
+}
+)
 </script>
 <style scoped>
 .modal-background {

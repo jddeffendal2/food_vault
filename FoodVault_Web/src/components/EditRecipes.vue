@@ -1,7 +1,7 @@
 <template>
   <div class="editRecipes">
     <h2>Edit Your Recipes:</h2>
-    <div>
+    <div v-if="currentUserRecipes.length > 0">
       <div
         class="singleRecipe"
         v-for="recipe in currentUserRecipes"
@@ -12,6 +12,10 @@
         <span class="recipeDescription">{{ recipe.description }}</span>
         <p class="lastUpdated"> Last Updated: {{ recipe.updatedDate }}</p>
       </div>
+    </div>
+    <div v-else>
+      <br/><br/>
+      <div class="noRecipes"><br/><br/>You have no recipes. <RouterLink class="createRecipeLink" to="/CreateRecipe">Create A Recipe?</RouterLink></div>
     </div>
     <br/>
   </div>
@@ -72,5 +76,14 @@ const editRecipe = function (recipe) {
 }
 .recipeDescription {
   font-size: smaller;
+}
+
+.noRecipes {
+  font-size: large;
+}
+
+.createRecipeLink {
+  text-decoration: underline;
+  font-weight: bold;
 }
 </style>
