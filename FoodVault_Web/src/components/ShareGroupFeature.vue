@@ -10,11 +10,13 @@
 
       <section class="modal-body">
         <div>
-          <input type="search" v-model="searchedUser"/>
-          <div>
-            <p v-for="user in registeredUsers" :key="user">
-              {{ user.firstName }} {{ user.lastName }}
-            </p>
+          <input class="searchBar" type="search" v-model="searchedUser" placeholder="Add People to this Group"/>
+          <div v-if="searchedUser.length > 0" class="usersBeingSearchedBox">
+            <div v-for="user in registeredUsers" :key="user">
+              &nbsp;{{ user.firstName }} {{ user.lastName }} <br/>
+              &nbsp;{{ user.email }}
+              <br/><br/>
+            </div>
           </div>
         </div>
         <br /><br />
@@ -116,5 +118,22 @@ watch(searchedUser, () => {
   box-shadow: 1px 1px 1px gray;
 }
 
+.searchBar {
+  max-width: 400px;
+  min-width: 400px;
+}
+.usersBeingSearchedBox {
+  border: 2px solid #c7d6d5;
+  border-radius: 5px;
+  max-width: 400px;
+  min-width: 400px;
+  min-height: 100px;
+  max-height: 100px;
+  margin-right: auto;
+  margin-left: auto;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  text-align: left;
+}
 
 </style>
