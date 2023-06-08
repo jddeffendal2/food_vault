@@ -6,7 +6,7 @@
     <br />
     <div class="viewGroupDiv">
       <div class="sharedUsers">
-        Shared with {{ 0 }} Users <button @click="shareGroup">Share</button>
+        Shared with {{ 0 }} Users <button @click="shareGroup" class="greenStyledButton">Share</button>
       </div>
       <div class="addedRecipes">
         <p v-if="addedGroupRecipes.length == 0">
@@ -18,7 +18,7 @@
             <br /><br />
             <tr>
               <th><h2> Recipes in this Group </h2>
-                <button id="addMoreRecipesButton" @click="showAddRecipeModal">Add More Recipes</button>
+                <button @click="showAddRecipeModal" class="greenStyledButton">Add More Recipes</button>
               </th>
             </tr>
             <div
@@ -157,6 +157,18 @@ td {
 
 #recipeTableTitle {
   font-size: 20px;
+}
+
+.greenStyledButton {
+  color: #043565;
+  background: #c7d6d5;
+  border: 1px solid #043565;
+  border-radius: 2px;
+}
+
+.greenStyledButton:hover {
+  cursor: pointer;
+  box-shadow: 1px 1px 1px gray;
 }
 
 </style>
