@@ -9,13 +9,16 @@
       </header>
 
       <section class="modal-body">
-        <div class="recipeView" v-for="recipe in usersRecipes" :key="recipe">
+        <div class="recipeView" v-for="recipe in recipesNotInGroup" :key="recipe">
           <td>Picture</td>
           <td class="recipeNameColumn">{{ recipe.name }}</td>
           <td>
             <span>
-              <button class="addRecipe" @click="addRecipe(recipe)">
+              <button v-if="!computedAddedRecipes.includes(recipe.id)" class="addRecipe" @click="addRecipe(recipe)">
                 Add
+              </button>
+              <button v-else class="addRecipe" @click="removeRecipe(recipe)">
+                Remove
               </button>
             </span>
           </td>
@@ -29,13 +32,17 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import { useAccountStore } from "../stores/accountStore";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
 
 const accountStore = useAccountStore();
 const usersRecipes = ref([]);
+const recipesAlreadyInGroup = ref([])
+var recipesNotInGroup = ref([]);
+var isRecipeAlreadyInGroup = ref(false);
+const addedRecipes = ref([])
 
 const props = defineProps({
   selectedGroup: {
@@ -45,24 +52,53 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  usersRecipes.value = await new RecipeRequest().getUserRecipes(
-    accountStore.currentUserId
-  );
+  usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
+  recipesAlreadyInGroup.value = await new GroupRecipeRequest().getRecipesInGroup(props.selectedGroup.id);  
+  for (let i = 0; i < usersRecipes.value.length; i++) {
+    isRecipeAlreadyInGroup.value = false;
+
+    for (let j = 0; j < recipesAlreadyInGroup.value.length; j++) {
+      if (usersRecipes.value[i].id == recipesAlreadyInGroup.value[j].recipeId) {
+        isRecipeAlreadyInGroup.value = true;
+      }
+    }
+    if (!isRecipeAlreadyInGroup.value) {
+      recipesNotInGroup.value.push(usersRecipes.value[i])
+    }
+  }
 });
 
 const emit = defineEmits(["close"]);
 
-const close = function () {
+const close = async function () {
+  for (let i = 0; i < addedRecipes.value.length; i++) {
+    const groupRecipe = {
+      groupId: props.selectedGroup.id,
+      recipeId: addedRecipes.value[i]
+    };
+    await new GroupRecipeRequest().createGroupRecipe(groupRecipe);
+  }
   emit("close");
 };
 
-const addRecipe = async function (recipe) {
-  const groupRecipe = {
-    groupId: props.selectedGroup.id,
-    recipeId: recipe.id
-  };
-  await new GroupRecipeRequest().createGroupRecipe(groupRecipe);
+const addRecipe = function (recipe) {
+  addedRecipes.value.push(recipe.id)
 };
+
+const removeRecipe = function (recipe) {
+  var updatedAddedRecipes = []
+  for (let i = 0; i < addedRecipes.value.length; i++) {
+    if (addedRecipes.value[i] != recipe.id) {
+      updatedAddedRecipes.push(addedRecipes.value[i])
+    }
+  }
+  addedRecipes.value = updatedAddedRecipes;
+}
+
+const computedAddedRecipes = computed(() => {
+  return addedRecipes.value;
+}
+)
 </script>
 <style scoped>
 .modal-background {

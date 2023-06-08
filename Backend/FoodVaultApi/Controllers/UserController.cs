@@ -148,5 +148,17 @@ namespace FoodVaultApi.Controllers
             }
             return true;
         }
+
+        [HttpGet("SearchUsers")]
+
+        public IActionResult SearchUsers(string searchTerm) {
+            var users = _context.Users.Where(x => 
+                x.FirstName.Contains(searchTerm) ||
+                x.LastName.Contains(searchTerm) ||
+                x.Username.Contains(searchTerm) ||
+                x.Email.Contains(searchTerm));
+                        
+            return Ok(users);
+        }
     }
 }

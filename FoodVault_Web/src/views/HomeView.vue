@@ -16,12 +16,8 @@
           <span v-else> &utrif; </span>
         </div>
         <br />
-        <div v-if="!dropDownIsHidden" id="dropDown" class="dropdown">
-          <div
-            v-for="group in usersGroups"
-            :key="group.id"
-            @click="editGroup(group)"
-          >
+        <div v-if="!dropDownIsHidden && (usersGroups.length > 0)" id="dropDown" class="dropdown">
+          <div v-for="group in usersGroups" :key="group.id" @click="editGroup(group)">
             <td class="nameColumn">&nbsp;{{ group.name }}</td>
             <td class="editColumn">
               <span class="editSpan">
@@ -31,6 +27,9 @@
               </span>
             </td>
           </div>
+        </div>
+        <div v-if="!dropDownIsHidden && (usersGroups.length == 0)">
+          <h4 class="noGroupsCreated">You have no groups. <router-link to="/CreateGroup">Create Group?</router-link></h4>
         </div>
       </div>
     </div>
@@ -53,7 +52,7 @@
         <span v-else> &utrif; </span>
       </div>
       <br />
-      <div v-if="!recipeDropDownIsHidden" id="dropDown" class="dropdown">
+      <div v-if="!recipeDropDownIsHidden && (usersRecipes.length > 0)" id="dropDown" class="dropdown">
         <table>
           <div v-for="recipe in usersRecipes" :key="recipe.id">
             <td class="nameColumn">&nbsp;{{ recipe.name }}</td>
@@ -66,6 +65,9 @@
             </td>
           </div>
         </table>
+      </div>
+      <div v-if="!recipeDropDownIsHidden && (usersRecipes.length == 0)"> 
+        <h4 class="noGroupsCreated">You have no recipes. <router-link to="/CreateRecipe">Create A Recipe?</router-link></h4>
       </div>
     </div>
   </div>
@@ -244,4 +246,5 @@ onMounted(async () => {
   box-shadow: 0 4px 4px #c7d6d5;
   cursor: pointer;
 }
+
 </style>
