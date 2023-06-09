@@ -6,6 +6,6 @@ export default class RecipeInstructionRequest extends Request {
   }
 
   createRecipeInstruction = async function(instructionInfo) {
-    return await this.makeAuthenticatedRequest("Create", "POST", instructionInfo);
+    return await this.makeRequest("Create", "POST", instructionInfo);
   }
 }

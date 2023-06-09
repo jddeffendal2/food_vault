@@ -149,14 +149,23 @@ namespace FoodVaultApi.Controllers
             return true;
         }
 
+        /// <summary>
+        /// Search users given a searchTerm
+        /// Searches by first name, last name, username, and email
+        /// </summary>
+        /// <param name="user">The user id sending the search request</param>
+        /// <param name="searchTerm">The term to search by</param>
+        /// <returns></returns>
         [HttpGet("SearchUsers")]
-
-        public IActionResult SearchUsers(string searchTerm) {
-            var users = _context.Users.Where(x => 
-                x.FirstName.Contains(searchTerm) ||
-                x.LastName.Contains(searchTerm) ||
-                x.Username.Contains(searchTerm) ||
-                x.Email.Contains(searchTerm));
+        public IActionResult SearchUsers(string user, string searchTerm) {
+            var users = _context.Users
+                .Where(x => 
+                    !x.Id.ToLower().Equals(user.ToLower()) &&
+                    (x.FirstName.Contains(searchTerm) ||
+                    x.LastName.Contains(searchTerm) ||
+                    x.Username.Contains(searchTerm) ||
+                    x.Email.Contains(searchTerm)))
+                .Select(UserDTO.ToDTO);
                         
             return Ok(users);
         }

@@ -38,20 +38,31 @@ namespace FoodVaultApi.Controllers
             return Ok();
         }
 
-        [HttpGet("{userId}")]
+        [HttpGet("GetGroup/{groupId}")]
+        public IActionResult GetGroupByGroupId(string groupId) {
+            var group = _context.Groups.FirstOrDefault(x => x.Id.ToUpper() == groupId.ToUpper());
 
-        public IActionResult GetGroupsById(String userId) {
-            var groups = _context.Groups.Where(x => x.UserId == userId);
+            if (group == null)
+                return NotFound();
+
+            return Ok(group);
+        }
+
+        [HttpGet("{userId}/Owner")]
+        public IActionResult GetGroupsByOwnerId(string userId) {
+            var groups = _context.Groups.Where(x => x.UserId.ToUpper() == userId.ToUpper());
                         
             return Ok(groups);
         }
 
-        [HttpGet("GetGroup/{groupId}")]
+        [HttpGet("{userId}/Member")]
+        public IActionResult GetGroupsWhereUserIsMember(string userId)
+        {
+            var groups = _context.UserGroups
+                .Where(x => x.UserId.ToUpper() == userId.ToUpper())
+                .Select(x => x.Group);
 
-        public IActionResult GetGroupByGroupId(String groupId) {
-            var group = _context.Groups.Where(x => x.Id == groupId).First();
-                        
-            return Ok(group);
+            return Ok(groups);
         }
     }
 }

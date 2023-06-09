@@ -6,6 +6,6 @@ export default class RecipeIngredientRequest extends Request {
   }
 
   createRecipeIngredient = async function(ingredientInfo) {
-    return await this.makeAuthenticatedRequest("Create", "POST", ingredientInfo);
+    return await this.makeRequest("Create", "POST", ingredientInfo);
   }
 }

@@ -6,18 +6,18 @@ export default class UserRequest extends Request {
   }
 
   logIn = async function(data) {
-    return await this.makeRequest("Authenticate", "POST", data);
+    return await this.makeAnonymousRequest("Authenticate", "POST", data);
   }
 
   signUp = async function(data) {
-    return await this.makeRequest("SignUp", "POST", data);
+    return await this.makeAnonymousRequest("SignUp", "POST", data);
   }
 
   getUser = async function(userId) {
-    return this.makeAuthenticatedRequest(userId, "GET");
+    return this.makeRequest(userId, "GET");
   }
 
-  searchUsers = async function(searchTerm) {
-    return this.makeAuthenticatedRequest("SearchUsers", "GET", { searchTerm });
+  searchUsers = async function(userId, searchTerm) {
+    return this.makeRequest("SearchUsers", "GET", { user: userId, searchTerm });
   }
 }
