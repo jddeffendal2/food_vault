@@ -1,64 +1,83 @@
 <template>
-  <div class="homePageTitle">
+  <div class="home-page-title">
     <h2>Welcome Home!</h2>
   </div>
-  <div class="homePage">
-    <div class="leftDiv">
+  <div class="home-page">
+    <div class="left-div">
       <h3>Create a group to share your recipes with!</h3>
       <div>
-        <button class="greenButtons" @click="openGroupCreation">
+        <button class="green-buttons" @click="openGroupCreation">
           Create Group
         </button>
         <br /><br />
-        <div class="dropDownList" @click="toggleDisplayOfGroups">
+        <div class="drop-down-list" @click="groupsHidden = !groupsHidden">
           Your Groups &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <span v-if="dropDownIsHidden">&dtrif;</span>
+          <span v-if="groupsHidden">&dtrif;</span>
           <span v-else> &utrif; </span>
         </div>
         <br />
-        <div v-if="!dropDownIsHidden && (usersGroups.length > 0)" id="dropDown" class="dropdown">
+        <div v-if="!groupsHidden && (usersGroups.length > 0)" id="groups-drop-down" class="drop-down">
           <div v-for="group in usersGroups" :key="group.id" @click="editGroup(group)">
-            <td class="nameColumn">&nbsp;{{ group.name }}</td>
-            <td class="editColumn">
-              <span class="editSpan">
-                <button class="editEachRow">
+            <td class="name-column">&nbsp;{{ group.name }}</td>
+            <td class="edit-column">
+              <span class="edit-span">
+                <button class="edit-each-row">
                   View/Edit
                 </button>
               </span>
             </td>
           </div>
         </div>
-        <div v-if="!dropDownIsHidden && (usersGroups.length == 0)">
-          <h4 class="noGroupsCreated">You have no groups. <router-link to="/CreateGroup">Create Group?</router-link></h4>
+        <div v-if="!groupsHidden && (usersGroups.length == 0)">
+          <h4 class="no-groups-created">You have no groups. <router-link to="/CreateGroup">Create Group?</router-link></h4>
+        </div>
+        <div class="drop-down-list" @click="invitationsHidden = !invitationsHidden">
+          Invitations &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <span v-if="invitationsHidden">&dtrif;</span>
+          <span v-else> &utrif; </span>
+        </div>
+        <div v-if="!invitationsHidden && invitations.length > 0" id="invitations-drop-down" class="drop-down">
+          <table class="invitation-table">
+            <tr
+              v-for="invitation in invitations"
+              :key="invitation.invitationId"
+              class="invite-row"
+            >
+              <td class="invite-group-name">{{ invitation.groupName }}</td>
+              <td class="invite-about"><button @click="aboutInvitation(invitation)">About</button></td>
+              <td class="invite-accept"><button @click="acceptInvitation(invitation)">Accept</button></td>
+              <td class="invite-reject"><button @click="rejectInvitation(invitation)">Reject</button></td>
+            </tr>
+          </table>
         </div>
       </div>
     </div>
-    <div class="centerDiv">
+    <div class="center-div">
       <h3>Share your Recipes with family/friends</h3>
       <div>
-        <button class="editButton" @click="openRecipeEditing">
+        <button class="edit-button" @click="openRecipeEditing">
           View/Edit Your Recipes
         </button>
       </div>
     </div>
-    <div class="rightDiv">
+    <div class="right-div">
       <h3>Your Recipes</h3>
       <RouterLink to="/CreateRecipe">
-        <button class="greenButtons">Create Recipe</button></RouterLink
+        <button class="green-buttons">Create Recipe</button></RouterLink
       ><br /><br />
-      <div class="dropDownList" @click="toggleDisplayOfRecipes">
+      <div class="drop-down-list" @click="recipesHidden = !recipesHidden">
         Your Recipes &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <span v-if="recipeDropDownIsHidden">&dtrif;</span>
+        <span v-if="recipesHidden">&dtrif;</span>
         <span v-else> &utrif; </span>
       </div>
       <br />
-      <div v-if="!recipeDropDownIsHidden && (usersRecipes.length > 0)" id="dropDown" class="dropdown">
+      <div v-if="!recipesHidden && (usersRecipes.length > 0)" id="recipes-drop-down" class="drop-down">
         <table>
           <div v-for="recipe in usersRecipes" :key="recipe.id">
-            <td class="nameColumn">&nbsp;{{ recipe.name }}</td>
-            <td class="editColumn">
-              <span class="editSpan">
-                <button class="editEachRow" @click="editRecipe(recipe)">
+            <td class="name-column">&nbsp;{{ recipe.name }}</td>
+            <td class="edit-column">
+              <span class="edit-span">
+                <button class="edit-each-row" @click="editRecipe(recipe)">
                   Edit
                 </button>
               </span>
@@ -66,8 +85,8 @@
           </div>
         </table>
       </div>
-      <div v-if="!recipeDropDownIsHidden && (usersRecipes.length == 0)"> 
-        <h4 class="noGroupsCreated">You have no recipes. <router-link to="/CreateRecipe">Create A Recipe?</router-link></h4>
+      <div v-if="!recipesHidden && (usersRecipes.length == 0)"> 
+        <h4 class="no-groups-created">You have no recipes. <router-link to="/CreateRecipe">Create A Recipe?</router-link></h4>
       </div>
     </div>
   </div>
@@ -77,16 +96,22 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "../stores/accountStore";
+import InvitationRequest from "@/requests/invitation-request";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRequest from "@/requests/group-request";
 
 const router = useRouter();
-
-var dropDownIsHidden = ref(true);
-var recipeDropDownIsHidden = ref(true);
 const accountStore = useAccountStore();
-var usersGroups = ref([]);
-var usersRecipes = ref([]);
+const invitationRequest = new InvitationRequest();
+const groupRequest = new GroupRequest();
+
+const groupsHidden = ref(true);
+const invitationsHidden = ref(true);
+const recipesHidden = ref(true);
+
+const usersGroups = ref([]);
+const invitations = ref([]);
+const usersRecipes = ref([]);
 
 const openGroupCreation = function () {
   router.push("/CreateGroup");
@@ -105,22 +130,6 @@ const editGroup = function (group) {
   });
 };
 
-const toggleDisplayOfGroups = function () {
-  if (dropDownIsHidden.value == true) {
-    dropDownIsHidden.value = false;
-  } else {
-    dropDownIsHidden.value = true;
-  }
-};
-
-const toggleDisplayOfRecipes = function () {
-  if (recipeDropDownIsHidden.value == true) {
-    recipeDropDownIsHidden.value = false;
-  } else {
-    recipeDropDownIsHidden.value = true;
-  }
-};
-
 const editRecipe = function (recipe) {
   router.push({
     name: "EditSingleRecipe",
@@ -130,30 +139,47 @@ const editRecipe = function (recipe) {
   });
 };
 
+const aboutInvitation = function (invitation) {
+  // TODO: open a modal with with detailed invitation information
+  // who it is from, when it was sent...
+  console.log(invitation);
+}
+
+const acceptInvitation = async function (invitation) {
+  console.log(invitation);
+  await invitationRequest.acceptInvitation(invitation.invitationId);
+}
+
+const rejectInvitation = function (invitation) {
+  // TODO
+  console.log(invitation);
+}
+
 onMounted(async () => {
-  usersGroups.value = await new GroupRequest().getGroupsOwnedByUser(
-    accountStore.currentUserId
-  );
-  usersRecipes.value = await new RecipeRequest().getUserRecipes(
-    accountStore.currentUserId
-  );
+  const groupsOwnedByUser = await groupRequest.getGroupsOwnedByUser(accountStore.currentUserId);
+  const groupsUserIsMember = await groupRequest.getGroupsWhereUserIsMember(accountStore.currentUserId);
+  usersGroups.value = groupsOwnedByUser.concat(groupsUserIsMember);
+
+  usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
+  
+  invitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
 });
 </script>
 
 <style>
-.homePageTitle {
+.home-page-title {
   justify-content: center;
   text-align: center;
 }
 
-.homePage {
+.home-page {
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
 }
 
-.homePage > div {
+.home-page > div {
   flex: 30%;
   min-width: 250px;
   padding: 5px;
@@ -165,15 +191,15 @@ onMounted(async () => {
   text-align: center;
 }
 
-.homePage > div:hover {
+.home-page > div:hover {
   border: 3px solid #c7d6d5;
 }
 
-.centerDiv {
+.center-div {
   background-color: #c7d6d5;
 }
 
-.dropdown {
+.drop-down {
   min-height: 300px;
   max-height: 300px;
   flex-wrap: wrap;
@@ -184,11 +210,11 @@ onMounted(async () => {
   text-align: left;
 }
 
-.rightDiv h3 {
+.right-div h3 {
   color: #043565;
 }
 
-.greenButtons {
+.green-buttons {
   min-height: 30px;
   min-width: 100px;
   background-color: #c7d6d5;
@@ -196,24 +222,24 @@ onMounted(async () => {
   border: 1px solid #043565;
 }
 
-.greenButtons:hover {
+.green-buttons:hover {
   box-shadow: 0 4px 4px #c7d6d5;
   cursor: pointer;
 }
 
-.editButton {
+.edit-button {
   min-height: 30px;
   min-width: 100px;
   border-radius: 10px;
   border: 1px solid #043565;
 }
 
-.editButton:hover {
+.edit-button:hover {
   box-shadow: 0 2px 2px lightslategrey;
   cursor: pointer;
 }
 
-.dropDownList {
+.drop-down-list {
   border: 1px solid #6d7275;
   border-radius: 8px;
   background-color: #c7d6d5;
@@ -222,19 +248,19 @@ onMounted(async () => {
   color: #043565;
 }
 
-.dropDownList:hover {
+.drop-down-list:hover {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }
 
-.nameColumn {
+.name-column {
   width: 600px;
 }
-.editColumn {
+.edit-column {
   width: 5%;
 }
 
-.editEachRow {
+.edit-each-row {
   min-height: 20px;
   min-width: 80px;
   background-color: #c7d6d5;
@@ -242,9 +268,16 @@ onMounted(async () => {
   border: 1px solid #043565;
 }
 
-.editEachRow:hover {
+.edit-each-row:hover {
   box-shadow: 0 4px 4px #c7d6d5;
   cursor: pointer;
 }
 
+.invitation-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.invite-group-name {
+  width: 70%;
+}
 </style>

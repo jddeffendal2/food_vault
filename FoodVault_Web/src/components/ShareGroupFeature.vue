@@ -10,7 +10,12 @@
         <div>
           <input class="search-bar" type="search" v-model="searchedUser" placeholder="Add People to this Group"/>
           <div v-if="searchedUser.length > 0" class="user-search-results-box">
-            <div v-for="user in searchResults" :key="user" class="user-search-result" @click="selectUser(user)">
+            <div
+              v-for="user in searchResults"
+              :key="user.userId"
+              class="user-search-result"
+              @click="selectUser(user)"
+            >
               &nbsp;{{ user.firstName }} {{ user.lastName }} <br/>
               &nbsp;{{ user.username }}
               <br/><br/>
