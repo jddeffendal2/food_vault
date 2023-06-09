@@ -6,6 +6,6 @@ export default class UserGroupRequest extends Request {
   }
 
   createGroup = async function(userGroupInfo) {
-    return await this.makeAuthenticatedRequest("Create", "POST", userGroupInfo);
+    return await this.makeRequest("Create", "POST", userGroupInfo);
   }
 }

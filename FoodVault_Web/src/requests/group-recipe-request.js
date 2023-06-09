@@ -6,10 +6,10 @@ export default class GroupRecipeRequest extends Request {
   }
 
   createGroupRecipe = async function(groupRecipeInfo) {
-    return await this.makeAuthenticatedRequest("Create", "POST", groupRecipeInfo);
+    return await this.makeRequest("Create", "POST", groupRecipeInfo);
   }
 
   getRecipesInGroup = async function(groupId) {
-    return await this.makeAuthenticatedRequest(groupId, "GET");
+    return await this.makeRequest(groupId, "GET");
   }
 }

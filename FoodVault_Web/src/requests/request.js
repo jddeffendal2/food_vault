@@ -29,7 +29,7 @@ export class Request {
     };
   }
 
-  makeRequest = async (action, method, body = null) => {
+  makeAnonymousRequest = async (action, method, body = null) => {
     let config = {
       method: method
     }
@@ -40,7 +40,7 @@ export class Request {
     })).data;
   }
 
-  makeAuthenticatedRequest = async function (action, method, body = null) {
+  makeRequest = async function (action, method, body = null) {
     let config = this.options(method, body, {
       Authorization: `Bearer ${localStorage.getItem("fv-token")}`,
     });

@@ -2,56 +2,82 @@
   <div class="modal-background">
     <div class="modal">
       <header class="modal-header">
-        <slot id="header" name="header">
-          Add People to this Group to Share Your Recipes with
-        </slot>
-        <button type="button" class="btn-close" @click="close">x</button>
+        Add people to this group to share your recipes with!
+        <button type="button" class="btn-close" @click="close">X</button>
       </header>
 
       <section class="modal-body">
         <div>
-          <input class="searchBar" type="search" v-model="searchedUser" placeholder="Add People to this Group"/>
-          <div v-if="searchedUser.length > 0" class="usersBeingSearchedBox">
-            <div v-for="user in registeredUsers" :key="user">
+          <input class="search-bar" type="search" v-model="searchedUser" placeholder="Add People to this Group"/>
+          <div v-if="searchedUser.length > 0" class="user-search-results-box">
+            <div v-for="user in searchResults" :key="user" class="user-search-result" @click="selectUser(user)">
               &nbsp;{{ user.firstName }} {{ user.lastName }} <br/>
-              &nbsp;{{ user.email }}
+              &nbsp;{{ user.username }}
               <br/><br/>
             </div>
           </div>
         </div>
         <br /><br />
-        <button type="button" class="closeButton" @click="close">
-          Save Recipes
+        <div v-if="selectedUser">
+          {{ selectedUser.username }}
+        </div>
+        <br /><br />
+        <button type="button" class="invite-button" @click="invite">
+          Invite
         </button>
       </section>
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, watch } from "vue";
+import { useRoute } from "vue-router"
+import InvitationRequest from "@/requests/invitation-request";
 import UserRequest from "@/requests/user-request";
+import { useAccountStore } from "@/stores/accountStore";
+
+const route = useRoute();
+const accountStore = useAccountStore();
+const invitationRequest = new InvitationRequest();
+const userRequest = new UserRequest();
 
 const searchedUser = ref("");
-const registeredUsers = ref([]);
+const searchResults = ref([]);
+const selectedUser = ref(null);
 
 const emit = defineEmits(["close"]);
 
-const close = function () {
-  emit("close");
+const selectUser = function (user) {
+  selectedUser.value = user;
+  searchedUser.value = "";
+}
+
+const invite = async function () {
+  await invitationRequest.sendRequest({
+    fromUserId: accountStore.currentUserId,
+    toUserId: selectedUser.value.userId,
+    groupId: route.params.groupId
+  });
+  close();
 };
 
 let timeout = null;
-
 watch(searchedUser, () => {
+  if (searchedUser.value.length == 0) return;
   if (timeout) {
     clearTimeout(timeout)
   }
   timeout = window.setTimeout(async () => {
-    registeredUsers.value = await new UserRequest().searchUsers(searchedUser.value)
+    searchResults.value = await userRequest.searchUsers(accountStore.currentUserId, searchedUser.value)
   }, 300);
 });
- 
+
+const close = function () {
+  emit("close");
+}
 </script>
+
 <style scoped>
 .modal-background {
   position: fixed;
@@ -106,28 +132,27 @@ watch(searchedUser, () => {
   background: transparent;
 }
 
-.closeButton {
+.invite-button {
   color: #043565;
   background: #c7d6d5;
   border: 1px solid #4aae9b;
   border-radius: 2px;
 }
 
-.closeButton:hover {
+.invite-button:hover {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }
 
-.searchBar {
+.search-bar {
   max-width: 400px;
   min-width: 400px;
 }
-.usersBeingSearchedBox {
+.user-search-results-box {
   border: 2px solid #c7d6d5;
   border-radius: 5px;
   max-width: 400px;
   min-width: 400px;
-  min-height: 100px;
   max-height: 100px;
   margin-right: auto;
   margin-left: auto;
@@ -136,4 +161,10 @@ watch(searchedUser, () => {
   text-align: left;
 }
 
+.user-search-result {
+  background-color: gray;
+}
+.user-search-result:hover {
+  background-color: darkgray;
+}
 </style>

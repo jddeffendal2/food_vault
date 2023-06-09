@@ -8,9 +8,7 @@
       <li><RouterLink to="/">ABOUT</RouterLink></li>
       <li><RouterLink to="/">CONTACT</RouterLink></li>
     </ul>
-    <RouterLink v-if="accountStore.isLoggedIn" to="/login">
-      <button class="logoutButton" type="button" @click="logOut">Log Out</button>
-    </RouterLink>
+    <button v-if="accountStore.isLoggedIn" class="logoutButton" type="button" @click="logOut">Log Out</button>
   </header>
   <div>
     <RouterView />
