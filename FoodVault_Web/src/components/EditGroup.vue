@@ -1,32 +1,32 @@
 <template>
-  <div class="editGroupDiv">
+  <div class="edit-group-div">
     <br />
-    <h2>Group Name: {{ selectedGroup.name }}</h2>
+    <h2>{{ selectedGroup.name }}</h2>
     <div>{{ selectedGroup.description }}</div>
     <br />
-    <div class="viewGroupDiv">
-      <div class="sharedUsers">
-        Shared with {{ 0 }} Users <button @click="shareGroup" class="greenStyledButton">Share</button>
+    <div class="view-group-div">
+      <div class="shared-users">
+        Shared with {{ 0 }} Users <button @click="shareGroup" class="green-styled-button">Share</button>
       </div>
-      <div class="addedRecipes">
+      <div class="added-recipes">
         <p v-if="addedGroupRecipes.length == 0">
           This group contains no recipes.
           <button @click="showAddRecipeModal">Add Recipes</button>
         </p>
-        <div v-else class="recipeTableDiv">
+        <div v-else class="recipe-table-div">
           <table>
             <br /><br />
             <tr>
               <th><h2> Recipes in this Group </h2>
-                <button @click="showAddRecipeModal" class="greenStyledButton">Add More Recipes</button>
+                <button @click="showAddRecipeModal" class="green-styled-button">Add More Recipes</button>
               </th>
             </tr>
             <div
-              class="recipeTable"
+              class="recipe-table"
               v-for="recipe in recipesInGroup"
               :key="recipe"
             >
-              <div id="recipeRow" @click="selectRecipe(recipe)">
+              <div id="recipe-row" @click="selectRecipe(recipe)">
                 <td>{{ recipe.name }}</td>
                 <td>{{ recipe.description }}</td>
               </div>
@@ -121,27 +121,27 @@ const selectRecipe = function (recipe) {
 </script>
 
 <style scoped>
-.editGroupDiv {
+.edit-group-div {
   justify-content: center;
   text-align: center;
 }
 
-.recipeTableDiv {
+.recipe-table-div {
   min-width: 500px;
   max-width: 500px;
 }
-.recipeTableDiv,
+.recipe-table-div,
 th {
   margin-left: auto;
   margin-right: auto;
 }
-th, #recipeRow {
+th, #recipe-row {
   border: 2px solid #c7d6d5;
   text-align: center;
   margin-bottom: 5px;
 }
 
-#recipeRow:hover {
+#recipe-row:hover {
   box-shadow: 0px 0px 3px #043565;
   cursor: pointer;
   background-color: #c7d6d5;
@@ -155,18 +155,18 @@ td {
   width: 250px;
 }
 
-#recipeTableTitle {
+#recipe-table-title {
   font-size: 20px;
 }
 
-.greenStyledButton {
+.green-styled-button {
   color: #043565;
   background: #c7d6d5;
   border: 1px solid #043565;
   border-radius: 2px;
 }
 
-.greenStyledButton:hover {
+.green-styled-button:hover {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }

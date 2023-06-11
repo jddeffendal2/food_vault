@@ -1,4 +1,4 @@
-# Recipe Vault
+# Food Vault
 
 This is an application for creating and sharing your personal recipes with your family and friends.
 

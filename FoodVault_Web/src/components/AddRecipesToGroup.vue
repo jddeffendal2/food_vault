@@ -33,7 +33,7 @@
 </template>
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
 

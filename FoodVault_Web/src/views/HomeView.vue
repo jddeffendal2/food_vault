@@ -95,7 +95,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 import InvitationRequest from "@/requests/invitation-request";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRequest from "@/requests/group-request";

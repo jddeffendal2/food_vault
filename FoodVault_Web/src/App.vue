@@ -1,14 +1,13 @@
 <template>
   <header>
     <RouterLink to="/">
-      <h1 class="brandName">Recipe Vault</h1>
+      <h1 class="brand-name">Food Vault</h1>
     </RouterLink>
     <ul class="nav-bar">
-      <li><RouterLink to="/">WORK</RouterLink></li>
-      <li><RouterLink to="/">ABOUT</RouterLink></li>
-      <li><RouterLink to="/">CONTACT</RouterLink></li>
+      <li><RouterLink to="/Groups">Groups</RouterLink></li>
+      <li>Invitations</li>
     </ul>
-    <button v-if="accountStore.isLoggedIn" class="logoutButton" type="button" @click="logOut">Log Out</button>
+    <button v-if="accountStore.isLoggedIn" class="logout-button" type="button" @click="logOut">Log Out</button>
   </header>
   <div>
     <RouterView />
@@ -27,8 +26,6 @@ onMounted(async () => {
 
   if (!accountStore.isLoggedIn) {
     router.push("/login");
-  } else {
-    router.push("/")
   }
 });
 
@@ -61,7 +58,7 @@ header {
   box-shadow: 0 3px 3px #ECE4DB;
 }
 
-.brandName {
+.brand-name {
   color: #043565;
   padding-left: 100px;
 }
@@ -82,7 +79,7 @@ ul li {
   display: flex;
 }
 
-.logoutButton {
+.logout-button {
   margin: auto auto auto 400px;
   min-width: 100px;
   max-width: 100px;
@@ -93,7 +90,7 @@ ul li {
   color: #043565;
 }
 
-.logoutButton:hover {
+.logout-button:hover {
   box-shadow: 1px 1px 1px gray;
   cursor: pointer;
 }
