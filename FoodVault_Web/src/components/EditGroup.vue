@@ -6,7 +6,7 @@
     <br />
     <div class="viewGroupDiv">
       <div class="sharedUsers">
-        Shared with {{ 0 }} Users <button @click="shareGroup" class="greenStyledButton">Share</button>
+        Shared with {{ sharedUsers.length }} Users <button @click="shareGroup" class="greenStyledButton">Share</button>
       </div>
       <div class="addedRecipes">
         <p v-if="addedGroupRecipes.length == 0">
@@ -40,7 +40,7 @@
       :selectedGroup="selectedGroup"
       @close="closeAddRecipesModal"
     ></AddRecipesToGroup>
-    <ShareGroupFeature v-if="isReadyToShare" @close="closeShareGroupModal"></ShareGroupFeature>
+    <ShareGroupFeature v-if="isReadyToShare" :sharedUsers="sharedUsersIds" @close="closeShareGroupModal"></ShareGroupFeature>
   </div>
 </template>
 
@@ -49,6 +49,7 @@ import { ref, onMounted } from "vue";
 import GroupRequest from "@/requests/group-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
 import RecipeRequest from "@/requests/recipe-request";
+import UserGroupRequest from "@/requests/user-group-request";
 import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
 import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
 import { useRouter } from "vue-router";
@@ -60,6 +61,9 @@ var addedGroupRecipes = ref([]);
 var recipesInGroup = ref([]);
 var isGroupEmpty = ref(false);
 var isReadyToShare = ref(false);
+var allUserGroups = ref([]);
+var sharedUsers = ref([]);
+var sharedUsersIds = ref([]);
 
 const props = defineProps({
   groupId: {
@@ -79,6 +83,14 @@ onMounted(async () => {
         addedGroupRecipes.value[i].recipeId
       )
     );
+  }
+
+  allUserGroups.value = await new UserGroupRequest().getAllUserGroups();
+  for (let i = 0; i < allUserGroups.value.length; i++) {
+    if (allUserGroups.value[i].groupId == props.groupId) {
+      sharedUsers.value.push(allUserGroups.value[i]);
+      sharedUsersIds.value.push(allUserGroups.value[i].userId);
+    }
   }
 });
 
