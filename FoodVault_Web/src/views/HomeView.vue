@@ -90,19 +90,19 @@
       </div>
     </div>
   </div>
-  <AcceptedInvitationNotification v-if="isInvitationAccepted" @close="closeInvitationModal"></AcceptedInvitationNotification>
-  <AboutTheRecipeModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal"></AboutTheRecipeModal>
+  <AcceptedInvitationNotification v-if="isInvitationAccepted" @close="closeInvitationModal" />
+  <InvitationInfoModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal" />
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 import InvitationRequest from "@/requests/invitation-request";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRequest from "@/requests/group-request";
 import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
-import AboutTheRecipeModal from "@/components/AboutTheRecipeModal.vue";
+import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
 
 const router = useRouter();
 const accountStore = useAccountStore();
@@ -129,12 +129,7 @@ const openRecipeEditing = function () {
 };
 
 const editGroup = function (group) {
-  router.push({
-    name: "EditGroup",
-    params: {
-      groupId: group.id,
-    },
-  });
+  router.push(`Group/${group.groupId}`)
 };
 
 const editRecipe = function (recipe) {

@@ -27,9 +27,10 @@
           {{ selectedUser.username }}
         </div>
         <br /><br />
-        <button type="button" class="invite-button" @click="invite">
+        <!-- <button type="button" class="invite-button" @click="invite">
           Invite
-        </button>
+        </button> -->
+        <FvButton @click="invite">Invite</FvButton>
       </section>
     </div>
   </div>
@@ -41,6 +42,7 @@ import { useRoute } from "vue-router"
 import InvitationRequest from "@/requests/invitation-request";
 import UserRequest from "@/requests/user-request";
 import { useAccountStore } from "@/stores/accountStore";
+import FvButton from "@/components/shared/FvButton.vue";
 
 const route = useRoute();
 const accountStore = useAccountStore();

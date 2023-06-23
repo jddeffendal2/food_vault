@@ -1,6 +1,6 @@
 <template>
   <br/><br/>
-  <div class="createGroup">
+  <div class="create-group">
     <h2>Create a Group</h2>
     <div>
       Group Name:
@@ -12,14 +12,14 @@
       <input v-model="description" />
     </div>
     <br/><br/>
-    <button class="createGroupButton" @click="createGroup">Create Group</button>
+    <button class="create-group-button" @click="createGroup">Create Group</button>
     <br/><br/>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
 import GroupRequest from "@/requests/group-request";
 
@@ -33,7 +33,7 @@ const createGroup = async function () {
   const group = {
     name: name.value,
     description: description.value,
-    creator: accountStore.currentUserId
+    ownerId: accountStore.currentUserId
   };
   await new GroupRequest().createGroup(group);
   router.push("/");
@@ -41,7 +41,7 @@ const createGroup = async function () {
 </script>
 
 <style scoped>
-.createGroup {
+.create-group {
   text-align: center;
   color: #043565;
   font-weight: bold;
@@ -56,7 +56,7 @@ const createGroup = async function () {
   max-height: 250px;
 }
 
-.createGroupButton {
+.create-group-button {
   min-width: 100px;
   max-width: 100px;
   min-height: 40px;
@@ -68,7 +68,7 @@ const createGroup = async function () {
   font-family: 'Quicksand', sans-serif;
 }
 
-.createGroupButton:hover {
+.create-group-button:hover {
   box-shadow: 1px 1px 1px gray;
   cursor: pointer;
 }

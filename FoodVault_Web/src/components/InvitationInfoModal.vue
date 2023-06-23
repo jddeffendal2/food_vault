@@ -7,12 +7,12 @@
       </header>
 
       <section class="modal-body">
-        <div>From: {{ invitationInformation.fromUserFullName }} ({{invitationInformation.fromUserUsername}})</div>
+        <div>From: {{ invitationInformation.fromUserFullName }} ({{ invitationInformation.fromUserUsername }})</div>
         <br/>
         <div>Group Name: {{ invitationInformation.groupName }}</div>
         <br/>
         <h5>Sent: {{ invitationInformation.sent }}</h5>
-        <button type="button" class="closeButton" @click="close">Ok</button>
+        <button type="button" class="close-button" @click="close">Ok</button>
       </section>
     </div>
   </div>
@@ -86,14 +86,14 @@ const props = defineProps({
   background: transparent;
 }
 
-.closeButton {
+.close-button {
   color: #043565;
   background: #c7d6d5;
   border: 1px solid #4aae9b;
   border-radius: 2px;
 }
 
-.closeButton:hover {
+.close-button:hover {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }

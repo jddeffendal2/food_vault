@@ -25,7 +25,7 @@ namespace FoodVaultApi.Controllers
             var group = new Group
             {
                 Id = Guid.NewGuid().ToString().ToUpper(),
-                UserId = groupDto.creator,
+                UserId = groupDto.ownerId,
                 Name = groupDto.name,
                 Description = groupDto.description,
                 CreatedDate = DateTime.UtcNow,
@@ -45,12 +45,41 @@ namespace FoodVaultApi.Controllers
             if (group == null)
                 return NotFound();
 
-            return Ok(group);
+            var owner = _context.Users.FirstOrDefault(x => x.Id.ToUpper() == group.UserId.ToUpper());
+            UserDTO ownerDto = null;
+            if (owner != null) ownerDto = UserDTO.ToDTO(owner);
+
+            var groupUsers = _context.UserGroups
+                .Where(x => x.GroupId.ToUpper() == groupId.ToUpper())
+                .Select(x => _context.Users.FirstOrDefault(y => y.Id.ToUpper() == x.UserId.ToUpper()));
+
+            var members = new List<UserDTO>();
+            foreach (var user in groupUsers)
+            {
+                if (user == null) continue;
+                members.Add(UserDTO.ToDTO(user));
+            }
+
+            var detailedGroupInfo = new GroupDetailedDTO
+            {
+                groupId = groupId,
+                ownerId = group.UserId,
+                name = group.Name,
+                description = group.Description,
+                createdDate = group.CreatedDate,
+                updatedDate = group.UpdatedDate,
+                owner = ownerDto,
+                members = members
+            };
+
+            return Ok(detailedGroupInfo);
         }
 
         [HttpGet("{userId}/Owner")]
         public IActionResult GetGroupsByOwnerId(string userId) {
-            var groups = _context.Groups.Where(x => x.UserId.ToUpper() == userId.ToUpper());
+            var groups = _context.Groups
+                .Where(x => x.UserId.ToUpper() == userId.ToUpper())
+                .Select(GroupDTO.ToDTO);
                         
             return Ok(groups);
         }
@@ -60,7 +89,7 @@ namespace FoodVaultApi.Controllers
         {
             var groups = _context.UserGroups
                 .Where(x => x.UserId.ToUpper() == userId.ToUpper())
-                .Select(x => x.Group);
+                .Select(x => GroupDTO.ToDTO(x.Group));
 
             return Ok(groups);
         }

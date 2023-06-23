@@ -38,7 +38,7 @@ namespace FoodVaultApi.Controllers
         [HttpGet("GetAll")]
         public IActionResult GetAllUserGroups()
         {
-            var groups = _context.UserGroups.Where(x => x == x);
+            var groups = _context.UserGroups.Select(x => x);
             return Ok(groups);
         }
     }

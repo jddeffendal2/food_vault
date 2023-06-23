@@ -42,16 +42,15 @@ namespace FoodVaultApi.Controllers
 
         [HttpGet("{userId}")]
 
-        public IActionResult GetRecipesById(String userId) {
+        public IActionResult GetRecipesByUserId(string userId) {
             var recipes = _context.Recipes.Where(x => x.UserId == userId);
                         
             return Ok(recipes);
         }
 
         [HttpGet("GetRecipe/{recipeId}")]
-
-        public IActionResult GetRecipeByRecipeId(String recipeId) {
-            var recipe = _context.Recipes.Where(x => x.Id == recipeId).First();
+        public IActionResult GetRecipeByRecipeId(string recipeId) {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id == recipeId);
                         
             return Ok(recipe);
         }

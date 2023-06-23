@@ -23,7 +23,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import { useAccountStore } from "../stores/accountStore";
+import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
 import RecipeRequest from "@/requests/recipe-request";
 
