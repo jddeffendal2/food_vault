@@ -8,4 +8,8 @@ export default class UserGroupRequest extends Request {
   createGroup = async function(userGroupInfo) {
     return await this.makeRequest("Create", "POST", userGroupInfo);
   }
+  
+  getAllUserGroups = async function() {
+    return await this.makeRequest("GetAll", "GET")
+  }
 }

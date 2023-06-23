@@ -27,9 +27,10 @@
           {{ selectedUser.username }}
         </div>
         <br /><br />
-        <button type="button" class="invite-button" @click="invite">
+        <!-- <button type="button" class="invite-button" @click="invite">
           Invite
-        </button>
+        </button> -->
+        <FvButton @click="invite">Invite</FvButton>
       </section>
     </div>
   </div>
@@ -41,6 +42,7 @@ import { useRoute } from "vue-router"
 import InvitationRequest from "@/requests/invitation-request";
 import UserRequest from "@/requests/user-request";
 import { useAccountStore } from "@/stores/accountStore";
+import FvButton from "@/components/shared/FvButton.vue";
 
 const route = useRoute();
 const accountStore = useAccountStore();
@@ -50,6 +52,14 @@ const userRequest = new UserRequest();
 const searchedUser = ref("");
 const searchResults = ref([]);
 const selectedUser = ref(null);
+
+
+const props = defineProps({
+  sharedUsers: {
+    type: Array,
+    required: true,
+  }
+});
 
 const emit = defineEmits(["close"]);
 
@@ -75,6 +85,15 @@ watch(searchedUser, () => {
   }
   timeout = window.setTimeout(async () => {
     searchResults.value = await userRequest.searchUsers(accountStore.currentUserId, searchedUser.value)
+    var checkSearchResults = [];
+    for (let i = 0; i< props.sharedUsers.length; i++) {
+      for (let j = 0; j< searchResults.value.length; j++) {
+        if (searchResults.value[j].userId == props.sharedUsers[i]) {
+          checkSearchResults.push(searchResults.value[j].userId)
+        }
+      }
+    }
+    searchResults.value = searchResults.value.filter(x => !checkSearchResults.includes(x.userId))
   }, 300);
 });
 

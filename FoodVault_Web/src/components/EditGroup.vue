@@ -6,26 +6,23 @@
     <br />
     <div class="view-group-div">
       <div class="shared-users">
-        Shared with {{ 0 }} Users <button @click="shareGroup" class="green-styled-button">Share</button>
+        Shared with {{ sharedUsers.length }} Users <button @click="isReadyToShare = true" class="greenStyledButton">Share</button>
       </div>
       <div class="added-recipes">
         <p v-if="addedGroupRecipes.length == 0">
           This group contains no recipes.
-          <button @click="showAddRecipeModal">Add Recipes</button>
+          <button @click="isGroupEmpty = true">Add Recipes</button>
         </p>
         <div v-else class="recipe-table-div">
           <table>
             <br /><br />
             <tr>
-              <th><h2> Recipes in this Group </h2>
-                <button @click="showAddRecipeModal" class="green-styled-button">Add More Recipes</button>
+              <th>
+                <h2> Recipes in this Group </h2>
+                <FvButton @click="isGroupEmpty = true">Add More Recipes</FvButton>
               </th>
             </tr>
-            <div
-              class="recipe-table"
-              v-for="recipe in recipesInGroup"
-              :key="recipe"
-            >
+            <div class="recipe-table" v-for="recipe in recipesInGroup" :key="recipe">
               <div id="recipe-row" @click="selectRecipe(recipe)">
                 <td>{{ recipe.name }}</td>
                 <td>{{ recipe.description }}</td>
@@ -35,12 +32,8 @@
         </div>
       </div>
     </div>
-    <AddRecipesToGroup
-      v-if="isGroupEmpty"
-      :selectedGroup="selectedGroup"
-      @close="closeAddRecipesModal"
-    ></AddRecipesToGroup>
-    <ShareGroupFeature v-if="isReadyToShare" @close="closeShareGroupModal"></ShareGroupFeature>
+    <AddRecipesToGroup v-if="isGroupEmpty" :selectedGroup="selectedGroup" @close="closeAddRecipesModal" />
+    <ShareGroupFeature v-if="isReadyToShare" :sharedUsers="sharedUsersIds" @close="isReadyToShare = false" />
   </div>
 </template>
 
@@ -49,17 +42,27 @@ import { ref, onMounted } from "vue";
 import GroupRequest from "@/requests/group-request";
 import GroupRecipeRequest from "@/requests/group-recipe-request";
 import RecipeRequest from "@/requests/recipe-request";
+import UserGroupRequest from "@/requests/user-group-request";
 import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
 import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
 import { useRouter } from "vue-router";
+import FvButton from "@/components/shared/FvButton.vue";
 
 const router = useRouter();
 
-var selectedGroup = ref({});
-var addedGroupRecipes = ref([]);
-var recipesInGroup = ref([]);
-var isGroupEmpty = ref(false);
-var isReadyToShare = ref(false);
+const groupRequest = new GroupRequest();
+const groupRecipeRequest = new GroupRecipeRequest();
+const recipeRequest = new RecipeRequest();
+const userGroupRequest = new UserGroupRequest();
+
+const selectedGroup = ref({});
+const addedGroupRecipes = ref([]);
+const recipesInGroup = ref([]);
+const isGroupEmpty = ref(false);
+const isReadyToShare = ref(false);
+const allUserGroups = ref([]);
+const sharedUsers = ref([]);
+const sharedUsersIds = ref([]);
 
 const props = defineProps({
   groupId: {
@@ -69,44 +72,40 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  selectedGroup.value = await new GroupRequest().getGroupById(props.groupId);
-  addedGroupRecipes.value = await new GroupRecipeRequest().getRecipesInGroup(
+  selectedGroup.value = await groupRequest.getGroupById(props.groupId);
+  addedGroupRecipes.value = await groupRecipeRequest.getRecipesInGroup(
     props.groupId
   );
   for (let i = 0; i < addedGroupRecipes.value.length; i++) {
     recipesInGroup.value.push(
-      await new RecipeRequest().getRecipeById(
-        addedGroupRecipes.value[i].recipeId
+      await recipeRequest.getRecipeById(
+        addedGroupRecipes.value[i].id
       )
     );
   }
-});
 
-const showAddRecipeModal = function () {
-  isGroupEmpty.value = true;
-};
+  allUserGroups.value = await userGroupRequest.getAllUserGroups();
+  for (let i = 0; i < allUserGroups.value.length; i++) {
+    if (allUserGroups.value[i].groupId == props.groupId) {
+      sharedUsers.value.push(allUserGroups.value[i]);
+      sharedUsersIds.value.push(allUserGroups.value[i].userId);
+    }
+  }
+});
 
 const closeAddRecipesModal = async function () {
   isGroupEmpty.value = false;
-  addedGroupRecipes.value = await new GroupRecipeRequest().getRecipesInGroup(
+  addedGroupRecipes.value = await groupRecipeRequest.getRecipesInGroup(
     props.groupId
   );
   recipesInGroup.value = []
   for (let i = 0; i < addedGroupRecipes.value.length; i++) {
     recipesInGroup.value.push(
-      await new RecipeRequest().getRecipeById(
-        addedGroupRecipes.value[i].recipeId
+      await recipeRequest.getRecipeById(
+        addedGroupRecipes.value[i].id
       )
     );
   }
-};
-
-const shareGroup = function () {
-  isReadyToShare.value = true;
-};
-
-const closeShareGroupModal = function () {
-  isReadyToShare.value = false;
 };
 
 const selectRecipe = function (recipe) {
@@ -117,7 +116,6 @@ const selectRecipe = function (recipe) {
     }
   });
 }
-
 </script>
 
 <style scoped>
@@ -130,12 +128,15 @@ const selectRecipe = function (recipe) {
   min-width: 500px;
   max-width: 500px;
 }
+
 .recipe-table-div,
 th {
   margin-left: auto;
   margin-right: auto;
 }
-th, #recipe-row {
+
+th,
+#recipe-row {
   border: 2px solid #c7d6d5;
   text-align: center;
   margin-bottom: 5px;
@@ -151,6 +152,7 @@ th, #recipe-row {
 th {
   width: 500px;
 }
+
 td {
   width: 250px;
 }
@@ -170,5 +172,4 @@ td {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }
-
 </style>

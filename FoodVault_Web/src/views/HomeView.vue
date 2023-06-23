@@ -90,6 +90,8 @@
       </div>
     </div>
   </div>
+  <AcceptedInvitationNotification v-if="isInvitationAccepted" @close="closeInvitationModal" />
+  <InvitationInfoModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal" />
 </template>
 
 <script setup>
@@ -99,6 +101,8 @@ import { useAccountStore } from "@/stores/accountStore";
 import InvitationRequest from "@/requests/invitation-request";
 import RecipeRequest from "@/requests/recipe-request";
 import GroupRequest from "@/requests/group-request";
+import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
+import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
 
 const router = useRouter();
 const accountStore = useAccountStore();
@@ -108,6 +112,9 @@ const groupRequest = new GroupRequest();
 const groupsHidden = ref(true);
 const invitationsHidden = ref(true);
 const recipesHidden = ref(true);
+const isInvitationAccepted = ref(false);
+const isAboutModalClicked = ref(false);
+const invitationInfo = ref({});
 
 const usersGroups = ref([]);
 const invitations = ref([]);
@@ -122,12 +129,7 @@ const openRecipeEditing = function () {
 };
 
 const editGroup = function (group) {
-  router.push({
-    name: "EditGroup",
-    params: {
-      groupId: group.id,
-    },
-  });
+  router.push(`Group/${group.groupId}`)
 };
 
 const editRecipe = function (recipe) {
@@ -139,15 +141,27 @@ const editRecipe = function (recipe) {
   });
 };
 
+const closeInvitationModal = async function() {
+  isInvitationAccepted.value = false;
+  invitations.value = []
+  invitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
+  const groupsOwnedByUser = await groupRequest.getGroupsOwnedByUser(accountStore.currentUserId);
+  const groupsUserIsMember = await groupRequest.getGroupsWhereUserIsMember(accountStore.currentUserId);
+  usersGroups.value = groupsOwnedByUser.concat(groupsUserIsMember);
+}
+
+const closeAboutInvitationModal = async function() {
+  isAboutModalClicked.value = false;
+}
+
 const aboutInvitation = function (invitation) {
-  // TODO: open a modal with with detailed invitation information
-  // who it is from, when it was sent...
-  console.log(invitation);
+  isAboutModalClicked.value = true;
+  invitationInfo.value = invitation;
 }
 
 const acceptInvitation = async function (invitation) {
-  console.log(invitation);
   await invitationRequest.acceptInvitation(invitation.invitationId);
+  isInvitationAccepted.value = true;
 }
 
 const rejectInvitation = function (invitation) {

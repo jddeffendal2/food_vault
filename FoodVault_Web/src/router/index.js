@@ -9,6 +9,7 @@ import EditSingleRecipe from "@/components/EditSingleRecipe.vue";
 import EditGroup from "@/components/EditGroup.vue";
 import GroupListView from "@/views/GroupListView.vue";
 import GroupView from "@/views/GroupView.vue";
+import RecipeView from "@/views/RecipeView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,6 +65,11 @@ const router = createRouter({
       path: "/Group/:id", // specific group view
       name: "GroupView",
       component: GroupView
+    },
+    {
+      path: "/Recipe/:id",
+      name: "RecipeView",
+      component: RecipeView
     }
   ]
 })

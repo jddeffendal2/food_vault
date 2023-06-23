@@ -11,4 +11,10 @@ namespace FoodVaultApi.DTO
         public string groupId { get; set; }
         public string groupName { get; set; }
     }
+
+    public class GroupMembersDTO
+    {
+        public UserDTO owner { get; set; }
+        public List<UserDTO> members { get; set; }
+    }
 }
