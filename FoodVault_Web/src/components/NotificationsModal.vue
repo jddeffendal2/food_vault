@@ -2,26 +2,51 @@
   <div class="modal-background">
     <div class="modal">
       <header class="modal-header">
-        <slot id="header" name="header"> You have 9 New Notifications </slot>
+        <slot id="header" name="header"> You have {{ usersInvitations.length }} New Notifications </slot>
         <button type="button" class="btn-close" @click="close">x</button>
       </header>
 
       <section class="modal-body">
-        <div>
-            You have been invited to join a group
+        <div v-if="usersInvitations.length == 1">
+            You have been invited to join a group.
+        </div>
+        <div v-if="usersInvitations.length > 1">
+            You have been invited to join multiple groups.
         </div>
         <br />
-        <button type="button" class="close-button" @click="close">View Invitations</button>
+        <FvButton type="button" class="close-button" @click="viewNotifications">View Invitations</FvButton>
       </section>
     </div>
   </div>
 </template>
 <script setup>
+import { onMounted, ref } from "vue";
+import { useAccountStore } from "@/stores/accountStore.js";
+import { useRouter } from "vue-router";
+import InvitationRequest from "@/requests/invitation-request";
+import FvButton from "@/components/shared/FvButton.vue";
+
+const router = useRouter();
+const accountStore = useAccountStore();
+const invitationRequest = new InvitationRequest();
+
+const usersInvitations = ref([]);
 const emit = defineEmits(["close"]);
 
 const close = async function () {
   emit("close");
 };
+
+const viewNotifications = function () {
+  router.push("/Invitations");
+  close();
+};
+
+
+onMounted(async () => {
+  usersInvitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
+});
+
 </script>
 <style scoped>
 .modal-background {
@@ -76,17 +101,5 @@ const close = async function () {
   font-weight: bold;
   color: #043565;
   background: transparent;
-}
-
-.close-button {
-  color: #043565;
-  background: #c7d6d5;
-  border: 1px solid #4aae9b;
-  border-radius: 2px;
-}
-
-.close-button:hover {
-  cursor: pointer;
-  box-shadow: 1px 1px 1px gray;
 }
 </style>

@@ -33,7 +33,7 @@
       </div>
     </div>
     <AddRecipesToGroup v-if="isGroupEmpty" :selectedGroup="selectedGroup" @close="closeAddRecipesModal" />
-    <ShareGroupFeature v-if="isReadyToShare" :sharedUsers="sharedUsersIds" @close="isReadyToShare = false" />
+    <ShareGroupFeature v-if="isReadyToShare" :group-id="groupId" :shared-users="sharedUsersIds" @close="isReadyToShare = false" />
   </div>
 </template>
 

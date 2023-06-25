@@ -38,13 +38,11 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import { useRoute } from "vue-router"
 import InvitationRequest from "@/requests/invitation-request";
 import UserRequest from "@/requests/user-request";
 import { useAccountStore } from "@/stores/accountStore";
 import FvButton from "@/components/shared/FvButton.vue";
 
-const route = useRoute();
 const accountStore = useAccountStore();
 const invitationRequest = new InvitationRequest();
 const userRequest = new UserRequest();
@@ -55,6 +53,10 @@ const selectedUser = ref(null);
 
 
 const props = defineProps({
+  groupId: { 
+    type: String,
+    required: true
+  },
   sharedUsers: {
     type: Array,
     required: true,
@@ -72,7 +74,7 @@ const invite = async function () {
   await invitationRequest.sendRequest({
     fromUserId: accountStore.currentUserId,
     toUserId: selectedUser.value.userId,
-    groupId: route.params.groupId
+    groupId: props.groupId
   });
   close();
 };
