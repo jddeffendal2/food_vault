@@ -29,7 +29,7 @@ const click = function () {
   min-width: 100px;
   background-color: #C7D6D5;
   border: 1px solid #043565;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 16px;
   color: #043565;
 }

@@ -10,6 +10,7 @@ import EditGroup from "@/components/EditGroup.vue";
 import GroupListView from "@/views/GroupListView.vue";
 import GroupView from "@/views/GroupView.vue";
 import RecipeView from "@/views/RecipeView.vue";
+import InvitationView from "@/views/InvitationView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,11 @@ const router = createRouter({
       path: "/Recipe/:id",
       name: "RecipeView",
       component: RecipeView
+    },
+    {
+      path: "/Invitations",
+      name: "InvitationView", 
+      component: InvitationView
     }
   ]
 })

@@ -1,12 +1,13 @@
 <template>
   <div class="editRecipes">
-    <h2>Edit Your Recipes:</h2>
+    <h2>Your Recipes:</h2>
+    <RouterLink to="/CreateRecipe"><div class="createNewRecipe">Create New Recipe?</div></RouterLink>
     <div v-if="currentUserRecipes.length > 0">
       <div
         class="singleRecipe"
         v-for="recipe in currentUserRecipes"
         :key="recipe.id" 
-        @click="editRecipe(recipe)"
+        @click="viewRecipe(recipe)"
       >
         <span class="recipeName"> {{ recipe.name }}: &nbsp;&nbsp;</span>
         <span class="recipeDescription">{{ recipe.description }}</span>
@@ -37,13 +38,8 @@ onMounted(async () => {
   currentUserRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
 });
 
-const editRecipe = function (recipe) {
-  router.push({
-    name: "EditSingleRecipe",
-    params: {
-      recipeId: recipe.id
-    }
-  });
+const viewRecipe = function (recipe) {
+  router.push("/Recipe/" + recipe.id);
 };
 </script>
 
@@ -85,5 +81,11 @@ const editRecipe = function (recipe) {
 .createRecipeLink {
   text-decoration: underline;
   font-weight: bold;
+}
+
+.createNewRecipe {
+  text-decoration: underline;
+  font-weight: bold;
+  font-size: 12px;
 }
 </style>

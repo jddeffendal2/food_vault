@@ -20,14 +20,14 @@ namespace FoodVaultApi.Controllers
         }
 
         [HttpPost("Create")]
-        public IActionResult Create(GroupDTO groupDto)
+        public IActionResult Create(GroupPostDTO groupPostDto)
         {
             var group = new Group
             {
                 Id = Guid.NewGuid().ToString().ToUpper(),
-                UserId = groupDto.ownerId,
-                Name = groupDto.name,
-                Description = groupDto.description,
+                UserId = groupPostDto.ownerId,
+                Name = groupPostDto.name,
+                Description = groupPostDto.description,
                 CreatedDate = DateTime.UtcNow,
                 UpdatedDate = DateTime.UtcNow,
             };
