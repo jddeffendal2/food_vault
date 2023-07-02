@@ -20,4 +20,8 @@ export default class GroupRequest extends Request {
   getGroupById = async function (groupId) {
     return await this.makeRequest(`GetGroup/${groupId}`, "GET")
   }
+
+  getAllGroupsForUser = async function (userId) {
+    return await this.makeRequest(`GetGroups/${userId}`, "GET");
+  }
 }

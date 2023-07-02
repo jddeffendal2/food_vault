@@ -1,23 +1,23 @@
 <template>
-  <div class="recipeDiv">
-    <div class="leftPicture">
+  <div class="recipe-div">
+    <div class="left-picture">
       <br/><br/>
-      <img src="../assets/mac-and-cheese.jpg" alt="Italian Trulli" width="350" height="350"/>
+      <img src="../assets/mac-and-cheese.jpg" alt="Recipe Picture" width="350" height="350"/>
     </div>
-    <div class="rightInfo">
-      <h3 class="recipeTitle">{{ recipe.name }}</h3>
-      <div id="recipeDescriptionDiv">{{ recipe.description }} </div>
-      <h3 id="recipeIngredients">Ingredients</h3>
+    <div class="right-info">
+      <h3 class="recipe-title">{{ recipe.name }}</h3>
+      <div id="recipe-description-div">{{ recipe.description }} </div>
+      <h3 id="recipe-ingredients">Ingredients</h3>
       <!-- <div> -->
         {{ recipe.ingredients }}
       <!-- </div> -->
     </div>
-    <div class="buttonDiv">
+    <div class="button-div">
       <FvButton @click="editRecipe">Edit Recipe</FvButton>
     </div>
     <br/><br/>
   </div>
-  <div class="bottomDiv">
+  <div class="bottom-div">
     <h3>Instructions</h3>
   </div>
   <!-- <FvButton @click="editRecipe">Edit</FvButton> -->
@@ -52,14 +52,14 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.recipeDiv {
+.recipe-div {
   text-align: center;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;
 }
-.leftPicture {
+.left-picture {
   flex: 30%;
   min-width: 400px;
   max-width: 400px;
@@ -72,7 +72,7 @@ onMounted(async () => {
   /* border: 1px solid #043565; */
 }
 
-.rightInfo {
+.right-info {
   flex: 30%;
   min-width: 500px;
   max-width: 500px;
@@ -85,7 +85,7 @@ onMounted(async () => {
   /* border: 1px solid #043565; */
 }
 
-.buttonDiv {
+.button-div {
   flex: 30%;
   min-width: 100px;
   max-width: 100px;
@@ -98,23 +98,23 @@ onMounted(async () => {
   /* border: 1px solid #043565; */
 }
 
-.recipeTitle {
+.recipe-title {
   font-size: 35px;
   color: #043565;
   font-weight: bold;
   text-decoration: overline;
 }
 
-#recipeDescriptionDiv {
+#recipe-description-div {
   min-width: 400px;
   max-width: 400px;
   margin: auto auto;
   text-align: center;
 }
-#recipeIngredients {
+#recipe-ingredients {
   color: #043565;
 }
-.bottomDiv {
+.bottom-div {
   /* border: 1px solid #043565; */
   color: #043565;
   margin: 4px 136px 4px 150px;

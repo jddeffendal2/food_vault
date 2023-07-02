@@ -93,5 +93,45 @@ namespace FoodVaultApi.Controllers
 
             return Ok(groups);
         }
+
+        [HttpGet("GetGroups/{userId}")]
+        public IActionResult GetAllGroupDetailsForUser(string userId)
+        {
+            var groupsOverview = new List<GroupOverviewDTO>();
+            var ownedGroupIds = new HashSet<string>();
+            var memberGroupIds = new HashSet<string>();
+
+            // Get every group id for groups owned by user
+            _context.Groups
+                .Where(x => x.UserId.ToUpper() == userId.ToUpper())
+                .ToList()
+                .ForEach(x => ownedGroupIds.Add(x.Id));
+
+            // Get every group id for groups where user is member
+            _context.UserGroups
+                .Where(x => x.UserId.ToUpper() == userId.ToUpper())
+                .ToList()
+                .ForEach(x => memberGroupIds.Add(x.GroupId));
+
+            foreach (var groupId in ownedGroupIds.Concat(memberGroupIds))
+            {
+                var group = _context.Groups.FirstOrDefault(x => x.Id.ToUpper() == groupId.ToUpper());
+                if (group == null) continue;
+
+                var userCount = _context.UserGroups.Count(x => x.GroupId.ToUpper() == groupId.ToUpper());
+                var recipeCount = _context.GroupRecipes.Count(x => x.GroupId.ToUpper() == groupId.ToUpper());
+
+                groupsOverview.Add(new GroupOverviewDTO
+                {
+                    id = group.Id,
+                    name = group.Name,
+                    description = group.Description,
+                    isOwner = ownedGroupIds.Contains(groupId),
+                    userCount = userCount + 1, // +1 for the owner
+                    recipeCount = recipeCount,
+                });
+            }
+            return Ok(groupsOverview);
+        }
     }
 }
