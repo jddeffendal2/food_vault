@@ -125,7 +125,7 @@ const openGroupCreation = function () {
 };
 
 const openRecipeEditing = function () {
-  router.push("/EditRecipes");
+  router.push("/Recipes");
 };
 
 const editGroup = function (group) {

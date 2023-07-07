@@ -41,8 +41,8 @@ const router = createRouter({
       component: RecipeCreationView
     },
     {
-      path: "/EditRecipes",
-      name: "EditRecipes",
+      path: "/Recipes",
+      name: "Recipes",
       component: EditRecipes
     },
     {
