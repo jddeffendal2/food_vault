@@ -10,6 +10,10 @@ export default class UserGroupRequest extends Request {
   }
   
   getAllUserGroups = async function() {
-    return await this.makeRequest("GetAll", "GET")
+    return await this.makeRequest("GetAll", "GET");
+  }
+
+  getAllUsersInSpecificGroups = async function(groupId) {
+    return await this.makeRequest("GetUsersInSpecificGroups/" + groupId, "GET");
   }
 }

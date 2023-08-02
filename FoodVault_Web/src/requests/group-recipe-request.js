@@ -12,4 +12,7 @@ export default class GroupRecipeRequest extends Request {
   getRecipesInGroup = async function(groupId) {
     return await this.makeRequest(groupId, "GET");
   }
+  getGroupsThatContainRecipe = async function(recipeId) {
+    return await this.makeRequest("GetGroupsThatContainRecipe/" + recipeId, "GET");
+  }
 }
