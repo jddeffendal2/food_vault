@@ -1,54 +1,86 @@
 <template>
-  <div class="recipe-div">
-    <div class="left-picture">
-      <br/><br/>
-      <img src="../assets/mac-and-cheese.jpg" alt="Recipe Picture" width="350" height="350"/>
-    </div>
-    <div class="right-info">
-      <h3 class="recipe-title">{{ recipe.name }}</h3>
-      <div id="recipe-description-div">{{ recipe.description }} </div>
-      <h3 id="recipe-ingredients">Ingredients</h3>
-      <!-- <div> -->
+  <div class="uninvitedUser" v-if="isUserUnauthorized">
+    <UnauthorizedRecipeViewerModal></UnauthorizedRecipeViewerModal>
+  </div>
+  <div>
+    <div class="recipe-div">
+      <div class="left-picture">
+        <br /><br />
+        <img
+          src="../assets/mac-and-cheese.jpg"
+          alt="Recipe Picture"
+          width="350"
+          height="350"
+        />
+      </div>
+      <div class="right-info">
+        <h3 class="recipe-title">{{ recipe.name }}</h3>
+        <div id="recipe-description-div">{{ recipe.description }}</div>
+        <h3 id="recipe-ingredients">Ingredients</h3>
         {{ recipe.ingredients }}
-      <!-- </div> -->
+      </div>
+      <div class="button-div">
+        <FvButton @click="editRecipe">Edit Recipe</FvButton>
+      </div>
+      <br /><br />
     </div>
-    <div class="button-div">
-      <FvButton @click="editRecipe">Edit Recipe</FvButton>
+    <div class="bottom-div">
+      <h3>Instructions</h3>
     </div>
-    <br/><br/>
   </div>
-  <div class="bottom-div">
-    <h3>Instructions</h3>
-  </div>
-  <!-- <FvButton @click="editRecipe">Edit</FvButton> -->
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
+import { useAccountStore } from "@/stores/accountStore";
 import { useRoute } from "vue-router";
 import { useRouter } from "vue-router";
 import RecipeRequest from "@/requests/recipe-request";
+import GroupRecipeRequest from "@/requests/group-recipe-request";
+import UserGroupRequest from "@/requests/user-group-request";
 import FvButton from "@/components/shared/FvButton.vue";
-
+import UnauthorizedRecipeViewerModal from "@/components/UnauthorizedRecipeViewerModal.vue";
 
 const route = useRoute();
 const router = useRouter();
 
+const accountStore = useAccountStore();
 const recipeRequest = new RecipeRequest();
+const groupRecipeRequest = new GroupRecipeRequest();
+const userGroupRequest = new UserGroupRequest();
+const groupsThatContainSelectedRecipe = ref([]);
+const usersInGroups = ref([]);
+const canUserSeeRecipe = ref(false);
+const isUserUnauthorized = ref(false);
 
 const recipe = ref({});
 
-const editRecipe = function() {
+const editRecipe = function () {
   router.push({
     name: "EditSingleRecipe",
     params: {
-      recipeId: recipe.value.id
-    }
+      recipeId: recipe.value.id,
+    },
   });
-}
+};
 onMounted(async () => {
   recipe.value = await recipeRequest.getRecipeById(route.params.id);
-})
+  groupsThatContainSelectedRecipe.value = await groupRecipeRequest.getGroupsThatContainRecipe(route.params.id);
+  for (let i = 0; i<groupsThatContainSelectedRecipe.value.length; i++) {
+    usersInGroups.value.push(await userGroupRequest.getAllUsersInSpecificGroups(groupsThatContainSelectedRecipe.value[i].groupId));
+  }
+  for (let i=0; i<usersInGroups.value.length; i++) {
+    if (usersInGroups.value[i].includes(accountStore.currentUserId)) {
+      canUserSeeRecipe.value = true;
+    }
+  }
+  if (recipe.value.userId == accountStore.currentUserId || canUserSeeRecipe.value) {
+    console.log("You are allowed to View This Recipe")
+  }
+  else{
+    isUserUnauthorized.value = true;
+  }
+});
 </script>
 
 <style scoped>
@@ -119,6 +151,5 @@ onMounted(async () => {
   color: #043565;
   margin: 4px 136px 4px 150px;
   text-align: center;
-
 }
 </style>

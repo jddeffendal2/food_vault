@@ -46,5 +46,13 @@ namespace FoodVaultApi.Controllers
 
             return Ok(recipes);
         }
+
+        [HttpGet("GetGroupsThatContainRecipe/{recipeId}")]
+        public IActionResult GetGroupsThatContainRecipe(string recipeId)
+        {
+            var groupsThatContainRecipe = _context.GroupRecipes.Where(x => x.RecipeId == recipeId);
+
+            return Ok(groupsThatContainRecipe);
+        }
     }
 }
