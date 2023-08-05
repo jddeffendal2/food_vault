@@ -23,7 +23,7 @@
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { useRouter } from "vue-router";
-import InvitationRequest from "@/requests/invitation-request";
+import { InvitationRequest } from "@/requests/invitation-request";
 import FvButton from "@/components/shared/FvButton.vue";
 
 const router = useRouter();

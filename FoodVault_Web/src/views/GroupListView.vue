@@ -23,7 +23,7 @@
 import { computed, onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
-import GroupRequest from "@/requests/group-request";
+import { GroupRequest } from "@/requests/group-request";
 
 const router = useRouter();
 const accountStore = useAccountStore();

@@ -1,22 +1,22 @@
 <template>
-  <div class="editRecipes">
+  <div class="edit-recipes">
     <h2>Your Recipes:</h2>
-    <RouterLink to="/CreateRecipe"><div class="createNewRecipe">Create New Recipe?</div></RouterLink>
+    <RouterLink to="/CreateRecipe"><div class="create-new-recipe">Create New Recipe?</div></RouterLink>
     <div v-if="currentUserRecipes.length > 0">
       <div
-        class="singleRecipe"
+        class="single-recipe"
         v-for="recipe in currentUserRecipes"
         :key="recipe.id" 
         @click="viewRecipe(recipe)"
       >
-        <span class="recipeName"> {{ recipe.name }}: &nbsp;&nbsp;</span>
-        <span class="recipeDescription">{{ recipe.description }}</span>
-        <p class="lastUpdated"> Last Updated: {{ recipe.updatedDate }}</p>
+        <span class="recipe-name"> {{ recipe.name }}: &nbsp;&nbsp;</span>
+        <span class="recipe-description">{{ recipe.description }}</span>
+        <p class="last-updated"> Last Updated: {{ recipe.updatedDate }}</p>
       </div>
     </div>
     <div v-else>
       <br/><br/>
-      <div class="noRecipes"><br/><br/>You have no recipes. <RouterLink class="createRecipeLink" to="/CreateRecipe">Create A Recipe?</RouterLink></div>
+      <div class="no-recipes"><br/><br/>You have no recipes. <RouterLink class="create-recipe-link" to="/CreateRecipe">Create A Recipe?</RouterLink></div>
     </div>
     <br/>
   </div>
@@ -26,7 +26,7 @@
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
-import RecipeRequest from "@/requests/recipe-request";
+import { RecipeRequest } from "@/requests/recipe-request";
 
 const router = useRouter();
 
@@ -44,14 +44,14 @@ const viewRecipe = function (recipe) {
 </script>
 
 <style scoped>
-.editRecipes {
+.edit-recipes {
   justify-content: center;
   text-align: center;
 }
-.recipeName {
+.recipe-name {
   font-weight: bold;
 }
-.singleRecipe {
+.single-recipe {
   border: 3px solid #c7d6d5;
   border-radius: 5px;
   margin-top: 3px;
@@ -61,29 +61,29 @@ const viewRecipe = function (recipe) {
   max-width: 550px;
   min-width: 550px;
 }
-.singleRecipe:hover {
+.single-recipe:hover {
   cursor: pointer;
   background-color: lightgray;
 }
 
-.lastUpdated {
+.last-updated {
   font-size: 60%;
   font-weight: bold;
 }
-.recipeDescription {
+.recipe-description {
   font-size: smaller;
 }
 
-.noRecipes {
+.no-recipes {
   font-size: large;
 }
 
-.createRecipeLink {
+.create-recipe-link {
   text-decoration: underline;
   font-weight: bold;
 }
 
-.createNewRecipe {
+.create-new-recipe {
   text-decoration: underline;
   font-weight: bold;
   font-size: 12px;

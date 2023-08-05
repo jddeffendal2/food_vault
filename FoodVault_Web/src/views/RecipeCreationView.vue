@@ -16,7 +16,7 @@
           <div class="ingredientInputs" v-for="ingredient in ingredients" :key="ingredient">
             <span>{{ ingredient.id + 1 }}: </span>
             <input type="text" :id="'ingredientName' + ingredient.id" placeholder="Name of Ingredient" v-model="ingredient.text" />
-            <input class="amount" type="number" :id="'amount' + ingredient.id" placeholder="Amount" v-model="ingredient.amount" />
+            <input class="amount" type="text" :id="'amount' + ingredient.id" placeholder="Amount" v-model="ingredient.amount" />
             <input class="termOfMeasurements" type="text" :id="'termOfMeasurement' + ingredient.id" placeholder="mg" v-model="ingredient.measurementTerm" />
             <br />
             <br />
@@ -58,9 +58,9 @@
 import { ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
-import RecipeRequest from "@/requests/recipe-request";
-import RecipeIngredientRequest from "@/requests/recipe-ingredient-request";
-import RecipeInstructionRequest from "@/requests/recipe-instruction-request";
+import { RecipeRequest } from "@/requests/recipe-request";
+import { RecipeIngredientRequest } from "@/requests/recipe-ingredient-request";
+import { RecipeInstructionRequest } from "@/requests/recipe-instruction-request";
 
 const router = useRouter();
 

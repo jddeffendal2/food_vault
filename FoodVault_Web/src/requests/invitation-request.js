@@ -1,6 +1,6 @@
 import { Request } from "@/requests/request";
 
-export default class InvitationRequest extends Request {
+export class InvitationRequest extends Request {
   constructor() {
     super("Invitation");
   }

@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
-import InvitationRequest from "@/requests/invitation-request";
+import { InvitationRequest } from "@/requests/invitation-request";
 import FvButton from "@/components/shared/FvButton.vue";
 import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";

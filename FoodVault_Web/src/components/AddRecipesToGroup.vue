@@ -9,22 +9,22 @@
       </header>
 
       <section class="modal-body">
-        <div class="recipeView" v-for="recipe in recipesNotInGroup" :key="recipe">
+        <div class="recipe-view" v-for="recipe in recipesNotInGroup" :key="recipe">
           <td>Picture</td>
-          <td class="recipeNameColumn">{{ recipe.name }}</td>
+          <td class="recipe-name-column">{{ recipe.name }}</td>
           <td>
             <span>
-              <button v-if="!computedAddedRecipes.includes(recipe.id)" class="addRecipe" @click="addRecipe(recipe)">
+              <button v-if="!computedAddedRecipes.includes(recipe.id)" class="add-recipe" @click="addRecipe(recipe)">
                 Add
               </button>
-              <button v-else class="addRecipe" @click="removeRecipe(recipe)">
+              <button v-else class="add-recipe" @click="removeRecipe(recipe)">
                 Remove
               </button>
             </span>
           </td>
         </div>
         <br /><br />
-        <button type="button" class="closeButton" @click="close">
+        <button type="button" class="close-button" @click="close">
           Save Recipes
         </button>
       </section>
@@ -34,10 +34,13 @@
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
-import RecipeRequest from "@/requests/recipe-request";
-import GroupRecipeRequest from "@/requests/group-recipe-request";
+import { RecipeRequest } from "@/requests/recipe-request";
+import { GroupRecipeRequest } from "@/requests/group-recipe-request";
 
-const accountStore = useAccountStore();
+const accountStore = useAccountStore()
+
+const groupRecipeRequest = new GroupRecipeRequest()
+
 const usersRecipes = ref([]);
 const recipesAlreadyInGroup = ref([])
 var recipesNotInGroup = ref([]);
@@ -47,13 +50,13 @@ const addedRecipes = ref([])
 const props = defineProps({
   selectedGroup: {
     type: Object,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
 onMounted(async () => {
   usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
-  recipesAlreadyInGroup.value = await new GroupRecipeRequest().getRecipesInGroup(props.selectedGroup.id);  
+  recipesAlreadyInGroup.value = await groupRecipeRequest.getRecipesInGroup(props.selectedGroup.groupId);  
   for (let i = 0; i < usersRecipes.value.length; i++) {
     isRecipeAlreadyInGroup.value = false;
 
@@ -73,10 +76,10 @@ const emit = defineEmits(["close"]);
 const close = async function () {
   for (let i = 0; i < addedRecipes.value.length; i++) {
     const groupRecipe = {
-      groupId: props.selectedGroup.id,
+      groupId: props.selectedGroup.groupId,
       recipeId: addedRecipes.value[i]
     };
-    await new GroupRecipeRequest().createGroupRecipe(groupRecipe);
+    await groupRecipeRequest.createGroupRecipe(groupRecipe);
   }
   emit("close");
 };
@@ -154,25 +157,25 @@ const computedAddedRecipes = computed(() => {
   background: transparent;
 }
 
-.closeButton {
+.close-button {
   color: #043565;
   background: #c7d6d5;
   border: 1px solid #4aae9b;
   border-radius: 2px;
 }
 
-.closeButton:hover {
+.close-button:hover {
   cursor: pointer;
   box-shadow: 1px 1px 1px gray;
 }
 
-.recipeView {
+.recipe-view {
   border: 1px solid #c7d6d5;
   min-height: 50px;
   max-height: 50px;
 }
 
-.addRecipe {
+.add-recipe {
   min-height: 20px;
   min-width: 80px;
   background-color: #c7d6d5;
@@ -180,12 +183,12 @@ const computedAddedRecipes = computed(() => {
   border: 1px solid #043565;
 }
 
-.addRecipe:hover {
+.add-recipe:hover {
   box-shadow: 0 4px 4px #c7d6d5;
   cursor: pointer;
 }
 
-.recipeNameColumn {
+.recipe-name-column {
   width: 600px;
 }
 </style>

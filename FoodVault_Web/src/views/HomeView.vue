@@ -98,9 +98,9 @@
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/accountStore";
-import InvitationRequest from "@/requests/invitation-request";
-import RecipeRequest from "@/requests/recipe-request";
-import GroupRequest from "@/requests/group-request";
+import { InvitationRequest } from "@/requests/invitation-request";
+import { RecipeRequest } from "@/requests/recipe-request";
+import { GroupRequest } from "@/requests/group-request";
 import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
 
@@ -125,7 +125,7 @@ const openGroupCreation = function () {
 };
 
 const openRecipeEditing = function () {
-  router.push("/EditRecipes");
+  router.push("/Recipes");
 };
 
 const editGroup = function (group) {

@@ -31,7 +31,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import UserRequest from "@/requests/user-request";
+import { UserRequest } from "@/requests/user-request";
 
 var firstName = ref("");
 var lastName = ref("");
