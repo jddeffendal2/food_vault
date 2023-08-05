@@ -39,5 +39,21 @@ namespace FoodVaultApi.Controllers
 
             return Ok();
         }
+
+        [HttpGet("Recipe/{recipeId}")]
+        public IActionResult GetAllIngredientsForRecipe(string recipeId)
+        {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id.ToUpper() == recipeId.ToUpper());
+
+            if (recipe == null)
+                return NotFound();
+
+            var ingredients = _context.RecipeIngredients
+                .Where(x => x.RecipeId.ToUpper() == recipeId.ToUpper())
+                .OrderBy(x => x.SortOrder)
+                .Select(RecipeIngredientGetDTO.ToDTO);
+
+            return Ok(ingredients);
+        }
     }
 }

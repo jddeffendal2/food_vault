@@ -55,7 +55,6 @@ const groupRequest = new GroupRequest();
 const groupRecipeRequest = new GroupRecipeRequest();
 
 const activeTab = ref(0);
-
 const owner = ref({});
 const members = ref([]);
 const recipes = ref([]);
