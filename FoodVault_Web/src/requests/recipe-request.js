@@ -1,6 +1,6 @@
 import { Request } from "@/requests/request";
 
-export default class RecipeRequest extends Request {
+export class RecipeRequest extends Request {
   constructor() {
     super("Recipe");
   }
@@ -15,5 +15,13 @@ export default class RecipeRequest extends Request {
 
   getRecipeById = async function (recipeId) {
     return await this.makeRequest("GetRecipe/" + recipeId, "GET")
+  }
+
+  isUserAllowedToViewRecipe = async function (userId, recipeId) {
+    return await this.makeRequest(`User/${userId}/Recipe/${recipeId}/IsAuthorized`, "GET")
+  }
+
+  isUserOwnerOfRecipe = async function (recipeId, userId) {
+    return await this.makeRequest(`Recipe/${recipeId}/User/${userId}/IsOwner`, "GET")
   }
 }

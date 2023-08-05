@@ -1,6 +1,6 @@
 import { Request } from "@/requests/request";
 
-export default class UserRequest extends Request {
+export class UserRequest extends Request {
   constructor() {
     super("User");
   }

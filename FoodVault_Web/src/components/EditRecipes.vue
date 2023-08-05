@@ -26,7 +26,7 @@
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
-import RecipeRequest from "@/requests/recipe-request";
+import { RecipeRequest } from "@/requests/recipe-request";
 
 const router = useRouter();
 

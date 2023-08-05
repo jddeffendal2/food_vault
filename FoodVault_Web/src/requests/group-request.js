@@ -1,6 +1,6 @@
 import { Request } from "@/requests/request";
 
-export default class GroupRequest extends Request {
+export class GroupRequest extends Request {
   constructor() {
     super("Group");
   }

@@ -1,6 +1,6 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
-import UserRequest from "@/requests/user-request";
+import { UserRequest } from "@/requests/user-request";
 import router from "@/router";
 
 export const useAccountStore = defineStore("account", () => {

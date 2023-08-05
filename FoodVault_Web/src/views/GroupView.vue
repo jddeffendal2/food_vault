@@ -43,8 +43,8 @@
 <script setup>
 import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import GroupRequest from "@/requests/group-request";
-import GroupRecipeRequest from "@/requests/group-recipe-request";
+import { GroupRequest } from "@/requests/group-request";
+import { GroupRecipeRequest } from "@/requests/group-recipe-request";
 import { useAccountStore } from "@/stores/accountStore"
 import EditGroup from "@/components/EditGroup.vue";
 

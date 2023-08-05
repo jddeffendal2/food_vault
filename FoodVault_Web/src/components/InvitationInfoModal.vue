@@ -17,6 +17,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 const emit = defineEmits(["close"]);
 

@@ -54,6 +54,8 @@ export class Request {
           console.error(error);
           if (error.response.status === 401) {
             useAccountStore().logOut();
+          } else {
+            return error;
           }
         })
     ).data;

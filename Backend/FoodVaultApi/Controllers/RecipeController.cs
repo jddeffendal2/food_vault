@@ -54,5 +54,42 @@ namespace FoodVaultApi.Controllers
                         
             return Ok(recipe);
         }
+
+        [HttpGet("User/{userId}/Recipe/{recipeId}/IsAuthorized")]
+        public IActionResult IsUserAuthorizedToViewRecipe(string userId, string recipeId)
+        {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id == recipeId);
+
+            if (recipe != null && recipe.UserId == userId)
+                return Ok(true);
+
+            var groupsRecipeIsSharedWith = _context.GroupRecipes
+                .Where(x => x.RecipeId == recipeId)
+                .Select(x => x.GroupId)
+                .ToList();
+
+            var groupsUserIsPartOf = _context.UserGroups
+                .Where(x => x.UserId == userId)
+                .Select(x => x.GroupId)
+                .ToList();
+
+            var recipeIsSharedWithUser = groupsUserIsPartOf.Any(x => groupsRecipeIsSharedWith.Contains(x));
+
+            if (recipeIsSharedWithUser)
+                return Ok(true);
+
+            return Ok(false);
+        }
+
+        [HttpGet("Recipe/{recipeId}/User/{userId}/IsOwner")]
+        public IActionResult IsUserOwnerOfRecipe(string recipeId, string userId)
+        {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id == recipeId);
+
+            if (recipe == null)
+                return NotFound();
+
+            return Ok(recipe.UserId == userId);
+        }
     }
 }

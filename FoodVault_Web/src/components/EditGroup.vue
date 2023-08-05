@@ -32,17 +32,17 @@
         </div>
       </div>
     </div>
-    <AddRecipesToGroup v-if="isGroupEmpty" :selectedGroup="selectedGroup" @close="closeAddRecipesModal" />
+    <AddRecipesToGroup v-if="isGroupEmpty" :selected-group="selectedGroup" @close="closeAddRecipesModal" />
     <ShareGroupFeature v-if="isReadyToShare" :group-id="groupId" :shared-users="sharedUsersIds" @close="isReadyToShare = false" />
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import GroupRequest from "@/requests/group-request";
-import GroupRecipeRequest from "@/requests/group-recipe-request";
-import RecipeRequest from "@/requests/recipe-request";
-import UserGroupRequest from "@/requests/user-group-request";
+import { GroupRequest } from "@/requests/group-request";
+import { GroupRecipeRequest } from "@/requests/group-recipe-request";
+import { RecipeRequest } from "@/requests/recipe-request";
+import { UserGroupRequest } from "@/requests/user-group-request";
 import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
 import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
 import { useRouter } from "vue-router";
@@ -72,7 +72,7 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  selectedGroup.value = await groupRequest.getGroupById(props.groupId);
+  selectedGroup.value = await groupRequest.getGroupById(props.groupId)
   addedGroupRecipes.value = await groupRecipeRequest.getRecipesInGroup(
     props.groupId
   );

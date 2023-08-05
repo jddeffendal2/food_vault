@@ -58,9 +58,9 @@
 import { ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
 import { useRouter } from "vue-router";
-import RecipeRequest from "@/requests/recipe-request";
-import RecipeIngredientRequest from "@/requests/recipe-ingredient-request";
-import RecipeInstructionRequest from "@/requests/recipe-instruction-request";
+import { RecipeRequest } from "@/requests/recipe-request";
+import { RecipeIngredientRequest } from "@/requests/recipe-ingredient-request";
+import { RecipeInstructionRequest } from "@/requests/recipe-instruction-request";
 
 const router = useRouter();
 

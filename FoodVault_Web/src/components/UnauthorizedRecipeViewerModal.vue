@@ -11,12 +11,19 @@
             You do not have permission to view this recipe.
         </div>
         <br />
-        <RouterLink to="/Groups" class="close-button">Ok</RouterLink>
+        <FvButton @click="router.push('/Groups')">Ok</FvButton>
       </section>
     </div>
   </div>
 </template>
-<script setup></script>
+
+<script setup>
+import FvButton from '@/components/shared/FvButton.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+</script>
+
 <style scoped>
 .modal-background {
   position: fixed;

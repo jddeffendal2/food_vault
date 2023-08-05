@@ -5,13 +5,13 @@
     @open="isNotificationsOpen = true"
     @close="isNotificationsOpen = false"
   />
-  <div>
+  <div class="page-wrapper">
     <RouterView />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onBeforeMount, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { useRouter } from "vue-router";
 import NotificationsModal from "@/components/NotificationsModal.vue";
@@ -22,7 +22,7 @@ const accountStore = useAccountStore();
 
 const isNotificationsOpen = ref(false);
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await accountStore.initialize();
 
   if (!accountStore.isLoggedIn) {
@@ -49,6 +49,11 @@ html, body {
 a {
   text-decoration: none;
   color: #043565;
+}
+
+.page-wrapper {
+  margin-left: 12px;
+  margin-top: 12px;
 }
 
 /* header {

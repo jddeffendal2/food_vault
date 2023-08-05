@@ -43,7 +43,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
-import InvitationRequest from "@/requests/invitation-request";
+import { InvitationRequest } from "@/requests/invitation-request";
 
 const accountStore = useAccountStore();
 
