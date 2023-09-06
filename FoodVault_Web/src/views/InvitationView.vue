@@ -25,6 +25,10 @@
         </tr>
       </table>
     </div>
+    <div v-else>
+      <br/><br/>
+      <h3>You have no invitations.</h3>
+    </div>
   </div>
   <AcceptedInvitationNotification v-if="isInvitationAccepted" @close="closeInvitationModal" />
   <InvitationInfoModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal" />
