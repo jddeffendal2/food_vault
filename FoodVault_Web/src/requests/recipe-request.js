@@ -24,4 +24,12 @@ export class RecipeRequest extends Request {
   isUserOwnerOfRecipe = async function (recipeId, userId) {
     return await this.makeRequest(`Recipe/${recipeId}/User/${userId}/IsOwner`, "GET")
   }
+
+  updateRecipeName = async function (recipeId, recipeNewName){
+    return await this.makeRequest(`Recipe/${recipeId}/${recipeNewName}`, "PUT")
+  }
+
+  updateRecipeDescription = async function(recipeId, recipeNewDescription) {
+    return await this.makeRequest(`Recipe/${recipeId}/Description/${recipeNewDescription}`, "PUT")
+  }
 }

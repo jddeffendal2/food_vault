@@ -8,6 +8,14 @@
       {{ ingredient.name }} - {{ ingredient.quantity }} {{ ingredient.unitOfMeasurement }}
     </div>
   </div>
+  <div>
+    <h3>Instructions</h3>
+    <div v-for="instruction in instructions" :key="instruction.id">
+      {{ instruction.sortOrder }}. {{ instruction.text }}
+    </div>
+  </div>
+  <br/><br/>
+  <FvButton @click="updateRecipe">Update Recipe</FvButton>
 </template>
 
 <script setup>
@@ -17,6 +25,8 @@ import { useRoute } from "vue-router"
 import { RecipeRequest } from "@/requests/recipe-request"
 import { RecipeIngredientRequest } from "@/requests/recipe-ingredient-request"
 import { RecipeInstructionRequest } from "@/requests/recipe-instruction-request"
+import FvButton from "@/components/shared/FvButton.vue";
+
 
 const route = useRoute()
 // const router = useRouter()
@@ -47,6 +57,14 @@ onMounted(async () => {
   instructions.value = await recipeInstructionRequest.getAllInstructionsForRecipe(props.recipeId)
 });
 
+const updateRecipe = async function () {
+  if (recipeName.value != recipe.value.name) {
+    await recipeRequest.updateRecipeName(props.recipeId, recipeName.value)
+  }
+  if (recipeDescription.value != recipe.value.description) {
+    await recipeRequest.updateRecipeDescription(props.recipeId, recipeDescription.value)
+  }
+}
 watch(recipeDescription, () => {
 });
 

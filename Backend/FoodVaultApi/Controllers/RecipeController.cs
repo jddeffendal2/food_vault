@@ -91,5 +91,22 @@ namespace FoodVaultApi.Controllers
 
             return Ok(recipe.UserId == userId);
         }
+
+        [HttpPut("Recipe/{recipeId}/{recipeNewName}")]
+        public IActionResult UpdateRecipeName(string recipeId, string recipeNewName) {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id == recipeId);
+            recipe.Name = recipeNewName;
+            _context.SaveChanges();
+
+            return Ok(recipe);
+        }
+        [HttpPut("Recipe/{recipeId}/Description/{recipeNewDescription}")]
+        public IActionResult UpdateRecipeDescription(string recipeId, string recipeNewDescription) {
+            var recipe = _context.Recipes.FirstOrDefault(x => x.Id == recipeId);
+            recipe.Description = recipeNewDescription;
+            _context.SaveChanges();
+
+            return Ok(recipe);
+        }
     }
 }
