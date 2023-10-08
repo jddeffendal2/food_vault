@@ -6,7 +6,7 @@
     <br />
     <div class="view-group-div">
       <div class="shared-users">
-        Shared with {{ sharedUsers.length }} Users <button @click="isReadyToShare = true" class="greenStyledButton">Share</button>
+        Shared with {{ sharedUsers.length }} Users <FvButton @click="isReadyToShare = true">Share</FvButton>
       </div>
       <div class="added-recipes">
         <p v-if="addedGroupRecipes.length == 0">

@@ -51,5 +51,19 @@ namespace FoodVaultApi.Controllers
 
             return Ok(usersInGroup);
         }
+
+        [HttpDelete("Group/{groupId}/User/{userId}/Remove")]
+        public IActionResult RemoveUserFromGroup(string groupId, string userId)
+        {
+            var userInGroup = _context.UserGroups.FirstOrDefault(x => x.GroupId == groupId && x.UserId == userId);
+
+            if (userInGroup == null)
+                return NotFound();
+
+            _context.UserGroups.Remove(userInGroup);
+            _context.SaveChanges();
+
+            return Ok();
+        }
     }
 }

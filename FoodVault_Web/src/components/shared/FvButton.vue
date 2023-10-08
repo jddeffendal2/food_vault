@@ -25,8 +25,9 @@ const click = function () {
 
 <style scoped>
 .green-button {
-  min-height: 45px;
-  min-width: 100px;
+  min-height: 40px;
+  min-width: 60px;
+  padding: 8px;
   background-color: #C7D6D5;
   border: 1px solid #043565;
   border-radius: 8px;
