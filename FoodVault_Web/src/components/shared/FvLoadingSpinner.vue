@@ -14,8 +14,8 @@
   border-top: 16px solid #043565;
   width: 70px;
   height: 70px;
-  left: calc(50% - 70px);
-  top: calc(50% - 70px);
+  left: calc(50% - 35px);
+  top: calc(50% - 35px);
   -webkit-animation: spin 2s linear infinite; /* Safari */
   animation: spin 2s linear infinite;
 }

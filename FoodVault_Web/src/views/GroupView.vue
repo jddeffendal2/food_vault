@@ -1,4 +1,5 @@
 <template>
+  <FvLoadingSpinner v-if="loading" />
   <div class="tab-bar">
     <div
       @click="activeTab = 0"
@@ -29,10 +30,13 @@
     <div class="member-card">
       <div>Owner: {{ owner.firstName }} {{ owner.lastName }}</div>
       <br />
-      <div>Members:</div>
-      <div v-for="member in members" :key="member.userId">
-        {{ member.firstName }} {{ member.lastName }}
-      </div>
+      <div class="member-card__header">Members:</div>
+      <table>
+        <tr v-for="member in members" :key="member.userId">
+          <td>{{ member.firstName }} {{ member.lastName }}</td>
+          <td v-if="currentUserIsGroupOwner"><FvButton @click="removeUserFromGroup(member)">Remove</FvButton></td>
+        </tr>
+      </table>
     </div>
   </div>
   <div v-if="activeTab === 2">
@@ -45,15 +49,20 @@ import { computed, onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { GroupRequest } from "@/requests/group-request";
 import { GroupRecipeRequest } from "@/requests/group-recipe-request";
+import { UserGroupRequest } from "@/requests/user-group-request";
 import { useAccountStore } from "@/stores/accountStore"
 import EditGroup from "@/components/EditGroup.vue";
+import FvButton from "@/components/shared/FvButton.vue";
+import FvLoadingSpinner from "@/components/shared/FvLoadingSpinner.vue";
 
 const route = useRoute();
 const router = useRouter();
 const accountStore = useAccountStore();
 const groupRequest = new GroupRequest();
 const groupRecipeRequest = new GroupRecipeRequest();
+const userGroupRequest = new UserGroupRequest();
 
+const loading = ref(false);
 const activeTab = ref(0);
 const owner = ref({});
 const members = ref([]);
@@ -67,16 +76,29 @@ const openRecipe = function (recipe) {
   router.push("/Recipe/" + recipe.id);
 }
 
-onMounted(async () => {
+const removeUserFromGroup = async (member) => {
+  loading.value = true;
+  await userGroupRequest.removeUserFromGroup(route.params.id, member.userId);
+  await loadData();
+  loading.value = false;
+}
+
+const loadData = async () => {
   const groupInfo = await groupRequest.getGroupById(route.params.id);
   recipes.value = await groupRecipeRequest.getRecipesInGroup(route.params.id);
   
   owner.value = groupInfo.owner;
   members.value = groupInfo.members;
+}
+
+onMounted(async () => {
+  loading.value = true;
+  await loadData();
+  loading.value = false;
 })
 </script>
 
-<style>
+<style scoped lang="scss">
 .tab-bar {
   display: flex;
   justify-content: center;
@@ -107,5 +129,10 @@ onMounted(async () => {
 }
 .member-card {
   flex-basis: 90%;
+
+  &__header {
+    font-size: 22px;
+    font-weight: bold;
+  }
 }
 </style>

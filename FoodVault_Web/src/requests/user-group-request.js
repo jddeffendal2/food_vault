@@ -16,4 +16,8 @@ export class UserGroupRequest extends Request {
   getAllUsersInSpecificGroups = async function(groupId) {
     return await this.makeRequest("GetUsersInSpecificGroups/" + groupId, "GET");
   }
+
+  removeUserFromGroup = async function (groupId, userId) {
+    return await this.makeRequest(`Group/${groupId}/User/${userId}/Remove`, "DELETE");
+  }
 }
