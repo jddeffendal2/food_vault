@@ -12,4 +12,12 @@ export class RecipeInstructionRequest extends Request {
   getAllInstructionsForRecipe = async function(recipeId) {
     return await this.makeRequest(`Recipe/${recipeId}`, "GET")
   }
+
+  updateRecipeInstructions = async function(recipeId, instructionId, updatedInstruction) {
+    return await this.makeRequest(`RecipeInstructions/${recipeId}/InstructionId/${instructionId}`, "PUT", updatedInstruction)
+  }
+
+  deleteRecipeInstruction = async function(instructionId) {
+    return await this.makeRequest(`RecipeInstructions/${instructionId}`, "DELETE")
+  }
 }

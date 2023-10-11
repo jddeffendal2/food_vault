@@ -53,5 +53,24 @@ namespace FoodVaultApi.Controllers
 
             return Ok(instructions);
         }
+
+        [HttpPut("RecipeInstructions/{recipeId}/InstructionId/{instructionId}")]
+        public IActionResult UpdateRecipeInstructions(string recipeId, string instructionId, RecipeInstructionDTO recipeInstructionDTO) {
+            var recipeInstruction = _context.RecipeInstructions.FirstOrDefault(x => x.RecipeId == recipeId && x.Id == instructionId);
+            recipeInstruction.Text = recipeInstructionDTO.text;
+            recipeInstruction.SortOrder = recipeInstructionDTO.sortOrder;
+            _context.SaveChanges();
+
+            return Ok(recipeInstruction);
+        }
+
+        [HttpDelete("RecipeInstructions/{instructionId}")]
+        public IActionResult DeleteRecipeIngredient(string instructionId) {
+             var recipeInstruction = _context.RecipeInstructions.FirstOrDefault(x => x.Id == instructionId);
+             _context.RecipeInstructions.Remove(recipeInstruction);
+             _context.SaveChanges();
+
+             return Ok();
+        }
     }
 }

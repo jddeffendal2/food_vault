@@ -36,20 +36,28 @@
         v-model="ingredient.unitOfMeasurement"
       />
       <button
-        class="deleteIngredientBtn"
+        class="recipeDeleteBtn"
         @click="deleteIngredient(ingredient.ingredientId)"
       >
         X
       </button>
     </div>
     <br />
-    <button @click="addNewIngredient">Add Another Ingredient</button>
+    <button @click="addNewIngredient">Add Ingredient</button>
   </div>
   <div>
     <h3>Instructions</h3>
-    <div v-for="instruction in instructions" :key="instruction.id">
-      {{ instruction.sortOrder }}. {{ instruction.text }}
+    <div v-for="instruction in updatedInstructions " :key="instruction.id">
+      {{ instruction.sortOrder }}. <input class="instructionText" v-model="instruction.text"/> 
+      <button
+        class="recipeDeleteBtn"
+        @click="deleteInstruction(instruction.id)"
+      >
+        X
+      </button>
     </div>
+    <br />
+    <button @click="addNewInstruction">Add Instruction</button>
   </div>
   <br /><br />
   <FvButton @click="updateRecipe">Update Recipe</FvButton>
@@ -74,6 +82,8 @@ const instructions = ref([]);
 const recipeDescription = ref("");
 const recipeName = ref("");
 const updatedIngredients = ref([]);
+const updatedInstructions = ref([]);
+
 
 const props = defineProps({
   recipeId: {
@@ -101,6 +111,14 @@ onMounted(async () => {
   }
   instructions.value =
     await recipeInstructionRequest.getAllInstructionsForRecipe(props.recipeId);
+  for (let i = 0; i < instructions.value.length; i++) {
+    updatedInstructions.value.push({
+      id: instructions.value[i].id,
+      recipeId: instructions.value[i].recipeId,
+      text: instructions.value[i].text,
+      sortOrder: instructions.value[i].sortOrder,
+    });
+  }
 });
 
 const addNewIngredient = function () {
@@ -114,18 +132,54 @@ const addNewIngredient = function () {
   };
   updatedIngredients.value.push(newIngredient);
 };
+const addNewInstruction = function () {
+  var newInstruction = {
+    id: 0,
+    recipeId: props.recipeId,
+    text: "",
+    sortOrder: updatedInstructions.value.length + 1
+  }
+  updatedInstructions.value.push(newInstruction)
+}
 
 const deleteIngredient = async function (ingredientId) {
   var ingredient = updatedIngredients.value.find(x => x.ingredientId === ingredientId);
   var index = updatedIngredients.value.indexOf(ingredient);
   
-  await recipeIngredientRequest.deleteRecipeIngredient(ingredientId);
+  var doesIngredientExistInDb = ref(false);
+  for (let i=0; i<ingredients.value.length; i++) {
+    if (ingredients.value[i].ingredientId == ingredientId) {
+      doesIngredientExistInDb.value = true;
+    }
+  }
+  if (doesIngredientExistInDb.value) {
+    await recipeIngredientRequest.deleteRecipeIngredient(ingredientId);
+  }
   updatedIngredients.value.splice(index, 1);
+};
+
+const deleteInstruction = async function (instructionId) {
+  var instruction = updatedInstructions.value.find(x => x.id === instructionId);
+  var index = updatedInstructions.value.indexOf(instruction);
+
+  var doesInstructionExistInDb = ref(false);
+  for (let i=0; i<instructions.value.length; i++) {
+    if (instructions.value[i].id == instructionId) {
+      doesInstructionExistInDb.value = true;
+    }
+  } 
+  if (doesInstructionExistInDb.value) {
+    await recipeInstructionRequest.deleteRecipeInstruction(instructionId);
+  }
+  updatedInstructions.value.splice(index, 1);
 };
 
 const cleanSortOrders = function () {
   for (let i = 0; i < updatedIngredients.value.length; i++) {
     updatedIngredients.value[i].sortOrder = i + 1;
+  }
+  for (let i=0; i<updatedInstructions.value.length; i++) {
+    updatedInstructions.value[i].sortOrder = i + 1;
   }
 }
 
@@ -140,7 +194,7 @@ const updateRecipe = async function () {
       recipeDescription.value
     );
   }
-  const areTheyEqual = ref(true);
+  const areTheIngredientArraysEqual = ref(true);
   for (let i = 0; i < updatedIngredients.value.length; i++) {
     if (
       updatedIngredients.value.length != ingredients.value.length ||
@@ -150,10 +204,10 @@ const updateRecipe = async function () {
         ingredients.value[i].unitOfMeasurement ||
       updatedIngredients.value[i].sortOrder != ingredients.value[i].sortOrder
     ) {
-      areTheyEqual.value = false;
+      areTheIngredientArraysEqual.value = false;
     }
   }
-  if (areTheyEqual.value == false) {
+  if (areTheIngredientArraysEqual.value == false) {
     for (let i = 0; i < updatedIngredients.value.length; i++) {
       if (updatedIngredients.value[i].ingredientId == 0) {
         await recipeIngredientRequest.createRecipeIngredient({
@@ -168,6 +222,33 @@ const updateRecipe = async function () {
           props.recipeId,
           updatedIngredients.value[i].ingredientId,
           updatedIngredients.value[i]
+        );
+      }
+    }
+  }
+  const areTheInstructionArraysEqual = ref(true);
+  for (let i = 0; i < updatedInstructions.value.length; i++) {
+    if (
+      updatedInstructions.value.length != instructions.value.length ||
+      updatedInstructions.value[i].text != instructions.value[i].text ||
+      updatedInstructions.value[i].sortOrder != instructions.value[i].sortOrder
+    ) {
+      areTheInstructionArraysEqual.value = false;
+    }
+  }
+  if (areTheInstructionArraysEqual.value == false) {
+    for (let i = 0; i < updatedInstructions.value.length; i++) {
+      if (updatedInstructions.value[i].id == 0) {
+        await recipeInstructionRequest.createRecipeInstruction({
+          recipeId: updatedInstructions.value[i].recipeId,
+          text: updatedInstructions.value[i].text,
+          sortOrder: updatedInstructions.value[i].sortOrder,
+        });
+      } else {
+        await recipeInstructionRequest.updateRecipeInstructions(
+          props.recipeId,
+          updatedInstructions.value[i].id,
+          updatedInstructions.value[i]
         );
       }
     }
@@ -191,7 +272,10 @@ const updateRecipe = async function () {
   width: 60px;
 }
 
-.deleteIngredientBtn {
+.instructionText {
+  width: 350px;
+}
+.recipeDeleteBtn {
   border: none;
   cursor: pointer;
   font-weight: bold;
