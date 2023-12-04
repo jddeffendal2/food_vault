@@ -9,7 +9,7 @@
     <div class="login-row">
       <label class="login-row" for="password">Password: </label>
       <input id="password" v-if="showPassword" type="text" v-model="password" placeholder="Password" />
-      <input id="password" v-else type="password" v-model="password" placeholder="Password" />
+      <input id="password" v-else type="password" v-model="password" placeholder="Password" />&nbsp;
       <button id="show-password" @click="showPassword = !showPassword">Show</button>
     </div>
     <div class="login-row">
@@ -19,7 +19,7 @@
       <button type="submit" id="login-button" @click="login">Login</button>
     </div>
     <div class="login-row">
-      <p>Don't have an account? <router-link to="/signup">Sign up!</router-link></p>
+      <p>Don't have an account? <router-link class="dontHaveAccount" to="/signup">Sign up!</router-link></p>
     </div>
   </div>
 </template>
@@ -90,6 +90,10 @@ var login = async function () {
   font-size: 15px;
 }
 
+#password-forgotten {
+  text-decoration: underline;
+}
+
 .login-row p {
   margin: auto auto 15px 118px;
   font-size: 15px;
@@ -131,8 +135,24 @@ var login = async function () {
 }
 
 #show-password {
-  width: 10%;
-  height: 40px;
+  width: 11%;
+  height: 30px;
   font-family: 'Quicksand', sans-serif;
+  border-radius: 8px;
+  border: 1px solid #043565;
+  padding-top: 6px;
+  padding-bottom: 3px;
+}
+
+#show-password:hover {
+  cursor: pointer;
+}
+
+.dontHaveAccount {
+  text-decoration: underline;
+}
+
+.dontHaveAccount:hover {
+  text-shadow: 0.2px 0.2px #043565;
 }
 </style>
