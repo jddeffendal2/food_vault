@@ -16,7 +16,7 @@
     </div>
     <div class="row">
       <input v-if="showPassword" type="text" placeholder="Password" v-model="password" />
-      <input v-else type="password" placeholder="Password" v-model="password" />
+      <input v-else type="password" placeholder="Password" v-model="password" />&nbsp;
       <button id="showPasswordButton" @click="showPassword = !showPassword">Show</button>
     </div>
     <div class="row">
@@ -24,6 +24,9 @@
     </div>
     <div class="row">
       <button id="registerButton" @click="signup">Register</button>
+    </div>
+    <div class="row">
+      <p>Already have an account? <router-link class="alreadyHaveAccount" to="/login">Sign In!</router-link></p>
     </div>
   </div>
 </template>
@@ -65,8 +68,8 @@ var signup = async function () {
   border: 3px solid #6D7275;
   border-radius: 6px;
   margin: 100px auto;
-  min-height: 550px;
-  max-height: 550px;
+  min-height: 575px;
+  max-height: 575px;
   min-width: 450px;
   max-width: 450px;
   background-color: #C7D6D5;
@@ -75,6 +78,12 @@ var signup = async function () {
 .row {
   display: block;
   width: 100%;
+}
+
+.row p {
+  text-align: center;
+  font-weight: bold;
+  color: #043565;
 }
 
 .row input {
@@ -119,8 +128,24 @@ var signup = async function () {
 }
 
 #showPasswordButton {
-  width: 12%;
+  width: 11%;
   height: 30px;
   font-family: 'Quicksand', sans-serif;
+  border-radius: 8px;
+  border: 1px solid #043565;
+  padding-top: 6px;
+  padding-bottom: 3px;
+}
+
+#showPasswordButton:hover {
+  cursor: pointer;
+}
+
+.alreadyHaveAccount {
+  text-decoration: underline;
+}
+
+.alreadyHaveAccount:hover {
+  text-shadow: 0.2px 0.2px #043565;
 }
 </style>

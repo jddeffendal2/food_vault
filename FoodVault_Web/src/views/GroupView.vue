@@ -22,6 +22,10 @@
     </div>
   </div>
   <div v-if="activeTab === 0" class="group-body">
+    <div v-if="recipes.length == 0">
+      <br/><br/>
+      There are no recipes in this group
+    </div>
     <div v-for="recipe in recipes" :key="recipe.id" class="recipe-card" @click="openRecipe(recipe)">
       {{ recipe.name }}
     </div>

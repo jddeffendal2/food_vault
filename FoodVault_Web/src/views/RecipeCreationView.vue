@@ -23,9 +23,9 @@
           </div>
         </div>
         <br />
-        <button id="addIngredient" @click="addIngredient">
+        <FvButton id="addIngredient" @click="addIngredient">
           Add Another Ingredient
-        </button>
+        </FvButton>
         <br />
         <br />
       </div>
@@ -43,13 +43,14 @@
         </div>
         <div id="extraInstructions"></div>
         <br /><br />
-        <button id="addInstruction" @click="addInstruction">
+        <FvButton id="addInstruction" @click="addInstruction">
           Add Another Instruction
-        </button>
+        </FvButton>
         <br /><br />
       </div>
     </div>
-    <button id="saveRecipe" @click="createRecipe">Save Recipe</button>
+    <FvButton @click="createRecipe">Save Recipe</FvButton>
+
     <br /><br /><br />
   </div>
 </template>
@@ -61,6 +62,7 @@ import { useRouter } from "vue-router";
 import { RecipeRequest } from "@/requests/recipe-request";
 import { RecipeIngredientRequest } from "@/requests/recipe-ingredient-request";
 import { RecipeInstructionRequest } from "@/requests/recipe-instruction-request";
+import FvButton from "@/components/shared/FvButton.vue";
 
 const router = useRouter();
 
