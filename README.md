@@ -4,7 +4,7 @@ This is an application for creating and sharing your personal recipes with your 
 
 To run the app:
   - In Backend/FoodVaultApi, run `dotnet watch run`
-  - In FoodVault_Web, run `npm run dev`
+  - In FoodVault_Web, run `yarn dev`
 
 Database Migrations
 - If you change a model, create a migration
