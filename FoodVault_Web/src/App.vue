@@ -1,10 +1,5 @@
 <template>
   <NavBar />
-  <NotificationsModal
-    v-if="isNotificationsOpen"
-    @open="isNotificationsOpen = true"
-    @close="isNotificationsOpen = false"
-  />
   <div class="page-wrapper">
     <RouterView />
   </div>
@@ -14,7 +9,6 @@
 import { onBeforeMount, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { useRouter } from "vue-router";
-import NotificationsModal from "@/components/NotificationsModal.vue";
 import NavBar from "@/components/NavBar.vue";
 
 const router = useRouter();
