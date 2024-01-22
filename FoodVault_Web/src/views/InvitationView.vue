@@ -69,6 +69,10 @@ const acceptInvitation = async function (invitation) {
   isInvitationAccepted.value = true;
 }
 
+// const rejectInvitation = function(invitation) {
+
+// }
+
 const closeInvitationModal = function() {
   isInvitationAccepted.value = false;
 }
