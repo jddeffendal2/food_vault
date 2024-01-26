@@ -16,4 +16,8 @@ export class InvitationRequest extends Request {
   acceptInvitation = async function(invitationId) {
     return await this.makeRequest(`${invitationId}/Accept`, "POST");
   }
+
+  rejectInvitation = async function(invitationId) {
+    return await this.makeRequest(`Invitations/${invitationId}`, "DELETE")
+  }
 }

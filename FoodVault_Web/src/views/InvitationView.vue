@@ -69,9 +69,9 @@ const acceptInvitation = async function (invitation) {
   isInvitationAccepted.value = true;
 }
 
-// const rejectInvitation = function(invitation) {
-
-// }
+const rejectInvitation = async function(invitation) {
+  await invitationRequest.rejectInvitation(invitation.invitationId);
+}
 
 const closeInvitationModal = function() {
   isInvitationAccepted.value = false;
