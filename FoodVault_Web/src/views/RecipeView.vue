@@ -5,7 +5,7 @@
       <UnauthorizedRecipeViewerModal />
     </div>
     <div v-else>
-      <FvButton v-if="isOwner" @click="editRecipe">Edit Recipe</FvButton>
+      <FvButton v-if="isOwner" @click="editRecipe">Edit Recipe</FvButton><br/><br/>
       <div class="recipe">
         <div class="recipe__image">
           <img src="../assets/mac-and-cheese.jpg" alt="Recipe Image" width="350" height="350"/>

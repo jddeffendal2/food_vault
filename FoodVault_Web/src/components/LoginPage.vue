@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="login-header">Sign In to Food Vault</h1>
+    <h1 class="login-header">Sign In to <span>Food</span><span id="secondWord">Vault</span></h1>
     <br />
     <div class="login-row">
       <label class="login-row" for="email">Email or Username: </label>
@@ -70,6 +70,10 @@ var login = async function () {
 .login-row h2, p, label {
   font-weight: bold;
   color: #043565;
+}
+
+#secondWord {
+  color: white;
 }
 
 .login-row input {

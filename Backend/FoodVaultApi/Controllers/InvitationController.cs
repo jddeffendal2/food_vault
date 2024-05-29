@@ -80,5 +80,14 @@ namespace FoodVaultApi.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("Invitations/{invitationId}")]
+        public IActionResult DeleteInvitation(string invitationId) {
+            var foundInvitation = _context.Invitations.FirstOrDefault(x => x.Id == invitationId);
+            _context.Invitations.Remove(foundInvitation);
+            _context.SaveChanges();
+
+            return Ok();
+        }
     }
 }
