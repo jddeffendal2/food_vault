@@ -3,7 +3,7 @@
     <div class="nav-bar">
       <div class="nav-bar__left">
         <RouterLink class="nav-item" to="/">
-          <h1 class="brand-name">Food Vault</h1>
+          <h1 class="brand-name"><span>Food</span><span id="secondWord">Vault</span></h1>
         </RouterLink>
         <div v-if="accountStore.isLoggedIn">
             <RouterLink class="hideable-nav-items" to="/Recipes">Recipes</RouterLink>
@@ -167,6 +167,9 @@ onMounted(async () => {
   float: left;
 }
 
+#secondWord {
+    color: white;
+}
 
 .logout-button {
   min-width: 100px;
