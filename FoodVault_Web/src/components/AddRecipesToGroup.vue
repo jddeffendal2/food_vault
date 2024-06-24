@@ -61,7 +61,7 @@ onMounted(async () => {
     isRecipeAlreadyInGroup.value = false;
 
     for (let j = 0; j < recipesAlreadyInGroup.value.length; j++) {
-      if (usersRecipes.value[i].id == recipesAlreadyInGroup.value[j].recipeId) {
+      if (usersRecipes.value[i].id == recipesAlreadyInGroup.value[j].id) {
         isRecipeAlreadyInGroup.value = true;
       }
     }
