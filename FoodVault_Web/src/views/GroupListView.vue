@@ -1,5 +1,6 @@
 <template>
-  <select v-model="viewType">
+  <h3 class="groupListTitle">View Groups </h3>
+  <select v-model="viewType" class="groupTypeSelection">
     <option value="0">All Groups</option>
     <option value="1">Groups You Created</option>
     <option value="2">Groups You're a Member Of</option>
@@ -65,5 +66,17 @@ onMounted(async () => {
 }
 .group__name {
   font-weight: bold;
+}
+.groupTypeSelection {
+  border: 2px solid #043565;
+  border-radius: 5px;
+  width: 300px;
+  height: 25px;
+  margin-left: 20px;
+}
+.groupListTitle {
+  text-align: center;
+  font-size: 30px;
+  color: #043565;
 }
 </style>

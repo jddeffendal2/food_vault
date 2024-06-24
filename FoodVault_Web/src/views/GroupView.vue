@@ -123,13 +123,21 @@ onMounted(async () => {
 }
 .group-body {
   display: flex;
-  justify-content: center;
+  text-align: center;
+  justify-content: space-between;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 .recipe-card {
   border: 1px solid #043565;
   border-radius: 5px;
-  flex-basis: 80%;
+  flex: 30%;
   cursor: pointer;
+  margin: 5px;
+}
+.recipe-card:hover {
+  background-color: #C7D6D5;
+  border: 2px solid #C7D6D5;
 }
 .member-card {
   flex-basis: 90%;
