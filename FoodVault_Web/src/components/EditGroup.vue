@@ -11,7 +11,7 @@
       <div class="added-recipes">
         <p v-if="addedGroupRecipes.length == 0">
           This group contains no recipes.
-          <button @click="isGroupEmpty = true">Add Recipes</button>
+          <FvButton @click="isGroupEmpty = true">Add Recipes</FvButton>
         </p>
         <div v-else class="recipe-table-div">
           <table>

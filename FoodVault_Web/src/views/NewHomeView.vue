@@ -25,6 +25,8 @@
             </div>
             <div class="rightDiv">
                 <h1 id="exampleSectionSubTitle">Create Groups to Share your Recipes with Anyone You Choose</h1>
+                <br/><br/>
+                <FvButton @click="createGroup">Create a Group</FvButton>
             </div>
         </div>
     </div>
@@ -36,6 +38,9 @@ import router from "../router";
 
 const addRecipes = function () {
     router.push('/CreateRecipe');
+}
+const createGroup = function () {
+    router.push('/CreateGroup');
 }
 </script>
 <style>

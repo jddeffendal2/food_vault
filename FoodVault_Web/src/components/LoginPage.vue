@@ -13,7 +13,11 @@
       <button id="show-password" @click="showPassword = !showPassword">Show</button>
     </div>
     <div class="login-row">
-      <p id="password-forgotten"><router-link to="/">Forgot your password?</router-link></p>
+      <p id="password-forgotten"><router-link to="/Login">Forgot your password?</router-link></p>
+    </div>
+    <div v-if="loginError">
+      <br/>
+      <p class="loginError">Invalid Username or Password</p>
     </div>
     <div class="login-row">
       <button type="submit" id="login-button" @click="login">Login</button>
@@ -35,6 +39,7 @@ var router = useRouter();
 var emailUsername = ref("");
 var password = ref("");
 var showPassword = ref(false);
+var loginError = ref(false);
 
 var login = async function () {
   var loginInfo = {
@@ -42,7 +47,11 @@ var login = async function () {
     password: password.value,
   }
 
-  await accountStore.logIn(loginInfo);
+  try {
+    await accountStore.logIn(loginInfo);
+  } catch (error) {
+    loginError.value = true;
+  }
   
   if (accountStore.isLoggedIn) {
     router.push("/");
@@ -158,5 +167,9 @@ var login = async function () {
 
 .dontHaveAccount:hover {
   text-shadow: 0.2px 0.2px #043565;
+}
+.loginError {
+  color: red;
+  text-align: center;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="div-main">
-    <h2>Create/Add Your Own Recipes To Food Vault</h2>
+    <h2 id="createRecipeTitle">Create/Add Your Own Recipes To Food Vault</h2>
     <br />
     <label>Name of Recipe: </label>
     <input type="text" name="recipeName" v-model="recipeName" />
@@ -100,8 +100,8 @@ const createRecipe = async function () {
       sortOrder: i + 1,
     };
     await new RecipeInstructionRequest().createRecipeInstruction(newInstruction);
-    router.push("/");
-  }
+  } 
+  router.push("/Recipes");
 };
 
 const addIngredient = function () {
@@ -147,6 +147,7 @@ const updateInstructionOrderLabels = function () {
 <style scoped>
 .div-main {
   text-align: center;
+  color: #043565;
 }
 
 .recipeInformation {

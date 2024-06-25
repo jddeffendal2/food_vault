@@ -1,66 +1,70 @@
 <template>
-  <h2>Edit This Recipe</h2>
-  <h3>
-    Name:
-    <input
-      type="text"
-      class="recipeDescription"
-      name="recipeName"
-      v-model="recipeName"
-    />
-  </h3>
-  <div>
-    Description:
-    <input
-      type="text"
-      class="recipeDescription"
-      name="recipeName"
-      v-model="recipeDescription"
-    />
-  </div>
-  <div>
-    <h3>Ingredients</h3>
-    <div
-      v-for="ingredient in updatedIngredients"
-      :key="ingredient.ingredientId"
-    >
-      <input type="text" v-model="ingredient.name" /> -
+  <div class="editRecipePage">
+    <h2 id="editRecipeTitle">Edit This Recipe</h2>
+    <h3>
+      Name:
       <input
         type="text"
-        class="ingredientQuantity"
-        v-model="ingredient.quantity"
+        class="recipeDescription"
+        name="recipeName"
+        v-model="recipeName"
       />
-      &nbsp;<input
+    </h3>
+    <h3>
+      Description:
+      <input
         type="text"
-        class="ingredientsMeasurementUnit"
-        v-model="ingredient.unitOfMeasurement"
+        class="recipeDescription"
+        name="recipeName"
+        v-model="recipeDescription"
       />
-      <button
-        class="recipeDeleteBtn"
-        @click="deleteIngredient(ingredient.ingredientId)"
+    </h3>
+    <div>
+      <h3>Ingredients</h3>
+      <div
+        v-for="ingredient in updatedIngredients"
+        :key="ingredient.ingredientId"
       >
-        X
-      </button>
+        <input type="text" class="ingredientName" v-model="ingredient.name" /> -
+        <input
+          type="text"
+          class="ingredientQuantity"
+          v-model="ingredient.quantity"
+        />
+        &nbsp;<input
+          type="text"
+          class="ingredientsMeasurementUnit"
+          v-model="ingredient.unitOfMeasurement"
+        />
+        <button
+          class="recipeDeleteBtn"
+          @click="deleteIngredient(ingredient.ingredientId)"
+        >
+          X
+        </button>
+      </div>
+      <br />
+      <FvButton @click="addNewIngredient">Add Ingredient</FvButton>
     </div>
-    <br />
-    <button @click="addNewIngredient">Add Ingredient</button>
-  </div>
-  <div>
-    <h3>Instructions</h3>
-    <div v-for="instruction in updatedInstructions " :key="instruction.id">
-      {{ instruction.sortOrder }}. <input class="instructionText" v-model="instruction.text"/> 
-      <button
-        class="recipeDeleteBtn"
-        @click="deleteInstruction(instruction.id)"
-      >
-        X
-      </button>
+    <div>
+      <h3>Instructions</h3>
+      <div v-for="instruction in updatedInstructions " :key="instruction.id">
+        {{ instruction.sortOrder }}. <input class="instructionText" v-model="instruction.text"/> 
+        <button
+          class="recipeDeleteBtn"
+          @click="deleteInstruction(instruction.id)"
+        >
+          X
+        </button>
+      </div>
+      <br />
+      <FvButton @click="addNewInstruction">Add Instruction</FvButton>
     </div>
-    <br />
-    <button @click="addNewInstruction">Add Instruction</button>
+    <br /><br />
   </div>
-  <br /><br />
-  <FvButton @click="updateRecipe">Update Recipe</FvButton>
+  <div class="updateButton">
+    <FvButton @click="updateRecipe">Update Recipe</FvButton>
+  </div>
 </template>
 
 <script setup>
@@ -258,22 +262,40 @@ const updateRecipe = async function () {
 </script>
 
 <style scoped>
+.editRecipePage {
+  color: #043565;
+}
+#editRecipeTitle{
+  text-align: center;
+}
 .recipeDescription {
   width: 400px;
   height: 25px;
   white-space: initial;
+  border: 1px solid #043565;
+  border-radius: 5px;
 }
 
 .ingredientQuantity {
   width: 30px;
+  border: 1px solid #043565;
+  border-radius: 5px;
+}
+.ingredientName {
+  border: 1px solid #043565;
+  border-radius: 5px;
 }
 
 .ingredientsMeasurementUnit {
   width: 60px;
+  border: 1px solid #043565;
+  border-radius: 5px;
 }
 
 .instructionText {
   width: 350px;
+  border: 1px solid #043565;
+  border-radius: 5px;
 }
 .recipeDeleteBtn {
   border: none;
@@ -281,5 +303,17 @@ const updateRecipe = async function () {
   font-weight: bold;
   color: #043565;
   background: transparent;
+}
+.updateButton{
+  text-align: center;
+}
+
+.ingredientQuantity:focus, .ingredientQuantity:hover, 
+.ingredientName:focus, .ingredientName:hover, 
+.recipeDescription:focus, .recipeDescription:hover,
+.ingredientsMeasurementUnit:focus, .ingredientsMeasurementUnit:hover,
+.instructionText:focus, .instructionText:hover
+{
+  background-color: #C7D6D5;
 }
 </style>

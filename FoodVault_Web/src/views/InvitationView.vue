@@ -1,4 +1,5 @@
 <template>
+  <FvLoadingSpinner v-if="loading" />
   <div class="invitations-page">
     <br/>
     <div v-if="invitations.length == 1">** You have been invited to join 1 group. **</div>
@@ -41,6 +42,7 @@ import { InvitationRequest } from "@/requests/invitation-request";
 import FvButton from "@/components/shared/FvButton.vue";
 import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
+import FvLoadingSpinner from "@/components/shared/FvLoadingSpinner.vue";
 
 const accountStore = useAccountStore();
 const invitationRequest = new InvitationRequest();
@@ -48,12 +50,18 @@ const isInvitationAccepted = ref(false);
 const invitations = ref([]);
 const isAboutModalClicked = ref(false);
 const invitationInfo = ref({});
+const loading = ref(false); 
 
 onMounted(async () => {
+  loading.value = true;
+  await loadData();
+  loading.value = false;
+});
+const loadData = async function() {
   invitations.value = await invitationRequest.getInvitationsToUser(
     accountStore.currentUserId
   );
-});
+}
 
 const aboutInvitation = function (invitation) {
   isAboutModalClicked.value = true;
@@ -67,10 +75,16 @@ const closeAboutInvitationModal = async function() {
 const acceptInvitation = async function (invitation) {
   await invitationRequest.acceptInvitation(invitation.invitationId);
   isInvitationAccepted.value = true;
+  loading.value = true;
+  await loadData();
+  loading.value = false;
 }
 
 const rejectInvitation = async function(invitation) {
+  loading.value = true;
   await invitationRequest.rejectInvitation(invitation.invitationId);
+  await loadData();
+  loading.value = false;
 }
 
 const closeInvitationModal = function() {

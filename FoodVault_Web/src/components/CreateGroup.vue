@@ -46,7 +46,7 @@ const createGroup = async function () {
   color: #043565;
   font-weight: bold;
   background-color: #c7d6d5;
-  border: 2px solid #6D7275;
+  border: 2px solid #043565;
   border-radius: 4px;
   margin-left: auto;
   margin-right: auto;
@@ -69,7 +69,8 @@ const createGroup = async function () {
 }
 
 .create-group-button:hover {
-  box-shadow: 1px 1px 1px gray;
+  box-shadow: 1px 1px 1px lightgray;
+  background-color: gainsboro;
   cursor: pointer;
 }
 </style>
