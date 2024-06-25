@@ -1,5 +1,9 @@
 <template>
   <h3 class="groupListTitle">View Groups </h3>
+  <RouterLink to="/CreateGroup">
+    <div class="create-group-link">Create New Group</div>
+    <br/>
+  </RouterLink>
   <select v-model="viewType" class="groupTypeSelection">
     <option value="0">All Groups</option>
     <option value="1">Groups You Created</option>
@@ -78,5 +82,11 @@ onMounted(async () => {
   text-align: center;
   font-size: 30px;
   color: #043565;
+}
+.create-group-link {
+    font-size: 16px;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-left: 20px;
 }
 </style>
