@@ -11,15 +11,20 @@ import GroupView from "@/views/GroupView.vue";
 import RecipeView from "@/views/RecipeView.vue";
 import RecipeListView from "@/views/RecipeListView.vue";
 import InvitationView from "@/views/InvitationView.vue";
-import NewHomeView from "@/views/NewHomeView.vue";
+import LandingPage from "@/views/LandingPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: "/",
-      name: "NewHome",
-      component: NewHomeView
+      name: "HomeView",
+      component: HomeView
+    },
+    {
+      path: '/LandingPage',
+      name: "LandingPage",
+      component: LandingPage
     },
     {
       path: "/Login",
