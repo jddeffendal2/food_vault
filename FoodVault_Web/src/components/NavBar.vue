@@ -2,7 +2,10 @@
   <header>
     <div class="nav-bar">
       <div class="nav-bar__left">
-        <RouterLink class="nav-item" to="/">
+        <RouterLink v-if="!accountStore.isLoggedIn" class="nav-item" to="/LandingPage">
+          <h1 class="brand-name"><span>Food</span><span id="secondWord">Vault</span></h1>
+        </RouterLink>
+        <RouterLink v-if="accountStore.isLoggedIn" class="nav-item" to="/">
           <h1 class="brand-name"><span>Food</span><span id="secondWord">Vault</span></h1>
         </RouterLink>
         <div v-if="accountStore.isLoggedIn">
@@ -38,6 +41,9 @@
           @click="logOut"
         >
           Log Out
+        </button>
+        <button class="login-button" v-if="!accountStore.isLoggedIn" @click="logIn">
+          Login
         </button>
       </div>
     </div>
@@ -83,8 +89,10 @@ import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { InvitationRequest } from "@/requests/invitation-request";
 import NotificationsModal from "@/components/NotificationsModal.vue";
+import { RouterLink, useRouter } from "vue-router";
 
 const accountStore = useAccountStore();
+const router = useRouter();
 
 const emit = defineEmits(["open"]);
 
@@ -94,6 +102,9 @@ const isNotificationsOpen = ref(false);
 
 function logOut() {
   accountStore.logOut();
+}
+function logIn() {
+  router.push("/Login");
 }
 const openNotifications = function() {
   isNotificationsOpen.value = true;
@@ -171,7 +182,7 @@ onMounted(async () => {
     color: white;
 }
 
-.logout-button {
+.logout-button, .login-button {
   min-width: 100px;
   max-width: 100px;
   min-height: 40px;
@@ -181,7 +192,7 @@ onMounted(async () => {
   color: #043565;
 }
 
-.logout-button:hover {
+.logout-button:hover, .login-button:hover {
   box-shadow: 1px 1px 1px gray;
   cursor: pointer;
 }

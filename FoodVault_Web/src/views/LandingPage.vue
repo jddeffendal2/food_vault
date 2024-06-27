@@ -37,10 +37,10 @@ import FvButton from "@/components/shared/FvButton.vue";
 import router from "../router";
 
 const addRecipes = function () {
-    router.push('/CreateRecipe');
+    router.push('/SignUp');
 }
 const createGroup = function () {
-    router.push('/CreateGroup');
+    router.push('/SignUp');
 }
 </script>
 <style>

@@ -13,5 +13,6 @@
         public ICollection<GroupRecipe> GroupRecipes { get; set; } // Every group the recipe is shared with
         public ICollection<RecipeInstruction> Instructions { get; set; } // Every instruction for this recipe
         public ICollection<RecipeIngredient> Ingredients { get; set; } // Every ingredient in this recipe
+        public ICollection<RecipeView> RecipeViews { get; set; }
     }
 }

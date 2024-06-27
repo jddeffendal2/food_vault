@@ -17,5 +17,6 @@
         public ICollection<UserGroup> UserGroups { get; set; } // all the groups user belongs to
         public ICollection<Invitation> SentInvitations { get; set; }
         public ICollection<Invitation> ReceivedInvitations { get; set; }
+        public ICollection<RecipeView> RecipeViews { get; set; }
     }
 }

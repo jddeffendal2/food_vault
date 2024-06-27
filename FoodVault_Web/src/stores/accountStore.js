@@ -43,7 +43,7 @@ export const useAccountStore = defineStore("account", () => {
     localStorage.removeItem(tokenKey);
     localStorage.removeItem(userIdKey);
     clearAccountStore();
-    router.push("/Login");
+    router.push("/LandingPage");
   }
 
   async function loadUserData(userId) {

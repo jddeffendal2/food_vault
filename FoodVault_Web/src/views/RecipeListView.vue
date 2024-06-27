@@ -1,7 +1,7 @@
 <template>
     <div class="edit-recipes">
         <h2>Your Recipes:</h2>
-        <RouterLink to="/CreateRecipe">
+        <RouterLink to="/CreateRecipe" v-if="currentUserRecipes.length > 0">
             <div class="create-recipe-link">Create New Recipe</div>
         </RouterLink>
         <div v-if="currentUserRecipes.length > 0">

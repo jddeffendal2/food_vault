@@ -2,7 +2,7 @@
   <FvLoadingSpinner v-if="loading" />
   <div class="tab-bar">
     <div
-      @click="activeTab = 0"
+      @click="activeTab = 0; loadData();"
       :class="{ 'tab-button': true, 'active-tab': activeTab === 0, 'inactive-tab': activeTab !== 0}"
     >
       Recipes

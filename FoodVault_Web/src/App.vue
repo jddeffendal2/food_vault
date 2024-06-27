@@ -20,7 +20,7 @@ onBeforeMount(async () => {
   await accountStore.initialize();
 
   if (!accountStore.isLoggedIn) {
-    router.push("/login");
+    router.push("/LandingPage");
   }
 });
 
