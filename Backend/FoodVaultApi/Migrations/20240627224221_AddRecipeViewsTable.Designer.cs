@@ -3,6 +3,7 @@ using System;
 using FoodVaultApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FoodVaultApi.Migrations
 {
     [DbContext(typeof(FoodVaultDbContext))]
-    partial class FoodVaultDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240627224221_AddRecipeViewsTable")]
+    partial class AddRecipeViewsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

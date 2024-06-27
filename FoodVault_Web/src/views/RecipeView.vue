@@ -40,6 +40,7 @@ import { useRouter } from "vue-router"
 import { RecipeRequest } from "@/requests/recipe-request"
 import { RecipeIngredientRequest } from "@/requests/recipe-ingredient-request"
 import { RecipeInstructionRequest } from "@/requests/recipe-instruction-request"
+import { RecipeViewRequest } from "@/requests/recipe-view-request"
 import FvButton from "@/components/shared/FvButton.vue"
 import FvLoadingSpinner from "@/components/shared/FvLoadingSpinner.vue"
 import UnauthorizedRecipeViewerModal from "@/components/UnauthorizedRecipeViewerModal.vue"
@@ -51,6 +52,7 @@ const accountStore = useAccountStore()
 const recipeRequest = new RecipeRequest()
 const recipeIngredientRequest = new RecipeIngredientRequest()
 const recipeInstructionRequest = new RecipeInstructionRequest()
+const recipeViewRequest = new RecipeViewRequest()
 
 const loading = ref(false)
 const isOwner = ref(false)
@@ -77,6 +79,7 @@ onMounted(async () => {
   ingredients.value = await recipeIngredientRequest.getAllIngredientsForRecipe(route.params.id)
   instructions.value = await recipeInstructionRequest.getAllInstructionsForRecipe(route.params.id)
   loading.value = false
+  await recipeViewRequest.createRecipeView(accountStore.currentUserId, route.params.id)
 })
 </script>
 

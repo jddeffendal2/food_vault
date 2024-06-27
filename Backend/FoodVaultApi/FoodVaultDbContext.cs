@@ -25,6 +25,7 @@ namespace FoodVaultApi
         public DbSet<RecipeInstruction> RecipeInstructions { get; set; }
         public DbSet<RecipeIngredient> RecipeIngredients { get; set; }
         public DbSet<Invitation> Invitations { get; set; }
+        public DbSet<RecipeView> RecipeViews { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -91,6 +92,16 @@ namespace FoodVaultApi
                 .HasOne(i => i.Group)
                 .WithMany(g => g.Invitations)
                 .HasForeignKey(i => i.GroupId);
+            modelBuilder.Entity<RecipeView>()
+                .HasKey(rv => rv.Id);
+            modelBuilder.Entity<RecipeView>()
+                .HasOne(rv => rv.User)
+                .WithMany(u => u.RecipeViews)
+                .HasForeignKey(rv => rv.UserId);
+            modelBuilder.Entity<RecipeView>()
+                .HasOne(rv => rv.Recipe)
+                .WithMany(r => r.RecipeViews)
+                .HasForeignKey(rv => rv.RecipeId);
         }
     }
 }
