@@ -44,9 +44,8 @@
               class="invite-row"
             >
               <td class="invite-group-name">{{ invitation.groupName }}</td>
-              <td class="invite-about"><button @click="aboutInvitation(invitation)">About</button></td>
-              <td class="invite-accept"><button @click="acceptInvitation(invitation)">Accept</button></td>
-              <td class="invite-reject"><button @click="rejectInvitation(invitation)">Reject</button></td>
+              <td><button @click="aboutInvitation(invitation)">About</button></td>
+              <td><RouterLink to="/Invitations"><button>View</button></RouterLink></td>
             </tr>
           </table>
         </div>
@@ -90,7 +89,6 @@
       </div>
     </div>
   </div>
-  <AcceptedInvitationNotification v-if="isInvitationAccepted" @close="closeInvitationModal" />
   <InvitationInfoModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal" />
 </template>
 
@@ -101,7 +99,6 @@ import { useAccountStore } from "@/stores/accountStore";
 import { InvitationRequest } from "@/requests/invitation-request";
 import { RecipeRequest } from "@/requests/recipe-request";
 import { GroupRequest } from "@/requests/group-request";
-import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
 
 const router = useRouter();
@@ -112,7 +109,6 @@ const groupRequest = new GroupRequest();
 const groupsHidden = ref(true);
 const invitationsHidden = ref(true);
 const recipesHidden = ref(true);
-const isInvitationAccepted = ref(false);
 const isAboutModalClicked = ref(false);
 const invitationInfo = ref({});
 
@@ -141,14 +137,6 @@ const editRecipe = function (recipe) {
   });
 };
 
-const closeInvitationModal = async function() {
-  isInvitationAccepted.value = false;
-  invitations.value = []
-  invitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
-  const groupsOwnedByUser = await groupRequest.getGroupsOwnedByUser(accountStore.currentUserId);
-  const groupsUserIsMember = await groupRequest.getGroupsWhereUserIsMember(accountStore.currentUserId);
-  usersGroups.value = groupsOwnedByUser.concat(groupsUserIsMember);
-}
 
 const closeAboutInvitationModal = async function() {
   isAboutModalClicked.value = false;
@@ -157,16 +145,6 @@ const closeAboutInvitationModal = async function() {
 const aboutInvitation = function (invitation) {
   isAboutModalClicked.value = true;
   invitationInfo.value = invitation;
-}
-
-const acceptInvitation = async function (invitation) {
-  await invitationRequest.acceptInvitation(invitation.invitationId);
-  isInvitationAccepted.value = true;
-}
-
-const rejectInvitation = function (invitation) {
-  // TODO
-  console.log(invitation);
 }
 
 onMounted(async () => {
