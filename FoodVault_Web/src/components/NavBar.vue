@@ -73,6 +73,14 @@
           </span>
           <span class="badge2">{{ invitations.length }}</span>
         </div>
+        <br/>
+        <button
+          class="logout-button"
+          type="button"
+          @click="logOut(); closeNavbar()"
+        >
+          Log Out
+        </button>
       </div>
       <br/>
     </div>
@@ -167,7 +175,6 @@ onMounted(async () => {
 
 .hideable-nav-items {
   margin-left: 16px;
-  margin-right: 16px;
 }
 
 .brand-name {
@@ -273,16 +280,17 @@ onMounted(async () => {
   box-sizing: border-box;
   background-color: #C7D6D5;
   box-shadow: 0 3px 3px #ECE4DB;
-  height: 250px;
+  height: 320px;
   border-radius: 8px;
   padding: 8px 24px;
   visibility: hidden;
   top: 1px;
   position: fixed;
-  width: 98%;
+  width: 97%;
+  margin-top: 7px;
 }
 
-@media screen and (max-width: 613px) {
+@media screen and (max-width: 632px) {
   .hideable-nav-items{
     visibility: hidden;
   }
