@@ -4,6 +4,7 @@ import { UserRequest } from "@/requests/user-request";
 import router from "@/router";
 import { UserGroupRequest } from '../requests/user-group-request';
 import { useSignalrStore } from './signalrStore';
+import { useInvitationsStore } from './invitationsStore';
 
 export const useAccountStore = defineStore("account", () => {
   const userId = ref(null);
@@ -55,7 +56,11 @@ export const useAccountStore = defineStore("account", () => {
     await signalR.startConnection()
     if (groupIdsUserIsPartOf.length > 0)
       signalR.connectToAllGroups(groupIdsUserIsPartOf);
+    
+    
+    useInvitationsStore().getInvitations(currentUserId.value)
   }
+
 
   function clearAccountStore() {
     token.value = null;
