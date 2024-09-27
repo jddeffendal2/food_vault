@@ -1,7 +1,8 @@
 using FoodVaultApi;
+using FoodVaultApi.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using MySql.EntityFrameworkCore.Extensions;
 using System.Text;
@@ -22,7 +23,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: "AllowAppOrigins",
         policy =>
         {
-            policy.AllowAnyOrigin()
+            policy.WithOrigins("http://localhost:5173")
+                .AllowCredentials()
                 .AllowAnyHeader()
                 .AllowAnyMethod();
         });
@@ -50,6 +52,9 @@ builder.Services.AddAuthentication(options =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+builder.Services.AddSignalR();
 
 builder.Services.AddAuthorization();
 
@@ -79,6 +84,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<GroupHub>("/GroupHub");
 
 app.Run();
 

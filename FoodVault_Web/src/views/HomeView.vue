@@ -36,10 +36,10 @@
           <span v-if="invitationsHidden">&dtrif;</span>
           <span v-else> &utrif; </span>
         </div>
-        <div v-if="!invitationsHidden && invitations.length > 0" id="invitations-drop-down" class="drop-down">
+        <div v-if="!invitationsHidden && invitationStore.invitations.length > 0" id="invitations-drop-down" class="drop-down">
           <table class="invitation-table">
             <tr
-              v-for="invitation in invitations"
+              v-for="invitation in invitationStore.invitations"
               :key="invitation.invitationId"
               class="invite-row"
             >
@@ -89,21 +89,21 @@
       </div>
     </div>
   </div>
-  <InvitationInfoModal v-if="isAboutModalClicked" :invitationInformation="invitationInfo" @close="closeAboutInvitationModal" />
+  <InvitationInfoModal v-if="isAboutModalClicked" :invitation-information="invitationInfo" @close="closeAboutInvitationModal" />
 </template>
 
 <script setup>
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { useAccountStore } from "@/stores/accountStore";
-import { InvitationRequest } from "@/requests/invitation-request";
 import { RecipeRequest } from "@/requests/recipe-request";
 import { GroupRequest } from "@/requests/group-request";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
+import { useInvitationsStore } from "../stores/invitationsStore";
 
 const router = useRouter();
 const accountStore = useAccountStore();
-const invitationRequest = new InvitationRequest();
+const invitationStore = useInvitationsStore()
 const groupRequest = new GroupRequest();
 
 const groupsHidden = ref(true);
@@ -113,7 +113,6 @@ const isAboutModalClicked = ref(false);
 const invitationInfo = ref({});
 
 const usersGroups = ref([]);
-const invitations = ref([]);
 const usersRecipes = ref([]);
 
 const openGroupCreation = function () {
@@ -153,8 +152,6 @@ onMounted(async () => {
   usersGroups.value = groupsOwnedByUser.concat(groupsUserIsMember);
 
   usersRecipes.value = await new RecipeRequest().getUserRecipes(accountStore.currentUserId);
-  
-  invitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
 });
 </script>
 

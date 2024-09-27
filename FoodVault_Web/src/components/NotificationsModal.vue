@@ -2,16 +2,16 @@
   <div class="modal-background">
     <div class="modal">
       <header class="modal-header">
-        <slot id="header" name="header"> You have {{ usersInvitations.length }} New Notifications </slot>
+        <slot id="header" name="header"> You have {{ invitationStore.invitations.length }} New Notifications </slot>
         <button type="button" class="btn-close" @click="close">x</button>
       </header>
 
       <section class="modal-body">
-        <div v-if="usersInvitations.length == 1">
-            You have been invited to join a group.
+        <div v-if="invitationStore.invitations.length === 1">
+          You have been invited to join a group.
         </div>
-        <div v-if="usersInvitations.length > 1">
-            You have been invited to join multiple groups.
+        <div v-else-if="invitationStore.invitations.length > 1">
+          You have been invited to join multiple groups.
         </div>
         <br />
         <FvButton type="button" class="close-button" @click="viewNotifications">View Invitations</FvButton>
@@ -19,18 +19,15 @@
     </div>
   </div>
 </template>
+
 <script setup>
-import { onMounted, ref } from "vue";
-import { useAccountStore } from "@/stores/accountStore.js";
-import { useRouter } from "vue-router";
-import { InvitationRequest } from "@/requests/invitation-request";
 import FvButton from "@/components/shared/FvButton.vue";
+import { useInvitationsStore } from "../stores/invitationsStore"
+import { useRouter } from "vue-router";
 
 const router = useRouter();
-const accountStore = useAccountStore();
-const invitationRequest = new InvitationRequest();
+const invitationStore = useInvitationsStore()
 
-const usersInvitations = ref([]);
 const emit = defineEmits(["close"]);
 
 const close = async function () {
@@ -41,13 +38,8 @@ const viewNotifications = function () {
   router.push("/Invitations");
   close();
 };
-
-
-onMounted(async () => {
-  usersInvitations.value = await invitationRequest.getInvitationsToUser(accountStore.currentUserId);
-});
-
 </script>
+
 <style scoped>
 .modal-background {
   position: fixed;
@@ -72,6 +64,7 @@ onMounted(async () => {
   flex-direction: column;
   border-radius: 15px;
 }
+
 .modal-header {
   border-radius: 15px;
   padding: 15px;

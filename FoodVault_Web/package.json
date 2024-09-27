@@ -9,6 +9,7 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.7",
     "axios": "^1.2.3",
     "pinia": "^2.0.28",
     "vue": "^3.2.45",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
+    "@stylistic/eslint-plugin-js": "^2.8.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",
     "eslint": "^8.22.0",
