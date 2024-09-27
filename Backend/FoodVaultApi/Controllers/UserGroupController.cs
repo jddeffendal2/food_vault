@@ -1,7 +1,9 @@
 using FoodVaultApi.DTO;
+using FoodVaultApi.Hubs;
 using FoodVaultApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FoodVaultApi.Controllers
 {
@@ -12,13 +14,20 @@ namespace FoodVaultApi.Controllers
     {
         private readonly FoodVaultDbContext _context;
         private IConfiguration _configuration;
+        private readonly IHubContext<GroupHub> _groupHub;
 
-        public UserGroupController(IConfiguration config, FoodVaultDbContext context)
+        public UserGroupController(IConfiguration config, FoodVaultDbContext context, IHubContext<GroupHub> groupHub)
         {
             _configuration = config;
             _context = context;
+            _groupHub = groupHub;
         }
 
+        /// <summary>
+        /// Create new UserGroup row (add user to group)
+        /// </summary>
+        /// <param name="userGroupDto"></param>
+        /// <returns></returns>
         [HttpPost("Create")]
         public IActionResult Create(UserGroupDTO userGroupDto)
         {
@@ -33,6 +42,22 @@ namespace FoodVaultApi.Controllers
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpGet("GetAllGroupsUserIsIn/{userId}")]
+        public IActionResult GetAllGroupsUserIsIn(string userId)
+        {
+            var ownedGroups = _context.Groups
+                .Where(x => x.UserId == userId)
+                .Select(x => x.Id)
+                .ToList();
+
+            var groupsPartOf = _context.UserGroups
+                .Where(x => x.UserId == userId)
+                .Select(x => x.GroupId)
+                .ToList();
+
+            return Ok(ownedGroups.Concat(groupsPartOf));
         }
 
         [HttpGet("GetAll")]

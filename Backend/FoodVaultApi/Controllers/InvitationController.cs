@@ -1,7 +1,9 @@
 ﻿using FoodVaultApi.DTO;
+using FoodVaultApi.Hubs;
 using FoodVaultApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FoodVaultApi.Controllers
 {
@@ -12,11 +14,13 @@ namespace FoodVaultApi.Controllers
     {
         private readonly FoodVaultDbContext _context;
         private IConfiguration _configuration;
+        private readonly IHubContext<GroupHub> _groupHub;
 
-        public InvitationController(IConfiguration config, FoodVaultDbContext context)
+        public InvitationController(IConfiguration config, FoodVaultDbContext context, IHubContext<GroupHub> groupHub)
         {
             _context = context;
             _configuration = config;
+            _groupHub = groupHub;
         }
 
         /// <summary>
@@ -41,7 +45,7 @@ namespace FoodVaultApi.Controllers
         }
 
         [HttpPost("SendInvitation")]
-        public IActionResult InviteUserToGroup(InvitationPost invitationPost)
+        public async Task<IActionResult> InviteUserToGroup(InvitationPost invitationPost)
         {
             _context.Invitations.Add(new Invitation
             {
@@ -53,6 +57,8 @@ namespace FoodVaultApi.Controllers
                 GroupId = invitationPost.groupId
             });
             _context.SaveChanges();
+
+            await _groupHub.Clients.User(invitationPost.toUserId).SendAsync("InviteReceived");
 
             return Ok();
         }

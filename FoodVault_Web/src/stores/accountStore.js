@@ -2,6 +2,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { UserRequest } from "@/requests/user-request";
 import router from "@/router";
+import { UserGroupRequest } from '../requests/user-group-request';
+import { useSignalrStore } from './signalrStore';
 
 export const useAccountStore = defineStore("account", () => {
   const userId = ref(null);
@@ -48,6 +50,11 @@ export const useAccountStore = defineStore("account", () => {
 
   async function loadUserData(userId) {
     user.value = await userRequest.getUser(userId);
+    const groupIdsUserIsPartOf = await new UserGroupRequest().getAllGroupsUserIsIn(userId);
+    const signalR = useSignalrStore()
+    await signalR.startConnection()
+    if (groupIdsUserIsPartOf.length > 0)
+      signalR.connectToAllGroups(groupIdsUserIsPartOf);
   }
 
   function clearAccountStore() {

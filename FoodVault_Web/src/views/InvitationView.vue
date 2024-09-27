@@ -2,14 +2,14 @@
   <FvLoadingSpinner v-if="loading" />
   <div class="invitations-page">
     <br/>
-    <div v-if="invitations.length == 1">** You have been invited to join 1 group. **</div>
-    <div v-if="invitations.length > 1"> ** You have been invited to join {{invitations.length}} groups. **</div>
+    <div v-if="invitationStore.invitations.length === 1">** You have been invited to join 1 group. **</div>
+    <div v-else-if="invitationStore.invitations.length > 1"> ** You have been invited to join {{ invitationStore.invitations.length }} groups. **</div>
     <br/>
     <h1 class="invitationsTitle">Invitations</h1>
-    <div v-if="invitations.length > 0" class="invitationsList">
+    <div v-if="invitationStore.invitations.length > 0" class="invitationsList">
       <table class="invitations-table">
         <tr
-          v-for="invitation in invitations"
+          v-for="invitation in invitationStore.invitations"
           :key="invitation.invitationId"
           class="invite-row"
         >
@@ -36,31 +36,25 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { InvitationRequest } from "@/requests/invitation-request";
 import FvButton from "@/components/shared/FvButton.vue";
 import AcceptedInvitationNotification from "@/components/AcceptedInvitationNotification.vue";
 import InvitationInfoModal from "@/components/InvitationInfoModal.vue";
 import FvLoadingSpinner from "@/components/shared/FvLoadingSpinner.vue";
+import { ref } from "vue";
+import { useInvitationsStore } from "../stores/invitationsStore";
 
 const accountStore = useAccountStore();
+const invitationStore = useInvitationsStore()
 const invitationRequest = new InvitationRequest();
 const isInvitationAccepted = ref(false);
-const invitations = ref([]);
 const isAboutModalClicked = ref(false);
 const invitationInfo = ref({});
 const loading = ref(false); 
 
-onMounted(async () => {
-  loading.value = true;
-  await loadData();
-  loading.value = false;
-});
-const loadData = async function() {
-  invitations.value = await invitationRequest.getInvitationsToUser(
-    accountStore.currentUserId
-  );
+const loadInvitations = async () => {
+  await invitationStore.getInvitations(accountStore.currentUserId)
 }
 
 const aboutInvitation = function (invitation) {
@@ -76,14 +70,14 @@ const acceptInvitation = async function (invitation) {
   await invitationRequest.acceptInvitation(invitation.invitationId);
   isInvitationAccepted.value = true;
   loading.value = true;
-  await loadData();
+  await loadInvitations();
   loading.value = false;
 }
 
 const rejectInvitation = async function(invitation) {
   loading.value = true;
   await invitationRequest.rejectInvitation(invitation.invitationId);
-  await loadData();
+  await loadInvitations();
   loading.value = false;
 }
 

@@ -7,9 +7,9 @@
 
 <script setup>
 import { onBeforeMount, ref } from "vue";
+import NavBar from "@/components/NavBar.vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { useRouter } from "vue-router";
-import NavBar from "@/components/NavBar.vue";
 
 const router = useRouter();
 const accountStore = useAccountStore();
@@ -32,7 +32,8 @@ onBeforeMount(async () => {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
-html, body {
+html,
+body {
   font-family: 'Quicksand', sans-serif;
 }
 
