@@ -22,6 +22,7 @@ namespace FoodVaultApi.Controllers
         [HttpPost("Create")]
         public IActionResult Create(GroupPostDTO groupPostDto)
         {
+            // Create the actual group
             var group = new Group
             {
                 Id = Guid.NewGuid().ToString().ToUpper(),
@@ -32,7 +33,18 @@ namespace FoodVaultApi.Controllers
                 UpdatedDate = DateTime.UtcNow,
             };
 
+            // Create usergroup entry for the owner
+            var userGroup = new UserGroup
+            {
+                Id = Guid.NewGuid().ToString().ToUpper(),
+                UserId = groupPostDto.ownerId,
+                GroupId = group.Id,
+                CanAddRecipes = true,
+                CanAddUsers = true
+            };
+
             _context.Groups.Add(group);
+            _context.UserGroups.Add(userGroup);
             _context.SaveChanges();
 
             return Ok();
@@ -49,8 +61,9 @@ namespace FoodVaultApi.Controllers
             UserDTO ownerDto = null;
             if (owner != null) ownerDto = UserDTO.ToDTO(owner);
 
+            // Find all members of group other than the owner
             var groupUsers = _context.UserGroups
-                .Where(x => x.GroupId.ToUpper() == groupId.ToUpper())
+                .Where(x => x.GroupId.ToUpper() == groupId.ToUpper() && x.UserId.ToUpper() != group.UserId.ToUpper())
                 .Select(x => _context.Users.FirstOrDefault(y => y.Id.ToUpper() == x.UserId.ToUpper()));
 
             var members = new List<UserDTO>();
@@ -87,11 +100,16 @@ namespace FoodVaultApi.Controllers
         [HttpGet("{userId}/Member")]
         public IActionResult GetGroupsWhereUserIsMember(string userId)
         {
-            var groups = _context.UserGroups
+            var allGroupsContainingUser = _context.UserGroups
                 .Where(x => x.UserId.ToUpper() == userId.ToUpper())
-                .Select(x => GroupDTO.ToDTO(x.Group));
+                .Select(x => GroupDTO.ToDTO(x.Group))
+                .ToList();
 
-            return Ok(groups);
+            var groupIdsOwnedByUser = _context.Groups.Where(x => x.UserId.ToUpper() == userId.ToUpper()).Select(x => x.Id).ToList();
+
+            var groupsNotOwnedByUser = allGroupsContainingUser.Where(x => !groupIdsOwnedByUser.Contains(x.groupId));
+
+            return Ok(groupsNotOwnedByUser);
         }
 
         [HttpGet("GetGroups/{userId}")]
@@ -107,9 +125,9 @@ namespace FoodVaultApi.Controllers
                 .ToList()
                 .ForEach(x => ownedGroupIds.Add(x.Id));
 
-            // Get every group id for groups where user is member
+            // Get every group id for groups where user is only a member, not owner
             _context.UserGroups
-                .Where(x => x.UserId.ToUpper() == userId.ToUpper())
+                .Where(x => x.UserId.ToUpper() == userId.ToUpper() && !ownedGroupIds.Contains(x.GroupId))
                 .ToList()
                 .ForEach(x => memberGroupIds.Add(x.GroupId));
 
@@ -127,7 +145,7 @@ namespace FoodVaultApi.Controllers
                     name = group.Name,
                     description = group.Description,
                     isOwner = ownedGroupIds.Contains(groupId),
-                    userCount = userCount + 1, // +1 for the owner
+                    userCount = userCount - 1, // - 1 to subtract owner from member count
                     recipeCount = recipeCount,
                 });
             }

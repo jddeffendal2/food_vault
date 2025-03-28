@@ -21,31 +21,49 @@
       Edit
     </div>
   </div>
-  <div v-if="activeTab === 0" class="group-body">
+  <div v-if="activeTab === 0">
+    <FvButton v-if="currentUserIsGroupOwner || canAddRecipes" @click="showAddRecipeModal = true">Add Recipe</FvButton>
     <div v-if="recipes.length == 0">
       <br/><br/>
       There are no recipes in this group
     </div>
-    <div v-for="recipe in recipes" :key="recipe.id" class="recipe-card" @click="openRecipe(recipe)">
-      {{ recipe.name }}
+    <div v-else class="group-body">
+      <div v-for="recipe in recipes" :key="recipe.id" class="recipe-card" @click="openRecipe(recipe)">
+        {{ recipe.name }}
+      </div>
     </div>
   </div>
   <div v-if="activeTab === 1" class="group-body">
     <div class="member-card">
+      <FvButton v-if="currentUserIsGroupOwner || canAddUsers" @click="showInvitationModal = true">Invite Members</FvButton>
+      <br/>
       <div>Owner: {{ owner.firstName }} {{ owner.lastName }}</div>
       <br />
       <div class="member-card__header">Members:</div>
       <table>
         <tr v-for="member in members" :key="member.userId">
           <td>{{ member.firstName }} {{ member.lastName }}</td>
-          <td v-if="currentUserIsGroupOwner"><FvButton @click="removeUserFromGroup(member)">Remove</FvButton></td>
+          <td v-if="currentUserIsGroupOwner">
+            <FvButton @click="removeUserFromGroup(member)">Remove</FvButton>
+          </td>
         </tr>
       </table>
     </div>
   </div>
   <div v-if="activeTab === 2">
-    <EditGroup :group-id="route.params.id" />
+    <EditGroup :group-id="groupId" :members="members" :current-user-is-owner="currentUserIsGroupOwner" />
   </div>
+  <AddRecipesToGroup
+    v-if="showAddRecipeModal"
+    :selected-group="groupInfoObject"
+    @close="showAddRecipeModal = false"
+  />
+  <ShareGroupFeature
+    v-if="showInvitationModal"
+    :group-id="groupId"
+    :shared-users="usersInGroupsIds"
+    @close="showInvitationModal = false"
+  />
 </template>
 
 <script setup>
@@ -55,9 +73,11 @@ import { GroupRequest } from "@/requests/group-request";
 import { GroupRecipeRequest } from "@/requests/group-recipe-request";
 import { UserGroupRequest } from "@/requests/user-group-request";
 import { useAccountStore } from "@/stores/accountStore"
+import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
 import EditGroup from "@/components/EditGroup.vue";
 import FvButton from "@/components/shared/FvButton.vue";
 import FvLoadingSpinner from "@/components/shared/FvLoadingSpinner.vue";
+import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -71,10 +91,16 @@ const activeTab = ref(0);
 const owner = ref({});
 const members = ref([]);
 const recipes = ref([]);
+const canAddUsers = ref(false)
+const canAddRecipes = ref(false)
+const groupInfoObject = ref({})
 
-const currentUserIsGroupOwner = computed(() => {
-  return owner.value.userId == accountStore.currentUserId;
-})
+const showAddRecipeModal = ref(false)
+const showInvitationModal = ref(false)
+
+const groupId = computed(() => route.params.id)
+const currentUserIsGroupOwner = computed(() => owner.value.userId == accountStore.currentUserId)
+const usersInGroupsIds = computed(() => [...members.value.map(x => x.userId), owner.value.userId])
 
 const openRecipe = function (recipe) {
   router.push("/Recipe/" + recipe.id);
@@ -82,17 +108,30 @@ const openRecipe = function (recipe) {
 
 const removeUserFromGroup = async (member) => {
   loading.value = true;
-  await userGroupRequest.removeUserFromGroup(route.params.id, member.userId);
+  await userGroupRequest.removeUserFromGroup(groupId.value, member.userId);
   await loadData();
   loading.value = false;
 }
 
+const getGroupInfo = async () => {
+  const groupInfo = await groupRequest.getGroupById(groupId.value)
+  groupInfoObject.value = groupInfo
+  owner.value = groupInfo.owner
+  members.value = groupInfo.members.filter(x => x.userId !== accountStore.currentUserId)
+}
+
+const getGroupRecipes = async () => {
+  recipes.value = await groupRecipeRequest.getRecipesInGroup(groupId.value)
+}
+
+const getUsersPermissionsForGroup = async () => {
+  const userGroup = await userGroupRequest.getUserGroup(groupId.value, accountStore.currentUserId)
+  canAddRecipes.value = userGroup.canAddRecipes
+  canAddUsers.value = userGroup.canAddUsers
+}
+
 const loadData = async () => {
-  const groupInfo = await groupRequest.getGroupById(route.params.id);
-  recipes.value = await groupRecipeRequest.getRecipesInGroup(route.params.id);
-  
-  owner.value = groupInfo.owner;
-  members.value = groupInfo.members;
+  await Promise.all([getGroupInfo(), getGroupRecipes(), getUsersPermissionsForGroup()])
 }
 
 onMounted(async () => {
@@ -123,7 +162,6 @@ onMounted(async () => {
 }
 .group-body {
   display: flex;
-  text-align: center;
   justify-content: space-between;
   flex-direction: row;
   flex-wrap: wrap;

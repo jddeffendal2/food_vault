@@ -79,7 +79,11 @@ namespace FoodVaultApi.Controllers
             {
                 Id = Guid.NewGuid().ToString().ToUpper(),
                 GroupId = invite.GroupId,
-                UserId = invite.SentTo
+                UserId = invite.SentTo,
+                // By default, users invited to group don't have ability to invite others or add recipes
+                // Group owner has to manually change each person's permissions
+                CanAddRecipes = false,
+                CanAddUsers = false
             });
 
             _context.SaveChanges();

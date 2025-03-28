@@ -23,48 +23,47 @@ namespace FoodVaultApi.Controllers
             _groupHub = groupHub;
         }
 
-        /// <summary>
-        /// Create new UserGroup row (add user to group)
-        /// </summary>
-        /// <param name="userGroupDto"></param>
-        /// <returns></returns>
-        [HttpPost("Create")]
-        public IActionResult Create(UserGroupDTO userGroupDto)
+        [HttpGet("{groupId}/user/{userId}")]
+        public IActionResult GetUserGroup(string groupId, string userId)
         {
-            var userGroup = new UserGroup
-            {
-                Id = Guid.NewGuid().ToString().ToUpper(),
-                UserId = userGroupDto.userId,
-                GroupId = userGroupDto.groupId,
-            };
+            var userGroup = _context.UserGroups.FirstOrDefault(x => x.GroupId.ToLower() == groupId.ToLower() && x.UserId.ToLower() == userId.ToLower());
+            if (userGroup == null)
+                return NotFound();
 
-            _context.UserGroups.Add(userGroup);
+            return Ok(UserGroupDTO.ToDTO(userGroup));
+        }
+
+        [HttpPut("UpdatePermissions")]
+        public IActionResult UpdateUserGroupPermissions(UserGroupDTO userGroupDto)
+        {
+            var userGroup = _context.UserGroups
+                .FirstOrDefault(x => x.UserId.ToLower() == userGroupDto.userId.ToLower() && x.GroupId.ToLower() == userGroupDto.groupId.ToLower());
+
+            if (userGroup == null)
+                return NotFound();
+
+            userGroup.CanAddRecipes = userGroupDto.canAddRecipes;
+            userGroup.CanAddUsers = userGroupDto.canAddUsers;
+
             _context.SaveChanges();
-
             return Ok();
         }
 
         [HttpGet("GetAllGroupsUserIsIn/{userId}")]
         public IActionResult GetAllGroupsUserIsIn(string userId)
         {
-            var ownedGroups = _context.Groups
-                .Where(x => x.UserId == userId)
-                .Select(x => x.Id)
-                .ToList();
-
             var groupsPartOf = _context.UserGroups
                 .Where(x => x.UserId == userId)
                 .Select(x => x.GroupId)
                 .ToList();
 
-            return Ok(ownedGroups.Concat(groupsPartOf));
+            return Ok(groupsPartOf);
         }
 
         [HttpGet("GetAll")]
         public IActionResult GetAllUserGroups()
         {
-            var groups = _context.UserGroups.Select(x => x);
-            return Ok(groups);
+            return Ok(_context.UserGroups.ToList());
         }
 
         [HttpGet("GetUsersInSpecificGroups/{groupId}")]
