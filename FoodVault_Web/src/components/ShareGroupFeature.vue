@@ -84,15 +84,7 @@ watch(searchedUser, () => {
   }
   timeout = window.setTimeout(async () => {
     searchResults.value = await userRequest.searchUsers(accountStore.currentUserId, searchedUser.value)
-    var checkSearchResults = [];
-    for (let i = 0; i< props.sharedUsers.length; i++) {
-      for (let j = 0; j< searchResults.value.length; j++) {
-        if (searchResults.value[j].userId == props.sharedUsers[i]) {
-          checkSearchResults.push(searchResults.value[j].userId)
-        }
-      }
-    }
-    searchResults.value = searchResults.value.filter(x => !checkSearchResults.includes(x.userId))
+    searchResults.value = searchResults.value.filter(x => !props.sharedUsers.includes(x.userId))
   }, 300);
 });
 

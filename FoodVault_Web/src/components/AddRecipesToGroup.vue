@@ -24,13 +24,14 @@
           </td>
         </div>
         <br /><br />
-        <button type="button" class="close-button" @click="close">
+        <button type="button" class="close-button" @click="addSelectedRecipesToGroupAndClose">
           Save Recipes
         </button>
       </section>
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted, computed } from "vue";
 import { useAccountStore } from "@/stores/accountStore";
@@ -73,16 +74,26 @@ onMounted(async () => {
 
 const emit = defineEmits(["close"]);
 
-const close = async function () {
+const addSelectedRecipesToGroup = async () => {
+  const promises = []
   for (let i = 0; i < addedRecipes.value.length; i++) {
     const groupRecipe = {
       groupId: props.selectedGroup.groupId,
       recipeId: addedRecipes.value[i]
     };
-    await groupRecipeRequest.createGroupRecipe(groupRecipe);
+    promises.push(groupRecipeRequest.createGroupRecipe(groupRecipe));
   }
+  await Promise.all(promises)
+}
+
+const close = async function () {
   emit("close");
 };
+
+const addSelectedRecipesToGroupAndClose = async () => {
+  await addSelectedRecipesToGroup()
+  close()
+}
 
 const addRecipe = function (recipe) {
   addedRecipes.value.push(recipe.id)

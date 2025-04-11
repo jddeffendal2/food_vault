@@ -5,8 +5,18 @@
     <div>{{ selectedGroup.description }}</div>
     <br />
     <div class="view-group-div">
-      <div class="shared-users">
-        Shared with {{ sharedUsers.length }} Users <FvButton @click="isReadyToShare = true">Share</FvButton>
+      <div class="group-users">
+        <div class="group-users__header">
+          <div>Current Members ({{ sharedUsers.length }}):</div>
+          <FvButton @click="isReadyToShare = true">Invite</FvButton>
+        </div>
+        <EditGroupUserRow
+          v-for="user in members"
+          :key="user.userId"
+          :group-id="groupId"
+          :user="user"
+          :current-user-is-owner="currentUserIsOwner"
+        />
       </div>
       <div class="added-recipes">
         <p v-if="addedGroupRecipes.length == 0">
@@ -38,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { computed, ref, onMounted } from "vue";
 import { GroupRequest } from "@/requests/group-request";
 import { GroupRecipeRequest } from "@/requests/group-recipe-request";
 import { RecipeRequest } from "@/requests/recipe-request";
@@ -47,7 +57,10 @@ import AddRecipesToGroup from "@/components/AddRecipesToGroup.vue";
 import ShareGroupFeature from "@/components/ShareGroupFeature.vue";
 import { useRouter } from "vue-router";
 import FvButton from "@/components/shared/FvButton.vue";
+import EditGroupUserRow from "./EditGroupUserRow.vue";
+import { useAccountStore } from '@/stores/accountStore'
 
+const accountStore = useAccountStore()
 const router = useRouter();
 
 const groupRequest = new GroupRequest();
@@ -62,13 +75,22 @@ const isGroupEmpty = ref(false);
 const isReadyToShare = ref(false);
 const allUserGroups = ref([]);
 const sharedUsers = ref([]);
-const sharedUsersIds = ref([]);
+
+const sharedUsersIds = computed(() => [...sharedUsers.value.map(x => x.userId), accountStore.currentUserId])
 
 const props = defineProps({
   groupId: {
     type: String,
     required: true,
   },
+  members: {
+    type: Array,
+    required: true
+  },
+  currentUserIsOwner: {
+    type: Boolean,
+    required: true
+  }
 });
 
 onMounted(async () => {
@@ -84,13 +106,7 @@ onMounted(async () => {
     );
   }
 
-  allUserGroups.value = await userGroupRequest.getAllUserGroups();
-  for (let i = 0; i < allUserGroups.value.length; i++) {
-    if (allUserGroups.value[i].groupId == props.groupId) {
-      sharedUsers.value.push(allUserGroups.value[i]);
-      sharedUsersIds.value.push(allUserGroups.value[i].userId);
-    }
-  }
+  sharedUsers.value = selectedGroup.value.members
 });
 
 const closeAddRecipesModal = async function () {
@@ -110,18 +126,32 @@ const closeAddRecipesModal = async function () {
 
 const selectRecipe = function (recipe) {
   router.push({
-    name: "EditSingleRecipe",
+    name: "RecipeView",
     params: {
-      recipeId: recipe.id
+      id: recipe.id
     }
   });
 }
 </script>
 
-<style scoped>
-.edit-group-div {
-  justify-content: center;
-  text-align: center;
+<style scoped lang="scss">
+.group-users {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+  }
+
+  &__users {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 }
 
 .recipe-table-div {

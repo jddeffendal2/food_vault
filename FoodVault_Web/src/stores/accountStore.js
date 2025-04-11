@@ -50,14 +50,18 @@ export const useAccountStore = defineStore("account", () => {
   }
 
   async function loadUserData(userId) {
+    // Load the user's info
     user.value = await userRequest.getUser(userId);
+    
+    // Add this SignalR connection to a SignalR group for every group the user is part of
+    // (in the future, this will allow us to use SignalR to send notifications to every user in the group)
     const groupIdsUserIsPartOf = await new UserGroupRequest().getAllGroupsUserIsIn(userId);
     const signalR = useSignalrStore()
     await signalR.startConnection()
     if (groupIdsUserIsPartOf.length > 0)
       signalR.connectToAllGroups(groupIdsUserIsPartOf);
-    
-    
+
+    // Load any invitations for this user
     useInvitationsStore().getInvitations(currentUserId.value)
   }
 
@@ -66,6 +70,7 @@ export const useAccountStore = defineStore("account", () => {
     token.value = null;
     userId.value = null;
     user.value = null;
+    useInvitationsStore().invitations = []
   }
 
   return {

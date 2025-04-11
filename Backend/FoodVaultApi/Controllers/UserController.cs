@@ -158,13 +158,15 @@ namespace FoodVaultApi.Controllers
         /// <returns></returns>
         [HttpGet("SearchUsers")]
         public IActionResult SearchUsers(string user, string searchTerm) {
+            var term = searchTerm.ToLower();
             var users = _context.Users
                 .Where(x => 
                     !x.Id.ToLower().Equals(user.ToLower()) &&
-                    (x.FirstName.Contains(searchTerm) ||
-                    x.LastName.Contains(searchTerm) ||
-                    x.Username.Contains(searchTerm) ||
-                    x.Email.Contains(searchTerm)))
+                    (x.FirstName.ToLower().Contains(term) ||
+                    x.LastName.ToLower().Contains(term) ||
+                    x.Username.ToLower().Contains(term) ||
+                    x.Email.ToLower().Contains(term)))
+                .Take(10) // Limit to 10 users returned
                 .Select(UserDTO.ToDTO);
                         
             return Ok(users);

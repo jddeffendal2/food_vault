@@ -5,8 +5,12 @@ export class UserGroupRequest extends Request {
     super("UserGroup");
   }
 
-  createGroup = async function (userGroupInfo) {
-    return await this.makeRequest("Create", "POST", userGroupInfo);
+  getUserGroup = async function (groupId, userId) {
+    return await this.makeRequest(`${groupId}/user/${userId}`, "GET")
+  }
+
+  updateUserGroupPermissions = async function (userId, groupId, canAddRecipes, canAddUsers) {
+    return await this.makeRequest("UpdatePermissions", "PUT", { userId, groupId, canAddRecipes, canAddUsers })
   }
 
   getAllUserGroups = async function () {
