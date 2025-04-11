@@ -13,6 +13,10 @@ export class RecipeRequest extends Request {
     return await this.makeRequest(userId, "GET");
   }
 
+  getAllRecipesUserCanView = async function(userId) {
+    return await this.makeRequest(`${userId}/all`, 'GET')
+  }
+
   getRecipeById = async function (recipeId) {
     return await this.makeRequest("GetRecipe/" + recipeId, "GET")
   }
