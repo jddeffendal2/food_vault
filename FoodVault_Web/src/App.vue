@@ -1,20 +1,20 @@
 <template>
   <NavBar />
   <div class="page-wrapper">
+    <NotificationsContainer/>
     <RouterView />
   </div>
 </template>
 
 <script setup>
-import { onBeforeMount, ref } from "vue";
 import NavBar from "@/components/NavBar.vue";
+import NotificationsContainer from "./components/NotificationsContainer.vue";
+import { onBeforeMount } from "vue";
 import { useAccountStore } from "@/stores/accountStore.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const accountStore = useAccountStore();
-
-const isNotificationsOpen = ref(false);
 
 onBeforeMount(async () => {
   await accountStore.initialize();
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
 // #087E8B secondary blue
 </script>
 
-<style>
+<style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
 
 html,
