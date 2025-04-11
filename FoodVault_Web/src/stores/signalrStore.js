@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { ref } from 'vue'
 import { useAccountStore } from "./accountStore";
 import { useInvitationsStore } from "./invitationsStore";
+import { useNotificationStore } from './notificationStore'
 
 export const useSignalrStore = defineStore("signalr", () => {
   const connection = ref();
@@ -32,6 +33,7 @@ export const useSignalrStore = defineStore("signalr", () => {
 
     connection.value.on("InviteReceived", async () => {
       await useInvitationsStore().getInvitations(useAccountStore().currentUserId)
+      useNotificationStore().createNotification('info', 'Invitation Received', 'You have recieved an invitation. Open the Invitations page to view it.')
     })
   }
 
