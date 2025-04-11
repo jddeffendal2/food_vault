@@ -1,8 +1,7 @@
 import { HubConnectionBuilder, HubConnectionState } from "@microsoft/signalr";
 import { defineStore } from "pinia";
-import { InvitationRequest } from "../requests/invitation-request";
-import { useAccountStore } from "./accountStore";
 import { ref } from 'vue'
+import { useAccountStore } from "./accountStore";
 import { useInvitationsStore } from "./invitationsStore";
 
 export const useSignalrStore = defineStore("signalr", () => {
@@ -25,12 +24,11 @@ export const useSignalrStore = defineStore("signalr", () => {
   }
 
   const startConnection = async () => {
-    console.log('starting connection')
     connection.value = new HubConnectionBuilder()
       .withUrl(`${import.meta.env.VITE_FOODVAULT_SERVER}/GroupHub`, { accessTokenFactory: () => useAccountStore().activeToken })
       .withAutomaticReconnect()
       .build();
-    await connection.value.start().catch((err) => console.log('error caught'))
+    await connection.value.start().catch((err) => console.error('error caught'))
 
     connection.value.on("InviteReceived", async () => {
       await useInvitationsStore().getInvitations(useAccountStore().currentUserId)
